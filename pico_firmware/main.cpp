@@ -5,20 +5,22 @@
 #include <cstring>
 #include <cstdio>
 
-// UART config
+// UART config (Pi communication)
 #define PI_UART_ID uart0
 #define PI_UART_TX_PIN 0
 #define PI_UART_RX_PIN 1
 #define PI_UART_BAUD 115200
 
-// BLDC config
-#define BLDC_PWM_PIN 20
-#define BLDC_SPEED_PIN 21
+// BLDC config (YOUR pin assignments!)
+#define BLDC_PWM_PIN 24      // PWM to EP-0172 SC input
+#define BLDC_HALL_PIN 22     // Hall sensor input from EP-0172
+#define BLDC_POWER_PIN 21    // HotBed MOSFET (motor power enable)
 
 uint bldc_pwm_slice;
 float bldc_target_rpm = 0;
 
 void bldc_init() {
+    // Init PWM for speed control
     gpio_set_function(BLDC_PWM_PIN, GPIO_FUNC_PWM);
     bldc_pwm_slice = pwm_gpio_to_slice_num(BLDC_PWM_PIN);
     
@@ -27,26 +29,45 @@ void bldc_init() {
     pwm_init(bldc_pwm_slice, &config, true);
     pwm_set_gpio_level(BLDC_PWM_PIN, 0);
     
-    printf("BLDC initialized on GPIO %d\n", BLDC_PWM_PIN);
+    // Init Hall sensor input
+    gpio_init(BLDC_HALL_PIN);
+    gpio_set_dir(BLDC_HALL_PIN, GPIO_IN);
+    
+    // Init power enable (HotBed MOSFET)
+    gpio_init(BLDC_POWER_PIN);
+    gpio_set_dir(BLDC_POWER_PIN, GPIO_OUT);
+    gpio_put(BLDC_POWER_PIN, 0);  // Off initially
+    
+    printf("BLDC init: PWM=GPIO%d, Hall=GPIO%d, Power=GPIO%d\n", 
+           BLDC_PWM_PIN, BLDC_HALL_PIN, BLDC_POWER_PIN);
 }
 
 void bldc_set_rpm(float rpm) {
     bldc_target_rpm = rpm;
-    // Simple linear mapping: 0-3000 RPM = 0-100% duty
-    float duty = (rpm / 3000.0f) * 100.0f;
-    if (duty > 100.0f) duty = 100.0f;
-    if (duty < 0.0f) duty = 0.0f;
     
-    uint16_t level = (uint16_t)((duty / 100.0f) * 65535);
-    pwm_set_gpio_level(BLDC_PWM_PIN, level);
-    
-    printf("BLDC set to %.1f RPM (%.1f%% duty)\n", rpm, duty);
+    if (rpm > 0) {
+        gpio_put(BLDC_POWER_PIN, 1);  // Enable power
+        
+        // Linear mapping: 0-3000 RPM = 0-100% duty
+        float duty = (rpm / 3000.0f) * 100.0f;
+        if (duty > 100.0f) duty = 100.0f;
+        
+        uint16_t level = (uint16_t)((duty / 100.0f) * 65535);
+        pwm_set_gpio_level(BLDC_PWM_PIN, level);
+        
+        printf("BLDC: %.1f RPM (%.1f%% duty, power ON)\n", rpm, duty);
+    } else {
+        gpio_put(BLDC_POWER_PIN, 0);  // Disable power
+        pwm_set_gpio_level(BLDC_PWM_PIN, 0);
+        printf("BLDC: stopped (power OFF)\n");
+    }
 }
 
 void bldc_stop() {
     pwm_set_gpio_level(BLDC_PWM_PIN, 0);
+    gpio_put(BLDC_POWER_PIN, 0);  // Power off
     bldc_target_rpm = 0;
-    printf("BLDC stopped\n");
+    printf("BLDC: emergency stop\n");
 }
 
 char cmd_buffer[128];
@@ -96,6 +117,8 @@ int main() {
     printf("Pico BLDC Controller v1.0\n");
     printf("UART: GPIO 0/1 @ %d baud\n", PI_UART_BAUD);
     printf("BLDC PWM: GPIO %d\n", BLDC_PWM_PIN);
+    printf("BLDC Hall: GPIO %d\n", BLDC_HALL_PIN);
+    printf("BLDC Power: GPIO %d (HotBed)\n", BLDC_POWER_PIN);
     printf("=================================\n\n");
     
     uart_puts(PI_UART_ID, "Pico_BLDC_Ready\n");
