@@ -117,17 +117,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named pico_uart_test
+# Target rules for targets named pico_bldc_controller
 
 # Build rule for target.
-pico_uart_test: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pico_uart_test
-.PHONY : pico_uart_test
+pico_bldc_controller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pico_bldc_controller
+.PHONY : pico_bldc_controller
 
 # fast build rule for target.
-pico_uart_test/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/build
-.PHONY : pico_uart_test/fast
+pico_bldc_controller/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/build
+.PHONY : pico_bldc_controller/fast
 
 #=============================================================================
 # Target rules for targets named bs2_default
@@ -199,7 +199,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.o: User
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.i
@@ -207,7 +207,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.i: User
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.s
@@ -215,7 +215,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.s: User
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.o
@@ -223,7 +223,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.o: Users/ss
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.i
@@ -231,7 +231,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.i: Users/ss
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.s
@@ -239,7 +239,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.s: Users/ss
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/cdc/cdc_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.o
@@ -247,7 +247,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.o: Users/ss
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.i
@@ -255,7 +255,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.i: Users/ss
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.s
@@ -263,7 +263,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.s: Users/ss
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
@@ -271,7 +271,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.o: Users
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
@@ -279,7 +279,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.i: Users
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
@@ -287,7 +287,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.s: Users
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/dfu/dfu_rt_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.o
@@ -295,7 +295,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.o: Users/ss
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.i
@@ -303,7 +303,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.i: Users/ss
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.s
@@ -311,7 +311,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.s: Users/ss
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/hid/hid_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.o
@@ -319,7 +319,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.o: Users/
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.i
@@ -327,7 +327,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.i: Users/
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.s
@@ -335,7 +335,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.s: Users/
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/midi/midi_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.o
@@ -343,7 +343,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.o: Users/ss
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.i
@@ -351,7 +351,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.i: Users/ss
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.s
@@ -359,7 +359,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.s: Users/ss
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/msc/msc_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
@@ -367,7 +367,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.o: Us
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
@@ -375,7 +375,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.i: Us
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
@@ -383,7 +383,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.s: Us
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ecm_rndis_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.o
@@ -391,7 +391,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.o: Users/ss
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.i
@@ -399,7 +399,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.i: Users/ss
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.s
@@ -407,7 +407,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.s: Users/ss
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/net/ncm_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
@@ -415,7 +415,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.o: Us
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
@@ -423,7 +423,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.i: Us
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
@@ -431,7 +431,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.s: Us
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/usbtmc/usbtmc_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.o
@@ -439,7 +439,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.o: Us
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.i
@@ -447,7 +447,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.i: Us
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.s
@@ -455,7 +455,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.s: Us
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/vendor/vendor_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.o
@@ -463,7 +463,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.o: User
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.i
@@ -471,7 +471,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.i: User
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.s
@@ -479,7 +479,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.s: User
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/video/video_device.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.o
@@ -487,7 +487,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.o: Users/ssnow/
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.i
@@ -495,7 +495,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.i: Users/ssnow/
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.s
@@ -503,7 +503,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.s: Users/ssnow/
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/common/tusb_fifo.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.o
@@ -511,7 +511,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.o: Users/ssnow/.pico
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.i
@@ -519,7 +519,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.i: Users/ssnow/.pico
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.s
@@ -527,7 +527,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.s: Users/ssnow/.pico
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.o
@@ -535,7 +535,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.i
@@ -543,7 +543,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.s
@@ -551,7 +551,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/device/usbd_control.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
@@ -559,7 +559,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
@@ -567,7 +567,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
@@ -575,7 +575,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/dcd_rp2040.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
@@ -583,7 +583,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp20
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
@@ -591,7 +591,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp20
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
@@ -599,7 +599,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp20
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/portable/raspberrypi/rp2040/rp2040_usb.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.o
@@ -607,7 +607,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.o: Users/ssnow/.pico-sdk/sd
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.i
@@ -615,7 +615,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.i: Users/ssnow/.pico-sdk/sd
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.s
@@ -623,7 +623,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.s: Users/ssnow/.pico-sdk/sd
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/tusb.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.o
@@ -631,7 +631,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.o: Users/ssnow/.
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.i
@@ -639,7 +639,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.i: Users/ssnow/.
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.s
@@ -647,7 +647,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.s: Users/ssnow/.
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/hardware_claim/claim.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.o
@@ -655,7 +655,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.o: Users/s
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.i
@@ -663,7 +663,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.i: Users/s
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.s
@@ -671,7 +671,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.s: Users/s
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/critical_section.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.o
@@ -679,7 +679,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.o: Users/ssnow/.p
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.i
@@ -687,7 +687,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.i: Users/ssnow/.p
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.s
@@ -695,7 +695,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.s: Users/ssnow/.p
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/lock_core.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.o
@@ -703,7 +703,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.o: Users/ssnow/.pico-
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.i
@@ -711,7 +711,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.i: Users/ssnow/.pico-
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.s
@@ -719,7 +719,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.s: Users/ssnow/.pico-
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/mutex.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.o
@@ -727,7 +727,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.o: Users/ssnow/.pico-sd
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.i
@@ -735,7 +735,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.i: Users/ssnow/.pico-sd
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.s
@@ -743,7 +743,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.s: Users/ssnow/.pico-sd
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_sync/sem.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.o
@@ -751,7 +751,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.o: Users/ssnow/.pico-s
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.i
@@ -759,7 +759,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.i: Users/ssnow/.pico-s
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.s
@@ -767,7 +767,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.s: Users/ssnow/.pico-s
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/time.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.o
@@ -775,7 +775,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.i
@@ -783,7 +783,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.s
@@ -791,7 +791,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_time/timeout_helper.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.o
@@ -799,7 +799,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.o: Users/ssnow/.pi
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.i
@@ -807,7 +807,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.i: Users/ssnow/.pi
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.s
@@ -815,7 +815,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.s: Users/ssnow/.pi
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/datetime.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.o
@@ -823,7 +823,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.o: Users/ssnow/.pico-
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.i
@@ -831,7 +831,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.i: Users/ssnow/.pico-
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.s
@@ -839,7 +839,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.s: Users/ssnow/.pico-
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/pheap.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.o
@@ -847,7 +847,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.o: Users/ssnow/.pico-
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.i
@@ -855,7 +855,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.i: Users/ssnow/.pico-
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s
@@ -863,7 +863,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.s: Users/ssnow/.pico-
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
@@ -871,7 +871,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
@@ -879,7 +879,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
@@ -887,7 +887,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.o
@@ -895,7 +895,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.o: U
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.i
@@ -903,7 +903,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.i: U
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.s
@@ -911,7 +911,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.s: U
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.o
@@ -919,7 +919,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.o: Users/s
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.i
@@ -927,7 +927,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.i: Users/s
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s
@@ -935,7 +935,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.s: Users/s
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
@@ -943,7 +943,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.o: Users
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.o
@@ -951,7 +951,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.i
@@ -959,7 +959,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.s
@@ -967,7 +967,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.o
@@ -975,7 +975,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.i
@@ -983,7 +983,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.s
@@ -991,7 +991,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_gpio/gpio.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.o
@@ -999,7 +999,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.o: Users/ssnow/.
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.i
@@ -1007,7 +1007,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.i: Users/ssnow/.
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.s
@@ -1015,7 +1015,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.s: Users/ssnow/.
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o
@@ -1023,7 +1023,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.o:
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.o
@@ -1031,7 +1031,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.o: Users/ssnow/.
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.i
@@ -1039,7 +1039,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.i: Users/ssnow/.
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.s
@@ -1047,7 +1047,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.s: Users/ssnow/.
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.o
@@ -1055,7 +1055,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.i
@@ -1063,7 +1063,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.s
@@ -1071,7 +1071,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync/sync.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
@@ -1079,7 +1079,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
@@ -1087,7 +1087,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
@@ -1095,7 +1095,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_sync_spin_lock/sync_spin_lock.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.o
@@ -1103,7 +1103,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.i
@@ -1111,7 +1111,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.s
@@ -1119,7 +1119,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_ticks/ticks.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.o
@@ -1127,7 +1127,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.i
@@ -1135,7 +1135,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.s
@@ -1143,7 +1143,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_timer/timer.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.o
@@ -1151,7 +1151,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.i
@@ -1159,7 +1159,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.s
@@ -1167,7 +1167,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_uart/uart.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.o
@@ -1175,7 +1175,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.i
@@ -1183,7 +1183,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.s
@@ -1191,7 +1191,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_vreg/vreg.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.o
@@ -1199,7 +1199,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.o: Use
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.i
@@ -1207,7 +1207,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.i: Use
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.s
@@ -1215,7 +1215,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.s: Use
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_watchdog/watchdog.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.o
@@ -1223,7 +1223,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.o: U
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.i
@@ -1231,7 +1231,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.i: U
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.s
@@ -1239,7 +1239,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.s: U
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xip_cache/xip_cache.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.o
@@ -1247,7 +1247,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.i
@@ -1255,7 +1255,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.s
@@ -1263,7 +1263,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_xosc/xosc.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.o
@@ -1271,7 +1271,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.i
@@ -1279,7 +1279,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.s
@@ -1287,7 +1287,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_atomic/atomic.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
@@ -1295,7 +1295,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.o: Use
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bit_ops/bit_ops_aeabi.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.o
@@ -1303,7 +1303,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.i
@@ -1311,7 +1311,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.s
@@ -1319,7 +1319,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.o
@@ -1327,7 +1327,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.o: User
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.i
@@ -1335,7 +1335,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.i: User
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.s
@@ -1343,7 +1343,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.s: User
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_bootrom/bootrom_lock.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.o
@@ -1351,7 +1351,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interf
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.i
@@ -1359,7 +1359,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interf
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.s
@@ -1367,7 +1367,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interf
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_clib_interface/newlib_interface.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.o
@@ -1375,7 +1375,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.o: Users/ssnow/.pi
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_crt0/crt0.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o
@@ -1383,7 +1383,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.o: Us
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.i
@@ -1391,7 +1391,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.i: Us
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
@@ -1399,7 +1399,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.s: Us
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
@@ -1407,7 +1407,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.o: 
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
@@ -1415,7 +1415,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.o
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
@@ -1423,7 +1423,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp204
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
@@ -1431,7 +1431,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp204
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
@@ -1439,7 +1439,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp204
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.o
@@ -1447,7 +1447,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.o: Users/
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.i
@@ -1455,7 +1455,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.i: Users/
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s
@@ -1463,7 +1463,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.s: Users/
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
@@ -1471,7 +1471,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
@@ -1479,7 +1479,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumer
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
@@ -1487,7 +1487,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumer
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
@@ -1495,7 +1495,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumer
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.o
@@ -1503,7 +1503,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.o: Users/ssnow/.
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.i
@@ -1511,7 +1511,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.i: Users/ssnow/.
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s
@@ -1519,7 +1519,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.s: Users/ssnow/.
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
@@ -1527,7 +1527,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.o: 
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
@@ -1535,7 +1535,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
@@ -1543,7 +1543,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
@@ -1551,7 +1551,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.o
@@ -1559,7 +1559,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.o: Users/ss
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.i
@@ -1567,7 +1567,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.i: Users/ss
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s
@@ -1575,7 +1575,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.s: Users/ss
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
@@ -1583,7 +1583,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp20
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
@@ -1591,7 +1591,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aea
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.o
@@ -1599,7 +1599,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.i
@@ -1607,7 +1607,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s
@@ -1615,7 +1615,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
@@ -1623,7 +1623,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.o: Use
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.o
@@ -1631,7 +1631,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.o: Us
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.i
@@ -1639,7 +1639,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.i: Us
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.s
@@ -1647,7 +1647,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.s: Us
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.o
@@ -1655,7 +1655,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.o: User
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.i
@@ -1663,7 +1663,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.i: User
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.s
@@ -1671,7 +1671,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.s: User
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_panic/panic.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.o
@@ -1679,7 +1679,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.i
@@ -1687,7 +1687,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.s
@@ -1695,7 +1695,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_printf/printf.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.o
@@ -1703,7 +1703,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.o: Users/ssn
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.i
@@ -1711,7 +1711,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.i: Users/ssn
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.s
@@ -1719,7 +1719,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.s: Users/ssn
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime/runtime.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.o
@@ -1727,7 +1727,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.o:
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.i
@@ -1735,7 +1735,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.i:
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.s
@@ -1743,7 +1743,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.s:
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
@@ -1751,7 +1751,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_cl
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
@@ -1759,7 +1759,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_cl
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
@@ -1767,7 +1767,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_cl
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_clocks.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
@@ -1775,7 +1775,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_st
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
@@ -1783,7 +1783,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_st
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
@@ -1791,7 +1791,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_st
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_runtime_init/runtime_init_stack_guard.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
@@ -1799,7 +1799,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standar
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
@@ -1807,7 +1807,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standar
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
@@ -1815,7 +1815,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standar
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_standard_binary_info/standard_binary_info.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.o
@@ -1823,7 +1823,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.o: Users/ssnow/.
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.i
@@ -1831,7 +1831,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.i: Users/ssnow/.
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.s
@@ -1839,7 +1839,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.s: Users/ssnow/.
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio/stdio.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.o
@@ -1847,7 +1847,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.o:
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.i
@@ -1855,7 +1855,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.i:
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.s
@@ -1863,7 +1863,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.s:
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/reset_interface.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
@@ -1871,7 +1871,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.o: Users
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
@@ -1879,7 +1879,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.i: Users
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
@@ -1887,7 +1887,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.s: Users
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
@@ -1895,7 +1895,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descript
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
@@ -1903,7 +1903,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descript
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
@@ -1911,7 +1911,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descript
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdio_usb/stdio_usb_descriptors.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o
@@ -1919,7 +1919,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.o: Users/ssnow
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.i
@@ -1927,7 +1927,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.i: Users/ssnow
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.s
@@ -1935,7 +1935,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.s: Users/ssnow
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_stdlib/stdlib.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o
@@ -1943,7 +1943,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.o: Users
 
 # target to build an object file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.i
@@ -1951,7 +1951,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.i: Users
 
 # target to preprocess a source file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.i
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.i
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s
@@ -1959,7 +1959,7 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.s: Users
 
 # target to generate assembly for a file
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s
 
 main.o: main.cpp.o
@@ -1967,7 +1967,7 @@ main.o: main.cpp.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -1975,7 +1975,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -1983,8 +1983,32 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_uart_test.dir/build.make CMakeFiles/pico_uart_test.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main.cpp.s
 .PHONY : main.cpp.s
+
+src/bldc_speed_pulse.o: src/bldc_speed_pulse.cpp.o
+.PHONY : src/bldc_speed_pulse.o
+
+# target to build an object file
+src/bldc_speed_pulse.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/src/bldc_speed_pulse.cpp.o
+.PHONY : src/bldc_speed_pulse.cpp.o
+
+src/bldc_speed_pulse.i: src/bldc_speed_pulse.cpp.i
+.PHONY : src/bldc_speed_pulse.i
+
+# target to preprocess a source file
+src/bldc_speed_pulse.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/src/bldc_speed_pulse.cpp.i
+.PHONY : src/bldc_speed_pulse.cpp.i
+
+src/bldc_speed_pulse.s: src/bldc_speed_pulse.cpp.s
+.PHONY : src/bldc_speed_pulse.s
+
+# target to generate assembly for a file
+src/bldc_speed_pulse.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/src/bldc_speed_pulse.cpp.s
+.PHONY : src/bldc_speed_pulse.cpp.s
 
 # Help Target
 help:
@@ -1999,7 +2023,7 @@ help:
 	@echo "... pico_status_led_ws2812_pio_h"
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
-	@echo "... pico_uart_test"
+	@echo "... pico_bldc_controller"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.s"
@@ -2224,6 +2248,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/bldc_speed_pulse.o"
+	@echo "... src/bldc_speed_pulse.i"
+	@echo "... src/bldc_speed_pulse.s"
 .PHONY : help
 
 

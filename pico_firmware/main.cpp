@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/pwm.h"
+#include <cstdlib>
 #include <cstring>
 #include <cstdio>
 
