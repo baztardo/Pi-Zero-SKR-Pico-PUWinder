@@ -22,21 +22,42 @@ def main():
         print(f"✅ Opened {SERIAL_PORT} @ {BAUD_RATE} baud")
         time.sleep(0.1)
         
+        # Flush any startup messages from Pico
+        ser.reset_input_buffer()
+        startup = ser.read_all()
+        if startup:
+            print(f"   Flushed startup data: {startup}")
+        time.sleep(0.1)
+        
         # Send test command
         print("\n📤 Sending: PING")
-        ser.write(b"PING\n")
+        data = b"PING\n"
+        print(f"   Raw bytes: {data} (length: {len(data)})")
+        ser.write(data)
         
         # Wait for response
         print("📥 Waiting for response...")
-        response = ser.readline().decode('utf-8').strip()
+        raw_response = ser.readline()
+        print(f"   Raw bytes: {raw_response} (length: {len(raw_response)})")
+        response = raw_response.decode('utf-8').strip()
         
         if response:
-            print(f"✅ Received: {response}")
+            print(f"✅ Received: '{response}'")
+            print(f"   After strip: '{response}' (length: {len(response)})")
             
             if response == "PONG":
                 print("\n🎉 SUCCESS! UART communication working!")
             else:
-                print(f"\n⚠️  Unexpected response: {response}")
+                print(f"\n⚠️  Unexpected response: '{response}'")
+        
+        # Try VERSION command too
+        print("\n📤 Sending: VERSION")
+        ser.write(b"VERSION\n")
+        
+        print("📥 Waiting for response...")
+        response2 = ser.readline().decode('utf-8').strip()
+        if response2:
+            print(f"✅ Received: {response2}")
         else:
             print("❌ No response (timeout)")
             print("   Check:")

@@ -2,6 +2,7 @@
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include <cstring>
+#include <cstdio>
 
 #define PI_UART_ID uart0
 #define PI_UART_TX_PIN 0

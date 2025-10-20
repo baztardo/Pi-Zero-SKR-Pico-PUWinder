@@ -13,7 +13,12 @@ Dual-processor architecture for high-performance winding:
 - ⚡ Hardware timing (Pico PIO)
 
 ## Quick Start
-See `docs/QUICKSTART.md`
+
+**Complete testing guide in 3 steps:**
+
+1. **Setup Pi Zero** → `docs/PI_ZERO_SETUP.md`
+2. **Build Pico Firmware** → `pico_firmware/BUILD.md`
+3. **Test Communication** → `docs/QUICKSTART.md`
 
 ## Hardware
 - Raspberry Pi Zero 2 W
