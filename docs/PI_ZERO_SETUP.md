@@ -128,7 +128,7 @@ On your **Mac**:
 
 ```bash
 cd /Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder
-scp -r pi_zero pi@winder.local:~/
+he
 ```
 
 This copies the `pi_zero` folder (with `test_uart.py`) to the Pi.
