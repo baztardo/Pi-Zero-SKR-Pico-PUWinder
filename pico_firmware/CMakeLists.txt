@@ -27,24 +27,32 @@ else()
     message(FATAL_ERROR "Pico SDK import not found.")
 endif()
 
-project(pico_bldc_controller C CXX ASM)
+project(pico_spindle_controller C CXX ASM)
 
 pico_sdk_init()
 
-add_executable(pico_bldc_controller
-    main_encoder_simple.cpp
+add_executable(pico_spindle_controller
+    main.cpp
+    src/spindle.cpp
+    src/move_queue.cpp
+    src/scheduler.cpp
+    src/stepcompress.cpp
+    src/tmc2209.cpp
+    src/winding_controller.cpp
 )
 
-target_include_directories(pico_bldc_controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(pico_spindle_controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-target_link_libraries(pico_bldc_controller
+target_link_libraries(pico_spindle_controller
     pico_stdlib
     hardware_uart
     hardware_pwm
     hardware_gpio
+    hardware_timer
+    hardware_irq
 )
 
-pico_enable_stdio_usb(pico_bldc_controller 1)
-pico_enable_stdio_uart(pico_bldc_controller 0)
+pico_enable_stdio_usb(pico_spindle_controller 1)
+pico_enable_stdio_uart(pico_spindle_controller 0)
 
-pico_add_extra_outputs(pico_bldc_controller)
+pico_add_extra_outputs(pico_spindle_controller)

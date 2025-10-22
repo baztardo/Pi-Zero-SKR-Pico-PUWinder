@@ -1,25 +1,19 @@
-// Pi-Pico UART Controller with BLDC Support
+// Pi-Pico UART Controller with Spindle Support
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/pwm.h"
+#include "hardware/gpio.h"
 #include <cstdlib>
 #include <cstring>
 #include <cstdio>
-#include "src/bldc_speed_pulse.h"
+#include "src/spindle.h"
+#include "src/config.h"
+#include "src/version.h"
 
-// UART config (Pi communication)
-#define PI_UART_ID uart0
-#define PI_UART_TX 0
-#define PI_UART_RX 1
-#define PI_UART_BAUD 115200
+// Use config.h for pin definitions
 
-// BLDC PWM config
-#define BLDC_PWM_PIN 24
-#define BLDC_HALL_PIN 22
-#define BLDC_ENABLE_PIN 21
-
-// Global BLDC controller
-BLDCSpeedPulse* bldc_controller = nullptr;
+// Global spindle controller
+BLDCSpeedPulse* spindle_controller = nullptr;
 
 void process_command(const char* cmd) {
     printf("CMD: %s (len=%d)\n", cmd, strlen(cmd));
@@ -28,11 +22,13 @@ void process_command(const char* cmd) {
         uart_puts(PI_UART_ID, "PONG\n");
     }
     else if (strcmp(cmd, "VERSION") == 0) {
-        uart_puts(PI_UART_ID, "Pico_BLDC_v1.0\n");
+        char version_str[64];
+        snprintf(version_str, sizeof(version_str), "Pico_Spindle_%s\n", FIRMWARE_VERSION);
+        uart_puts(PI_UART_ID, version_str);
     }
-    else if (strncmp(cmd, "SET_BLDC_RPM ", 13) == 0) {
-        float rpm = atof(cmd + 13);
-        printf("Setting BLDC to %.1f RPM\n", rpm);
+    else if (strncmp(cmd, "SET_SPINDLE_RPM ", 16) == 0) {
+        float rpm = atof(cmd + 16);
+        printf("Setting spindle to %.1f RPM\n", rpm);
         
         if (rpm < 0 || rpm > 3000) {
             uart_puts(PI_UART_ID, "ERROR_RPM_RANGE\n");
@@ -45,15 +41,16 @@ void process_command(const char* cmd) {
         
         printf("Duty cycle: %.1f%%\n", duty_cycle);
         
-        // Set PWM duty cycle
-        pwm_set_gpio_level(BLDC_PWM_PIN, (uint32_t)(duty_cycle * 655.35f));
+        // Set PWM duty cycle (16-bit: 0-65535)
+        uint32_t pwm_value = (uint32_t)(duty_cycle * 65535.0f / 100.0f);
+        pwm_set_gpio_level(SPINDLE_PWM_PIN, pwm_value);
         
         uart_puts(PI_UART_ID, "OK\n");
     }
-    else if (strcmp(cmd, "GET_BLDC_RPM") == 0) {
+    else if (strcmp(cmd, "GET_SPINDLE_RPM") == 0) {
         // Read current RPM from Hall sensor
-        if (bldc_controller) {
-            float current_rpm = bldc_controller->get_rpm();
+        if (spindle_controller) {
+            float current_rpm = spindle_controller->get_rpm();
             char response[32];
             snprintf(response, sizeof(response), "RPM:%.1f\n", current_rpm);
             uart_puts(PI_UART_ID, response);
@@ -61,8 +58,11 @@ void process_command(const char* cmd) {
             uart_puts(PI_UART_ID, "RPM:0.0\n");
         }
     }
-    else if (strcmp(cmd, "STOP_BLDC") == 0) {
-        pwm_set_gpio_level(BLDC_PWM_PIN, 0);
+    else if (strcmp(cmd, "STOP_SPINDLE") == 0) {
+        // Stop PWM output
+        uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
+        uint chan = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
+        pwm_set_chan_level(slice_num, chan, 0);
         uart_puts(PI_UART_ID, "STOPPED\n");
     }
     else {
@@ -73,31 +73,34 @@ void process_command(const char* cmd) {
 int main() {
     stdio_init_all();
     
-    printf("Pico_BLDC_v1.0\n");
-    printf("Pico_BLDC_Ready\n");
+    printf("Pico Spindle Controller %s\n", FIRMWARE_VERSION);
+    printf("Build: %s\n", VERSION_DATE);
+    printf("Pico_Spindle_Ready\n");
     
     // Initialize UART
     uart_init(PI_UART_ID, PI_UART_BAUD);
     gpio_set_function(PI_UART_TX, GPIO_FUNC_UART);
     gpio_set_function(PI_UART_RX, GPIO_FUNC_UART);
     
-    // Initialize BLDC PWM
-    gpio_set_function(BLDC_PWM_PIN, GPIO_FUNC_PWM);
-    uint slice_num = pwm_gpio_to_slice_num(BLDC_PWM_PIN);
+    // Initialize spindle PWM
+    gpio_set_function(SPINDLE_PWM_PIN, GPIO_FUNC_PWM);
+    uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
+    uint chan = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
     pwm_set_wrap(slice_num, 65535);  // 16-bit resolution
-    pwm_set_chan_level(slice_num, PWM_CHAN_A, 0);
+    pwm_set_chan_level(slice_num, chan, 0);  // Start at 0% duty cycle
     pwm_set_enabled(slice_num, true);
     
-    // Initialize BLDC enable pin
-    gpio_init(BLDC_ENABLE_PIN);
-    gpio_set_dir(BLDC_ENABLE_PIN, GPIO_OUT);
-    gpio_put(BLDC_ENABLE_PIN, 1);  // Enable BLDC
+    // Initialize spindle enable pin
+    gpio_init(SPINDLE_ENABLE_PIN);
+    gpio_set_dir(SPINDLE_ENABLE_PIN, GPIO_OUT);
+    gpio_put(SPINDLE_ENABLE_PIN, 1);  // Enable spindle
     
-    // Initialize BLDC speed pulse reader
-    bldc_controller = new BLDCSpeedPulse(BLDC_HALL_PIN);
+    // Initialize spindle speed pulse reader
+    spindle_controller = new BLDCSpeedPulse(SPINDLE_HALL_PIN);
+    spindle_controller->init();  // Initialize the controller
     
-    printf("BLDC Controller Ready\n");
-    printf("Commands: PING, VERSION, SET_BLDC_RPM <rpm>, GET_BLDC_RPM, STOP_BLDC\n");
+    printf("Spindle Controller Ready\n");
+    printf("Commands: PING, VERSION, SET_SPINDLE_RPM <rpm>, GET_SPINDLE_RPM, STOP_SPINDLE\n");
     
     char buffer[64];
     int buffer_pos = 0;
