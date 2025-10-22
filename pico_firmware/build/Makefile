@@ -1962,53 +1962,29 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.c.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+main_encoder_simple.o: main_encoder_simple.cpp.o
+.PHONY : main_encoder_simple.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main.cpp.o
-.PHONY : main.cpp.o
+main_encoder_simple.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main_encoder_simple.cpp.o
+.PHONY : main_encoder_simple.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
-
-# target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main.cpp.i
-.PHONY : main.cpp.i
-
-main.s: main.cpp.s
-.PHONY : main.s
-
-# target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main.cpp.s
-.PHONY : main.cpp.s
-
-src/bldc_speed_pulse.o: src/bldc_speed_pulse.cpp.o
-.PHONY : src/bldc_speed_pulse.o
-
-# target to build an object file
-src/bldc_speed_pulse.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/src/bldc_speed_pulse.cpp.o
-.PHONY : src/bldc_speed_pulse.cpp.o
-
-src/bldc_speed_pulse.i: src/bldc_speed_pulse.cpp.i
-.PHONY : src/bldc_speed_pulse.i
+main_encoder_simple.i: main_encoder_simple.cpp.i
+.PHONY : main_encoder_simple.i
 
 # target to preprocess a source file
-src/bldc_speed_pulse.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/src/bldc_speed_pulse.cpp.i
-.PHONY : src/bldc_speed_pulse.cpp.i
+main_encoder_simple.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main_encoder_simple.cpp.i
+.PHONY : main_encoder_simple.cpp.i
 
-src/bldc_speed_pulse.s: src/bldc_speed_pulse.cpp.s
-.PHONY : src/bldc_speed_pulse.s
+main_encoder_simple.s: main_encoder_simple.cpp.s
+.PHONY : main_encoder_simple.s
 
 # target to generate assembly for a file
-src/bldc_speed_pulse.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/src/bldc_speed_pulse.cpp.s
-.PHONY : src/bldc_speed_pulse.cpp.s
+main_encoder_simple.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_bldc_controller.dir/build.make CMakeFiles/pico_bldc_controller.dir/main_encoder_simple.cpp.s
+.PHONY : main_encoder_simple.cpp.s
 
 # Help Target
 help:
@@ -2245,12 +2221,9 @@ help:
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_unique_id/unique_id.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
-	@echo "... src/bldc_speed_pulse.o"
-	@echo "... src/bldc_speed_pulse.i"
-	@echo "... src/bldc_speed_pulse.s"
+	@echo "... main_encoder_simple.o"
+	@echo "... main_encoder_simple.i"
+	@echo "... main_encoder_simple.s"
 .PHONY : help
 
 

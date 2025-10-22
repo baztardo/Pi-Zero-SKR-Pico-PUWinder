@@ -32,8 +32,7 @@ project(pico_bldc_controller C CXX ASM)
 pico_sdk_init()
 
 add_executable(pico_bldc_controller
-    main.cpp
-    src/bldc_speed_pulse.cpp
+    main_encoder_simple.cpp
 )
 
 target_include_directories(pico_bldc_controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)

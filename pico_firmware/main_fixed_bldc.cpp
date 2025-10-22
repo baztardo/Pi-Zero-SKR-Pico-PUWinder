@@ -1,13 +1,12 @@
-// Pi-Pico UART Controller with BLDC Support
+// Fixed BLDC Control Firmware
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/pwm.h"
-#include <cstdlib>
+#include "hardware/gpio.h"
 #include <cstring>
 #include <cstdio>
-#include "src/bldc_speed_pulse.h"
+#include <cstdlib>
 
-// UART config (Pi communication)
 #define PI_UART_ID uart0
 #define PI_UART_TX 0
 #define PI_UART_RX 1
@@ -15,20 +14,16 @@
 
 // BLDC PWM config
 #define BLDC_PWM_PIN 24
-#define BLDC_HALL_PIN 22
 #define BLDC_ENABLE_PIN 21
 
-// Global BLDC controller
-BLDCSpeedPulse* bldc_controller = nullptr;
-
 void process_command(const char* cmd) {
-    printf("CMD: %s (len=%d)\n", cmd, strlen(cmd));
+    printf("CMD: '%s'\n", cmd);
     
     if (strcmp(cmd, "PING") == 0) {
         uart_puts(PI_UART_ID, "PONG\n");
     }
     else if (strcmp(cmd, "VERSION") == 0) {
-        uart_puts(PI_UART_ID, "Pico_BLDC_v1.0\n");
+        uart_puts(PI_UART_ID, "Fixed_BLDC_v1.0\n");
     }
     else if (strncmp(cmd, "SET_BLDC_RPM ", 13) == 0) {
         float rpm = atof(cmd + 13);
@@ -39,33 +34,42 @@ void process_command(const char* cmd) {
             return;
         }
         
-        // Convert RPM to PWM duty cycle (0-100%)
-        float duty_cycle = (rpm / 3000.0f) * 100.0f;
-        if (duty_cycle > 100.0f) duty_cycle = 100.0f;
+        // FIXED: Better RPM to PWM mapping
+        // Minimum 5% duty cycle to start motor, max 50% for 3000 RPM
+        float duty_cycle;
+        if (rpm <= 0) {
+            duty_cycle = 0.0f;
+        } else if (rpm <= 100) {
+            // Linear from 5% to 10% for 0-100 RPM
+            duty_cycle = 5.0f + (rpm / 100.0f) * 5.0f;
+        } else {
+            // Linear from 10% to 50% for 100-3000 RPM
+            duty_cycle = 10.0f + ((rpm - 100.0f) / 2900.0f) * 40.0f;
+        }
+        
+        if (duty_cycle > 50.0f) duty_cycle = 50.0f;
         
         printf("Duty cycle: %.1f%%\n", duty_cycle);
         
-        // Set PWM duty cycle
-        pwm_set_gpio_level(BLDC_PWM_PIN, (uint32_t)(duty_cycle * 655.35f));
+        // Set PWM duty cycle (0-65535 for 16-bit)
+        uint32_t pwm_level = (uint32_t)(duty_cycle * 655.35f);
+        pwm_set_gpio_level(BLDC_PWM_PIN, pwm_level);
+        
+        printf("PWM level set to: %u (%.1f%%)\n", pwm_level, duty_cycle);
+        
+        // Enable pin
+        gpio_put(BLDC_ENABLE_PIN, 1);
         
         uart_puts(PI_UART_ID, "OK\n");
     }
-    else if (strcmp(cmd, "GET_BLDC_RPM") == 0) {
-        // Read current RPM from Hall sensor
-        if (bldc_controller) {
-            float current_rpm = bldc_controller->get_rpm();
-            char response[32];
-            snprintf(response, sizeof(response), "RPM:%.1f\n", current_rpm);
-            uart_puts(PI_UART_ID, response);
-        } else {
-            uart_puts(PI_UART_ID, "RPM:0.0\n");
-        }
-    }
     else if (strcmp(cmd, "STOP_BLDC") == 0) {
         pwm_set_gpio_level(BLDC_PWM_PIN, 0);
+        gpio_put(BLDC_ENABLE_PIN, 0);
+        printf("BLDC stopped\n");
         uart_puts(PI_UART_ID, "STOPPED\n");
     }
     else {
+        printf("Unknown command: '%s'\n", cmd);
         uart_puts(PI_UART_ID, "ERROR_UNKNOWN_CMD\n");
     }
 }
@@ -73,8 +77,7 @@ void process_command(const char* cmd) {
 int main() {
     stdio_init_all();
     
-    printf("Pico_BLDC_v1.0\n");
-    printf("Pico_BLDC_Ready\n");
+    printf("Fixed BLDC Control v1.0\n");
     
     // Initialize UART
     uart_init(PI_UART_ID, PI_UART_BAUD);
@@ -91,19 +94,15 @@ int main() {
     // Initialize BLDC enable pin
     gpio_init(BLDC_ENABLE_PIN);
     gpio_set_dir(BLDC_ENABLE_PIN, GPIO_OUT);
-    gpio_put(BLDC_ENABLE_PIN, 1);  // Enable BLDC
-    
-    // Initialize BLDC speed pulse reader
-    bldc_controller = new BLDCSpeedPulse(BLDC_HALL_PIN);
+    gpio_put(BLDC_ENABLE_PIN, 0);  // Start with enable LOW
     
     printf("BLDC Controller Ready\n");
-    printf("Commands: PING, VERSION, SET_BLDC_RPM <rpm>, GET_BLDC_RPM, STOP_BLDC\n");
+    printf("PWM Pin: %d, Enable Pin: %d\n", BLDC_PWM_PIN, BLDC_ENABLE_PIN);
     
     char buffer[64];
     int buffer_pos = 0;
     
     while (true) {
-        // Check for UART data
         if (uart_is_readable(PI_UART_ID)) {
             char c = uart_getc(PI_UART_ID);
             
