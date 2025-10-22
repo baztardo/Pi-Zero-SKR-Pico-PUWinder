@@ -1,0 +1,84 @@
+name: Release Pipeline
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        type: string
+
+jobs:
+  # =============================================================================
+  # Build Release
+  # =============================================================================
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup Pico SDK
+      run: |
+        git clone https://github.com/raspberrypi/pico-sdk.git
+        cd pico-sdk
+        git submodule update --init
+        echo "PICO_SDK_PATH=$PWD" >> $GITHUB_ENV
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential
+    
+    - name: Build firmware
+      run: |
+        cd pico_firmware
+        mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        make -j$(nproc)
+    
+    - name: Create release package
+      run: |
+        mkdir -p release
+        cp pico_firmware/build/pico_spindle_controller.uf2 release/
+        cp -r pi_zero release/
+        cp README.md release/
+        cp LICENSE release/
+        tar -czf pi-zero-skr-pico-puwinder-${{ github.ref_name }}.tar.gz -C release .
+    
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: release-package
+        path: pi-zero-skr-pico-puwinder-${{ github.ref_name }}.tar.gz
+
+  # =============================================================================
+  # Create GitHub Release
+  # =============================================================================
+  create-release:
+    needs: build-release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: release-package
+    
+    - name: Generate changelog
+      run: |
+        echo "## Changes in ${{ github.ref_name }}" > CHANGELOG.md
+        git log --oneline $(git describe --tags --abbrev=0 HEAD^)..HEAD >> CHANGELOG.md
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: pi-zero-skr-pico-puwinder-${{ github.ref_name }}.tar.gz
+        body_path: CHANGELOG.md
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

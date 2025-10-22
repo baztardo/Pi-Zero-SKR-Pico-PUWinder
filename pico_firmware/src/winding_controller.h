@@ -83,7 +83,9 @@ public:
     uint32_t get_turns_completed() const { return turns_completed; }
     float get_current_rpm() const { return current_rpm; }
     void emergency_stop();
-
+    
+    // Public homing methods
+    void home_all_axes();
 
 private:
     MoveQueue* move_queue;

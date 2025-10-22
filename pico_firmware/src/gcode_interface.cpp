@@ -7,6 +7,8 @@
 #include "config.h"
 #include "spindle.h"
 #include "traverse_controller.h"
+#include "move_queue.h"
+#include "winding_controller.h"
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/pwm.h"
@@ -388,9 +390,10 @@ bool GCodeInterface::execute_g0_g1() {
         float target_y = params.Y;
         float feedrate = params.has_F ? params.F : 1000.0f; // Default 1000 mm/min
         
-        // Create move using WindingController (which uses StepCompressor)
-        // This will generate proper step chunks for the move queue
-        winding_controller->move_to_start(); // This will use StepCompressor internally
+        // TODO: Implement proper traverse movement using StepCompressor
+        // For now, just acknowledge the command
+        printf("G1 Y%.3f F%.1f - Move to Y=%.3f at %.1f mm/min\n", 
+               target_y, feedrate, target_y, feedrate);
         
         send_response("OK");
         return true;
@@ -412,7 +415,7 @@ bool GCodeInterface::execute_g28() {
     }
     
     // Use Klipper-style homing via WindingController
-    winding_controller->home_traverse();
+    winding_controller->home_all_axes();
     send_response("OK");
     return true;
 }
@@ -568,7 +571,7 @@ bool GCodeInterface::execute_m16() {
     }
     
     // Use Klipper-style homing via WindingController
-    winding_controller->home_traverse();
+    winding_controller->home_all_axes();
     send_response("All axes homed");
     return true;
 }

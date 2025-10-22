@@ -70,32 +70,59 @@ int main() {
     
     // Initialize spindle speed pulse reader
     spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
+    if (!spindle_controller) {
+        printf("ERROR: Failed to create spindle controller\n");
+        return -1;
+    }
     spindle_controller->init();
     printf("Spindle controller initialized\n");
     
     // Initialize traverse controller
     traverse_controller = new TraverseController();
+    if (!traverse_controller) {
+        printf("ERROR: Failed to create traverse controller\n");
+        return -1;
+    }
     traverse_controller->init();
     printf("Traverse controller initialized\n");
     
     // Initialize move queue (Klipper-style)
     move_queue = new MoveQueue();
+    if (!move_queue) {
+        printf("ERROR: Failed to create move queue\n");
+        return -1;
+    }
     move_queue->init();
     printf("Move queue initialized\n");
     
     // Initialize scheduler (Klipper-style)
     scheduler = new Scheduler(move_queue);
-    scheduler->start(HEARTBEAT_US);
+    if (!scheduler) {
+        printf("ERROR: Failed to create scheduler\n");
+        return -1;
+    }
+    if (!scheduler->start(HEARTBEAT_US)) {
+        printf("ERROR: Failed to start scheduler\n");
+        return -1;
+    }
     printf("Scheduler started\n");
+    
+    // Initialize G-code interface first
+    gcode_interface = new GCodeInterface();
+    if (!gcode_interface) {
+        printf("ERROR: Failed to create G-code interface\n");
+        return -1;
+    }
+    printf("G-code interface initialized\n");
     
     // Initialize winding controller (Klipper-style)
     winding_controller = new WindingController(move_queue);
+    if (!winding_controller) {
+        printf("ERROR: Failed to create winding controller\n");
+        return -1;
+    }
     winding_controller->init();
     printf("Winding controller initialized\n");
-    
-    // Initialize G-code interface
-    gcode_interface = new GCodeInterface();
-    printf("G-code interface initialized\n");
     
     printf("Pico Controller Ready (Klipper-style)\n");
     printf("Commands: G-code compatible (G0, G1, G28, M3, M4, M5, S, M6-M19, PING, VERSION)\n");
@@ -124,4 +151,27 @@ int main() {
         
         sleep_ms(10);
     }
+    
+    // Cleanup (this will never be reached in normal operation)
+    if (scheduler) {
+        scheduler->stop();
+        delete scheduler;
+    }
+    if (move_queue) {
+        delete move_queue;
+    }
+    if (winding_controller) {
+        delete winding_controller;
+    }
+    if (gcode_interface) {
+        delete gcode_interface;
+    }
+    if (traverse_controller) {
+        delete traverse_controller;
+    }
+    if (spindle_controller) {
+        delete spindle_controller;
+    }
+    
+    return 0;
 }

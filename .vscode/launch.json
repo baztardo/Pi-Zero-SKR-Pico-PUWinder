@@ -1,0 +1,40 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Pi Zero Python",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pi_zero/test_uart.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/pi_zero",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/pi_zero"
+            }
+        },
+        {
+            "name": "Debug G-code Interface",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pi_zero/test_gcode_interface.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/pi_zero"
+        },
+        {
+            "name": "Debug Spindle Test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pi_zero/test_spindle.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/pi_zero"
+        },
+        {
+            "name": "Debug Klipper Architecture",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/pi_zero/test_klipper_architecture.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/pi_zero"
+        }
+    ]
+}

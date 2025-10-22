@@ -26,10 +26,10 @@ WindingController::WindingController(MoveQueue* mq)
     , ramp_started(false)
     , ramp_start_time(0)
     , turn_accum(0.0)
-    , spindle_sign(0)  // BLDC motor direction sign
+    , encoder_sign(0)  // BLDC motor direction sign
     , traverse_steps_emitted(0.0)
-    , last_sync_time(0)
-    , last_rpm_time(0)
+    , enc_last_sync(0)
+    , enc_last_rpm(0)
 {
     printf("[WindingController] Created\n");
 }
@@ -37,12 +37,16 @@ WindingController::WindingController(MoveQueue* mq)
 void WindingController::init() {
     printf("WindingController::init() called\n");
     
-    // Initialize BLDC motor for spindle control
-    g_spindle_motor = new BLDC_MOTOR(SPINDLE_HALL_PIN);
-    g_spindle_motor->init();
-    g_spindle_motor->set_pulses_per_revolution(BLDC_DEFAULT_PPR);
+    // Use the global spindle controller from main.cpp
+    extern BLDC_MOTOR* spindle_controller;
+    g_spindle_motor = spindle_controller;
     
-    printf("WindingController initialized with BLDC motor\n");
+    if (g_spindle_motor) {
+        g_spindle_motor->set_pulses_per_revolution(BLDC_DEFAULT_PPR);
+        printf("WindingController initialized with existing BLDC motor\n");
+    } else {
+        printf("ERROR: Spindle controller not initialized in main.cpp\n");
+    }
 }
 
 void WindingController::set_parameters(const WindingParams& p) {
@@ -381,4 +385,13 @@ uint32_t WindingController::mm_to_steps(float mm) {
 float WindingController::steps_to_mm(uint32_t steps) {
     float revs = (float)steps / (200.0f * TRAVERSE_MICROSTEPS);
     return revs * TRAVERSE_PITCH_MM;
+}
+
+// =============================================================================
+// Public homing methods
+// =============================================================================
+void WindingController::home_all_axes() {
+    printf("[WindingController] Homing all axes\n");
+    home_traverse();
+    home_spindle();
 }

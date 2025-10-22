@@ -1986,6 +1986,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/gcode_interface.o: src/gcode_interface.cpp.o
+.PHONY : src/gcode_interface.o
+
+# target to build an object file
+src/gcode_interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/gcode_interface.cpp.o
+.PHONY : src/gcode_interface.cpp.o
+
+src/gcode_interface.i: src/gcode_interface.cpp.i
+.PHONY : src/gcode_interface.i
+
+# target to preprocess a source file
+src/gcode_interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/gcode_interface.cpp.i
+.PHONY : src/gcode_interface.cpp.i
+
+src/gcode_interface.s: src/gcode_interface.cpp.s
+.PHONY : src/gcode_interface.s
+
+# target to generate assembly for a file
+src/gcode_interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/gcode_interface.cpp.s
+.PHONY : src/gcode_interface.cpp.s
+
 src/move_queue.o: src/move_queue.cpp.o
 .PHONY : src/move_queue.o
 
@@ -2105,6 +2129,30 @@ src/tmc2209.s: src/tmc2209.cpp.s
 src/tmc2209.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/tmc2209.cpp.s
 .PHONY : src/tmc2209.cpp.s
+
+src/traverse_controller.o: src/traverse_controller.cpp.o
+.PHONY : src/traverse_controller.o
+
+# target to build an object file
+src/traverse_controller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/traverse_controller.cpp.o
+.PHONY : src/traverse_controller.cpp.o
+
+src/traverse_controller.i: src/traverse_controller.cpp.i
+.PHONY : src/traverse_controller.i
+
+# target to preprocess a source file
+src/traverse_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/traverse_controller.cpp.i
+.PHONY : src/traverse_controller.cpp.i
+
+src/traverse_controller.s: src/traverse_controller.cpp.s
+.PHONY : src/traverse_controller.s
+
+# target to generate assembly for a file
+src/traverse_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/traverse_controller.cpp.s
+.PHONY : src/traverse_controller.cpp.s
 
 src/winding_controller.o: src/winding_controller.cpp.o
 .PHONY : src/winding_controller.o
@@ -2368,6 +2416,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/gcode_interface.o"
+	@echo "... src/gcode_interface.i"
+	@echo "... src/gcode_interface.s"
 	@echo "... src/move_queue.o"
 	@echo "... src/move_queue.i"
 	@echo "... src/move_queue.s"
@@ -2383,6 +2434,9 @@ help:
 	@echo "... src/tmc2209.o"
 	@echo "... src/tmc2209.i"
 	@echo "... src/tmc2209.s"
+	@echo "... src/traverse_controller.o"
+	@echo "... src/traverse_controller.i"
+	@echo "... src/traverse_controller.s"
 	@echo "... src/winding_controller.o"
 	@echo "... src/winding_controller.i"
 	@echo "... src/winding_controller.s"

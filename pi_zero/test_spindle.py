@@ -4,8 +4,13 @@ Spindle Control Test for Pi Zero ↔ SKR Pico communication
 Tests spindle RPM control commands
 """
 
-import serial
-import time
+try:
+    import serial
+    import time
+except ImportError as e:
+    print(f"❌ Missing dependency: {e}")
+    print("   Install with: sudo apt install python3-serial")
+    exit(1)
 
 # UART configuration
 SERIAL_PORT = '/dev/serial0'

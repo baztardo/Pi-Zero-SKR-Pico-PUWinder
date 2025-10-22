@@ -9,6 +9,7 @@
 #include "hardware/timer.h"
 #include "hardware/gpio.h"
 #include <cstdio>
+#include <cmath>
 
 // Global instance for ISR
 TraverseController* TraverseController::instance = nullptr;
@@ -112,13 +113,13 @@ void TraverseController::move_to_position(float position_mm) {
     target_position_mm = position_mm;
     float distance = target_position_mm - current_position_mm;
     
-    if (abs(distance) < 0.01f) {  // Already at position
+    if (fabs(distance) < 0.01f) {  // Already at position
         printf("[TraverseController] Already at position %.2f mm\n", position_mm);
         return;
     }
     
     // Calculate steps needed
-    steps_remaining = (int32_t)(abs(distance) * steps_per_mm);
+    steps_remaining = (int32_t)(fabs(distance) * steps_per_mm);
     step_direction = (distance > 0);
     
     // Set direction pin
@@ -224,9 +225,9 @@ void TraverseController::emergency_stop() {
 // =============================================================================
 // Set brake
 // =============================================================================
-void TraverseController::set_brake(bool enable) {
+void TraverseController::set_brake(bool brake_enable) {
     // For stepper motors, "brake" is just disabling the motor
-    if (enable) {
+    if (brake_enable) {
         disable();
     } else {
         enable();
