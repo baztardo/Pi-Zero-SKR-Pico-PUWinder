@@ -1,15 +1,15 @@
-# Pick-up Winder - Klipper-based Architecture
+# Pick-up Winder - G-code Compatible Architecture
 
 ## 🏗️ System Architecture
 
-This winding machine is based on **Klipper's proven architecture**:
+This winding machine uses **G-code compatible architecture** inspired by open-source 3D printing firmware:
 
 ### 🧠 **Pi Zero (Host/Brain)**
 - **High-level control logic**
 - **Motion planning and coordination**
 - **User interface and display**
 - **Winding process management**
-- **Klipper host software**
+- **G-code host software**
 
 ### ⚙️ **Pico (MCU/Hardware Slave)**
 - **Real-time hardware control**
@@ -23,9 +23,9 @@ This winding machine is based on **Klipper's proven architecture**:
 ```
 Pi-Zero-SKR-Pico-PUWinder/
 ├── pi_zero/                    # Pi Zero (Host) code
-│   ├── klipper_main.py        # Main Klipper controller
-│   ├── klipper_winding.py     # Winding process logic
-│   ├── printer.cfg            # Klipper configuration
+│   ├── main_controller.py     # Main G-code controller
+│   ├── winding_controller.py  # Winding process logic
+│   ├── machine.cfg           # Machine configuration
 │   ├── requirements.txt       # Python dependencies
 │   └── test_*.py             # Test scripts
 │
@@ -52,6 +52,8 @@ Pi-Zero-SKR-Pico-PUWinder/
 ## 🎮 G-code Spindle Commands
 
 The system uses **standard G-code commands** for spindle control:
+
+> **Note**: This system uses G-code compatible architecture inspired by open-source 3D printing firmware but is a standalone implementation for winding machines.
 
 ### **Basic Spindle Commands:**
 - **`M3 S<rpm>`** - Start spindle clockwise at specified RPM
@@ -94,26 +96,22 @@ The system uses **standard G-code commands** for spindle control:
 
 ## 🚀 Getting Started
 
-### **1. Install Klipper on Pi Zero**
+### **1. Install Dependencies on Pi Zero**
 
 ```bash
-# Install Klipper
-cd ~
-git clone https://github.com/Klipper3d/klipper.git
-cd klipper
-make menuconfig
-make
-sudo make install
-
 # Install Python dependencies
 pip3 install -r requirements.txt
+
+# Install system packages
+sudo apt update
+sudo apt install python3-serial python3-requests
 ```
 
-### **2. Configure Klipper**
+### **2. Configure Machine**
 
-Copy `printer.cfg` to your Klipper config directory:
+Copy `machine.cfg` to your config directory:
 ```bash
-cp printer.cfg ~/printer.cfg
+cp machine.cfg ~/machine.cfg
 ```
 
 ### **3. Build and Flash Pico Firmware**
@@ -129,17 +127,14 @@ make -j4
 ### **4. Start the System**
 
 ```bash
-# Start Klipper
-sudo systemctl start klipper
-
 # Start winding controller
-python3 klipper_main.py
+python3 main_controller.py
 ```
 
 ## 🎯 Key Features
 
-### **Klipper Integration**
-- **Proven architecture** from 3D printing
+### **G-code Compatible Architecture**
+- **Proven architecture** inspired by 3D printing
 - **Real-time motion control**
 - **Hardware abstraction**
 - **Extensible configuration**
@@ -213,12 +208,12 @@ python3 test_spindle.py
 
 ### **Test Full System**
 ```bash
-python3 klipper_main.py
+python3 main_controller.py
 ```
 
-## 🎯 Benefits of Klipper Architecture
+## 🎯 Benefits of G-code Compatible Architecture
 
-1. **Proven Technology**: Based on Klipper's battle-tested 3D printing architecture
+1. **Proven Technology**: Based on battle-tested 3D printing architecture
 2. **Real-time Control**: Pico handles hardware timing, Pi Zero handles planning
 3. **Extensible**: Easy to add new features and hardware
 4. **Maintainable**: Clear separation of concerns
@@ -243,6 +238,17 @@ python3 klipper_main.py
 
 ## 📚 References
 
-- [Klipper Documentation](https://www.klipper3d.org/)
 - [Raspberry Pi Pico SDK](https://datasheets.raspberrypi.org/pico/raspberry-pi-pico-c-sdk.pdf)
 - [TMC2209 Datasheet](https://www.trinamic.com/fileadmin/assets/Products/ICs_Documents/TMC2209_Datasheet_V103.pdf)
+- [G-code Standards](https://en.wikipedia.org/wiki/G-code)
+
+## 🙏 Credits
+
+This project uses G-code compatible architecture inspired by open-source 3D printing firmware. The G-code command structure and M-code definitions are based on industry standards and open-source implementations.
+
+**Inspiration and References:**
+- G-code standards and open-source 3D printing firmware
+- Community-driven motion control systems
+- Open-source hardware and software principles
+
+**Note**: This is a standalone implementation specifically designed for winding machines and does not use any proprietary or trademarked software.

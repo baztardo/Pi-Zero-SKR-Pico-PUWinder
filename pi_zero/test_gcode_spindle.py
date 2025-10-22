@@ -12,16 +12,16 @@ from typing import Dict, Any
 # G-code Spindle Test Client
 # =============================================================================
 class GCodeSpindleTester:
-    def __init__(self, klipper_url: str = "http://localhost:7125"):
-        self.klipper_url = klipper_url
-        self.api_url = f"{klipper_url}/printer/gcode/script"
+    def __init__(self, machine_url: str = "http://localhost:8080"):
+        self.machine_url = machine_url
+        self.api_url = f"{machine_url}/api/gcode"
     
     def send_gcode(self, gcode: str) -> bool:
-        """Send G-code command to Klipper"""
+        """Send G-code command to machine"""
         try:
             response = requests.post(
                 self.api_url,
-                json={"script": gcode},
+                json={"command": gcode},
                 timeout=5
             )
             return response.status_code == 200

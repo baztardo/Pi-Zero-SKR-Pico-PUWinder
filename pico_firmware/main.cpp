@@ -9,65 +9,38 @@
 #include "src/spindle.h"
 #include "src/config.h"
 #include "src/version.h"
+#include "src/traverse_controller.h"
+#include "src/gcode_interface.h"
+#include "src/scheduler.h"
+#include "src/move_queue.h"
+#include "src/winding_controller.h"
 
 // Use config.h for pin definitions
 
-// Global spindle controller
+// Global controllers (Klipper-style architecture)
 BLDC_MOTOR* spindle_controller = nullptr;
+TraverseController* traverse_controller = nullptr;
+GCodeInterface* gcode_interface = nullptr;
+MoveQueue* move_queue = nullptr;
+Scheduler* scheduler = nullptr;
+WindingController* winding_controller = nullptr;
 
 void process_command(const char* cmd) {
     printf("CMD: %s (len=%d)\n", cmd, strlen(cmd));
     
-    if (strcmp(cmd, "PING") == 0) {
-        uart_puts(PI_UART_ID, "PONG\n");
+    if (!gcode_interface) {
+        uart_puts(PI_UART_ID, "ERROR_INTERFACE_NOT_INIT\n");
+        return;
     }
-    else if (strcmp(cmd, "VERSION") == 0) {
-        char version_str[64];
-        snprintf(version_str, sizeof(version_str), "Pico_Spindle_%s\n", FIRMWARE_VERSION);
-        uart_puts(PI_UART_ID, version_str);
+    
+    // Parse command
+    if (!gcode_interface->parse_command(cmd)) {
+        uart_puts(PI_UART_ID, "ERROR_PARSE_FAILED\n");
+        return;
     }
-    else if (strncmp(cmd, "SET_SPINDLE_RPM ", 16) == 0) {
-        float rpm = atof(cmd + 16);
-        printf("Setting spindle to %.1f RPM\n", rpm);
-        
-        if (rpm < 0 || rpm > 3000) {
-            uart_puts(PI_UART_ID, "ERROR_RPM_RANGE\n");
-            return;
-        }
-        
-        // Convert RPM to PWM duty cycle (0-100%)
-        float duty_cycle = (rpm / 3000.0f) * 100.0f;
-        if (duty_cycle > 100.0f) duty_cycle = 100.0f;
-        
-        printf("Duty cycle: %.1f%%\n", duty_cycle);
-        
-        // Set PWM duty cycle (16-bit: 0-65535)
-        uint32_t pwm_value = (uint32_t)(duty_cycle * 65535.0f / 100.0f);
-        pwm_set_gpio_level(SPINDLE_PWM_PIN, pwm_value);
-        
-        uart_puts(PI_UART_ID, "OK\n");
-    }
-    else if (strcmp(cmd, "GET_SPINDLE_RPM") == 0) {
-        // Read current RPM from Hall sensor
-        if (spindle_controller) {
-            float current_rpm = spindle_controller->get_rpm();
-            char response[32];
-            snprintf(response, sizeof(response), "RPM:%.1f\n", current_rpm);
-            uart_puts(PI_UART_ID, response);
-        } else {
-            uart_puts(PI_UART_ID, "RPM:0.0\n");
-        }
-    }
-    else if (strcmp(cmd, "STOP_SPINDLE") == 0) {
-        // Stop PWM output
-        uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
-        uint chan = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
-        pwm_set_chan_level(slice_num, chan, 0);
-        uart_puts(PI_UART_ID, "STOPPED\n");
-    }
-    else {
-        uart_puts(PI_UART_ID, "ERROR_UNKNOWN_CMD\n");
-    }
+    
+    // Execute command (G-code interface handles all responses)
+    gcode_interface->execute_command();
 }
 
 int main() {
@@ -97,10 +70,35 @@ int main() {
     
     // Initialize spindle speed pulse reader
     spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
-    spindle_controller->init();  // Initialize the controller
+    spindle_controller->init();
+    printf("Spindle controller initialized\n");
     
-    printf("Spindle Controller Ready\n");
-    printf("Commands: PING, VERSION, SET_SPINDLE_RPM <rpm>, GET_SPINDLE_RPM, STOP_SPINDLE\n");
+    // Initialize traverse controller
+    traverse_controller = new TraverseController();
+    traverse_controller->init();
+    printf("Traverse controller initialized\n");
+    
+    // Initialize move queue (Klipper-style)
+    move_queue = new MoveQueue();
+    move_queue->init();
+    printf("Move queue initialized\n");
+    
+    // Initialize scheduler (Klipper-style)
+    scheduler = new Scheduler(move_queue);
+    scheduler->start(HEARTBEAT_US);
+    printf("Scheduler started\n");
+    
+    // Initialize winding controller (Klipper-style)
+    winding_controller = new WindingController(move_queue);
+    winding_controller->init();
+    printf("Winding controller initialized\n");
+    
+    // Initialize G-code interface
+    gcode_interface = new GCodeInterface();
+    printf("G-code interface initialized\n");
+    
+    printf("Pico Controller Ready (Klipper-style)\n");
+    printf("Commands: G-code compatible (G0, G1, G28, M3, M4, M5, S, M6-M19, PING, VERSION)\n");
     
     char buffer[64];
     int buffer_pos = 0;
@@ -120,6 +118,9 @@ int main() {
                 buffer[buffer_pos++] = c;
             }
         }
+        
+        // Klipper-style: Scheduler handles all stepping via ISR
+        // No manual step generation needed - ISR handles everything
         
         sleep_ms(10);
     }

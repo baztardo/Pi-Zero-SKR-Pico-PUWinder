@@ -26,10 +26,10 @@ WindingController::WindingController(MoveQueue* mq)
     , ramp_started(false)
     , ramp_start_time(0)
     , turn_accum(0.0)
-    , encoder_sign(0)
+    , spindle_sign(0)  // BLDC motor direction sign
     , traverse_steps_emitted(0.0)
-    , enc_last_sync(0)
-    , enc_last_rpm(0)
+    , last_sync_time(0)
+    , last_rpm_time(0)
 {
     printf("[WindingController] Created\n");
 }

@@ -39,6 +39,8 @@ add_executable(pico_spindle_controller
     src/stepcompress.cpp
     src/tmc2209.cpp
     src/winding_controller.cpp
+    src/traverse_controller.cpp
+    src/gcode_interface.cpp
 )
 
 target_include_directories(pico_spindle_controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
