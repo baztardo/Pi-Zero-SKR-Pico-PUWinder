@@ -3,17 +3,16 @@
 // Purpose: Count speed pulses from SC output and calculate RPM
 // =============================================================================
 
-#include "bldc_speed_pulse.h"
+#include "spindle.h"
 #include "pico/stdlib.h"
 #include <cstdio>
 
 // Global instance pointer for ISR
-static BLDCSpeedPulse* g_speed_pulse_instance = nullptr;
-
+static BLDC_MOTOR* g_speed_pulse_instance = nullptr;
 // =============================================================================
 // Constructor
 // =============================================================================
-BLDCSpeedPulse::BLDCSpeedPulse(uint pulse_pin)
+BLDC_MOTOR::BLDC_MOTOR(uint pulse_pin)
     : pulse_pin(pulse_pin)
     , edge_count(0)
     , last_edge_time(0)
@@ -21,6 +20,9 @@ BLDCSpeedPulse::BLDCSpeedPulse(uint pulse_pin)
     , pulse_frequency(0.0f)
     , last_rpm_calculation_time(0)
     , pulses_per_revolution(6)  // Default: 6 edges per full rotation
+    , direction(DIRECTION_CW)
+    , brake(false)
+
 {
     g_speed_pulse_instance = this;
 }
@@ -28,28 +30,36 @@ BLDCSpeedPulse::BLDCSpeedPulse(uint pulse_pin)
 // =============================================================================
 // Initialize GPIO and ISR
 // =============================================================================
-void BLDCSpeedPulse::init() {
+void BLDC_MOTOR::init() {
     // Configure GPIO
     gpio_init(pulse_pin);
     gpio_set_dir(pulse_pin, GPIO_IN);
     gpio_pull_up(pulse_pin);
     
+    gpio_init(BLDC_MOTOR_DIR_PIN);
+    gpio_set_dir(BLDC_MOTOR_DIR_PIN, GPIO_OUT);
+    gpio_put(BLDC_MOTOR_DIR_PIN, 1);  // Start forward
+
+    gpio_init(BLDC_MOTOR_BRAKE_PIN);
+    gpio_set_dir(BLDC_MOTOR_BRAKE_PIN, GPIO_OUT);
+    gpio_put(BLDC_MOTOR_BRAKE_PIN, 0);  // Start brake OFF
+
     // Enable interrupt on rising edge
     gpio_set_irq_enabled_with_callback(
         pulse_pin,
         GPIO_IRQ_EDGE_RISE,  // Trigger on rising edge
         true,
-        &BLDCSpeedPulse::isr_wrapper
+        &BLDC_MOTOR::isr_wrapper
     );
     
-    printf("[BLDC-PULSE] Initialized on GPIO %u\n", pulse_pin);
-    printf("[BLDC-PULSE] Pulses per revolution: %u\n", pulses_per_revolution);
+    printf("[BLDC_MOTOR] Initialized on GPIO %u\n", pulse_pin);
+    printf("[BLDC_MOTOR] Pulses per revolution: %u\n", pulses_per_revolution);
 }
 
 // =============================================================================
 // Static ISR wrapper (required for Pico SDK)
 // =============================================================================
-void BLDCSpeedPulse::isr_wrapper(uint gpio, uint32_t events) {
+void BLDC_MOTOR::isr_wrapper(uint gpio, uint32_t events) {
     if (g_speed_pulse_instance) {
         g_speed_pulse_instance->handle_pulse();
     }
@@ -58,7 +68,7 @@ void BLDCSpeedPulse::isr_wrapper(uint gpio, uint32_t events) {
 // =============================================================================
 // Instance ISR handler
 // =============================================================================
-void BLDCSpeedPulse::handle_pulse() {
+void BLDC_MOTOR::handle_pulse() {
     uint32_t now = time_us_32();
     uint32_t dt_us = now - last_edge_time;
     
@@ -86,31 +96,47 @@ void BLDCSpeedPulse::handle_pulse() {
     }
 }
 
+void BLDC_MOTOR::set_direction(MotorDirection direction) {
+    this->direction = direction;
+    gpio_put(BLDC_MOTOR_DIR_PIN, direction);  // 1=HIGH(CW), 0=LOW(CCW)f
+}
+
+void BLDC_MOTOR::set_brake(bool brake) {
+    this->brake = brake;
+    gpio_put(BLDC_MOTOR_BRAKE_PIN, brake);  // 1=HIGH(Brake), 0=LOW(Release)
+}   
+void BLDC_MOTOR::get_brake() const {
+    return brake;
+}
+
+MotorDirection BLDC_MOTOR::get_direction() const {
+    return direction;
+}
 // =============================================================================
 // Get current RPM
 // =============================================================================
-float BLDCSpeedPulse::get_rpm() const {
+float BLDC_MOTOR::get_rpm() const {
     return measured_rpm;
 }
 
 // =============================================================================
 // Get pulse frequency (Hz)
 // =============================================================================
-float BLDCSpeedPulse::get_frequency() const {
+float BLDC_MOTOR::get_frequency() const {
     return pulse_frequency;
 }
 
 // =============================================================================
 // Get total pulse count
 // =============================================================================
-uint32_t BLDCSpeedPulse::get_pulse_count() const {
+uint32_t BLDC_MOTOR::get_pulse_count() const {
     return edge_count;
 }
 
 // =============================================================================
 // Get revolutions (calculated from pulse count)
 // =============================================================================
-float BLDCSpeedPulse::get_revolutions() const {
+float BLDC_MOTOR::get_revolutions() const {
     if (pulses_per_revolution == 0) return 0.0f;
     return (float)edge_count / (float)pulses_per_revolution;
 }
@@ -118,7 +144,7 @@ float BLDCSpeedPulse::get_revolutions() const {
 // =============================================================================
 // Set pulses per revolution (for different motor configurations)
 // =============================================================================
-void BLDCSpeedPulse::set_pulses_per_revolution(uint ppr) {
+void BLDC_MOTOR::set_pulses_per_revolution(uint ppr) {
     if (ppr > 0) {
         pulses_per_revolution = ppr;
         printf("[BLDC-PULSE] Pulses per revolution set to %u\n", ppr);
@@ -128,7 +154,7 @@ void BLDCSpeedPulse::set_pulses_per_revolution(uint ppr) {
 // =============================================================================
 // Reset counters
 // =============================================================================
-void BLDCSpeedPulse::reset() {
+void BLDC_MOTOR::reset() {
     edge_count = 0;
     measured_rpm = 0.0f;
     pulse_frequency = 0.0f;
@@ -139,7 +165,7 @@ void BLDCSpeedPulse::reset() {
 // =============================================================================
 // Get smoothed RPM (with low-pass filter to reduce jitter)
 // =============================================================================
-float BLDCSpeedPulse::get_smoothed_rpm(float alpha) {
+float BLDC_MOTOR::get_smoothed_rpm(float alpha) {
     // alpha: 0.0 (no filtering) to 1.0 (full filtering)
     // Typical: 0.1 = 10% new value, 90% old value
     static float smoothed_rpm = 0.0f;
@@ -151,10 +177,11 @@ float BLDCSpeedPulse::get_smoothed_rpm(float alpha) {
     return smoothed_rpm;
 }
 
+
 // =============================================================================
 // Print debug info
 // =============================================================================
-void BLDCSpeedPulse::debug_status() const {
+void BLDC_MOTOR::debug_status() const {
     printf("\n");
     printf("╔════════════════════════════════════════╗\n");
     printf("║  BLDC Speed Pulse Debug Status         ║\n");
