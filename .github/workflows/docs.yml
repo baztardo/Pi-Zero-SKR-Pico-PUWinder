@@ -1,0 +1,202 @@
+name: AI Documentation Generation
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'pi_zero/**'
+      - 'pico_firmware/**'
+      - 'scripts/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'pi_zero/**'
+      - 'pico_firmware/**'
+      - 'scripts/**'
+  workflow_dispatch:
+  schedule:
+    # Run daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  # =============================================================================
+  # Generate AI Documentation
+  # =============================================================================
+  generate-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for better analysis
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install ast pyyaml
+
+      - name: Generate AI Documentation
+        run: |
+          python scripts/ai_docs_generator.py
+
+      - name: Check for documentation changes
+        id: docs-changed
+        run: |
+          if git diff --quiet HEAD~1 docs/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit documentation changes
+        if: steps.docs-changed.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/
+          git commit -m "docs: update AI-generated documentation [skip ci]" || exit 0
+          git push origin ${{ github.ref_name }} || echo "No changes to push"
+
+      - name: Upload documentation artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ai-documentation
+          path: docs/
+          retention-days: 30
+
+  # =============================================================================
+  # Deploy to GitHub Pages
+  # =============================================================================
+  deploy-docs:
+    needs: generate-docs
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download documentation artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: ai-documentation
+          path: docs/
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Build documentation site
+        run: |
+          # Create a simple HTML index
+          cat > docs/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Pi Zero SKR Pico PUWinder Documentation</title>
+              <style>
+                  body { font-family: Arial, sans-serif; margin: 40px; }
+                  h1 { color: #333; }
+                  .doc-link { display: block; margin: 10px 0; padding: 10px; background: #f5f5f5; text-decoration: none; color: #333; border-radius: 5px; }
+                  .doc-link:hover { background: #e5e5e5; }
+                  .ai-badge { background: #007acc; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px; }
+              </style>
+          </head>
+          <body>
+              <h1>🤖 Pi Zero SKR Pico PUWinder Documentation</h1>
+              <p>AI-generated documentation for the precision winding machine controller.</p>
+              
+              <h2>📚 Documentation</h2>
+              <a href="project_overview.md" class="doc-link">
+                  <strong>Project Overview</strong> <span class="ai-badge">AI</span><br>
+                  Complete system overview and architecture
+              </a>
+              
+              <a href="setup_guide.md" class="doc-link">
+                  <strong>Setup Guide</strong> <span class="ai-badge">AI</span><br>
+                  Step-by-step installation and configuration
+              </a>
+              
+              <a href="troubleshooting_guide.md" class="doc-link">
+                  <strong>Troubleshooting Guide</strong> <span class="ai-badge">AI</span><br>
+                  Common issues and solutions
+              </a>
+              
+              <a href="python_api.md" class="doc-link">
+                  <strong>Python API</strong> <span class="ai-badge">AI</span><br>
+                  Python API reference documentation
+              </a>
+              
+              <a href="cpp_api.md" class="doc-link">
+                  <strong>C++ API</strong> <span class="ai-badge">AI</span><br>
+                  Firmware API reference documentation
+              </a>
+              
+              <h2>🔗 External Links</h2>
+              <a href="https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder" class="doc-link">
+                  <strong>GitHub Repository</strong><br>
+                  Source code and issue tracker
+              </a>
+              
+              <a href="https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/actions" class="doc-link">
+                  <strong>CI/CD Status</strong><br>
+                  Build and test status
+              </a>
+              
+              <p><em>This documentation is automatically generated and updated by AI.</em></p>
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v2
+        with:
+          path: docs/
+
+  # =============================================================================
+  # Documentation Quality Check
+  # =============================================================================
+  docs-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install documentation tools
+        run: |
+          pip install markdown-link-check
+          sudo apt-get install -y markdownlint
+
+      - name: Check documentation quality
+        run: |
+          # Check for broken links
+          find docs -name "*.md" -exec markdown-link-check {} \; || echo "Link check completed"
+          
+          # Check markdown syntax
+          find docs -name "*.md" -exec markdownlint {} \; || echo "Markdown lint completed"
+          
+          # Check file sizes
+          find docs -name "*.md" -exec wc -l {} \; | sort -n
+          
+          echo "Documentation quality check completed"
+
+      - name: Generate documentation statistics
+        run: |
+          echo "## 📊 Documentation Statistics" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Lines | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|-------|------|" >> $GITHUB_STEP_SUMMARY
+          
+          for file in docs/*.md; do
+            if [ -f "$file" ]; then
+              lines=$(wc -l < "$file")
+              size=$(du -h "$file" | cut -f1)
+              filename=$(basename "$file")
+              echo "| $filename | $lines | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
