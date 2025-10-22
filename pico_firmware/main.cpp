@@ -13,7 +13,7 @@
 // Use config.h for pin definitions
 
 // Global spindle controller
-BLDCSpeedPulse* spindle_controller = nullptr;
+BLDC_MOTOR* spindle_controller = nullptr;
 
 void process_command(const char* cmd) {
     printf("CMD: %s (len=%d)\n", cmd, strlen(cmd));
@@ -96,7 +96,7 @@ int main() {
     gpio_put(SPINDLE_ENABLE_PIN, 1);  // Enable spindle
     
     // Initialize spindle speed pulse reader
-    spindle_controller = new BLDCSpeedPulse(SPINDLE_HALL_PIN);
+    spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
     spindle_controller->init();  // Initialize the controller
     
     printf("Spindle Controller Ready\n");

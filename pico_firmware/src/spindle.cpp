@@ -4,6 +4,7 @@
 // =============================================================================
 
 #include "spindle.h"
+#include "config.h"
 #include "pico/stdlib.h"
 #include <cstdio>
 
@@ -19,7 +20,7 @@ BLDC_MOTOR::BLDC_MOTOR(uint pulse_pin)
     , measured_rpm(0.0f)
     , pulse_frequency(0.0f)
     , last_rpm_calculation_time(0)
-    , pulses_per_revolution(6)  // Default: 6 edges per full rotation
+    , pulses_per_revolution(BLDC_DEFAULT_PPR)  // From config.h
     , direction(DIRECTION_CW)
     , brake(false)
 
@@ -36,13 +37,13 @@ void BLDC_MOTOR::init() {
     gpio_set_dir(pulse_pin, GPIO_IN);
     gpio_pull_up(pulse_pin);
     
-    gpio_init(BLDC_MOTOR_DIR_PIN);
-    gpio_set_dir(BLDC_MOTOR_DIR_PIN, GPIO_OUT);
-    gpio_put(BLDC_MOTOR_DIR_PIN, 1);  // Start forward
+    gpio_init(SPINDLE_DIR_PIN);
+    gpio_set_dir(SPINDLE_DIR_PIN, GPIO_OUT);
+    gpio_put(SPINDLE_DIR_PIN, 1);  // Start forward
 
-    gpio_init(BLDC_MOTOR_BRAKE_PIN);
-    gpio_set_dir(BLDC_MOTOR_BRAKE_PIN, GPIO_OUT);
-    gpio_put(BLDC_MOTOR_BRAKE_PIN, 0);  // Start brake OFF
+    gpio_init(SPINDLE_BRAKE_PIN);
+    gpio_set_dir(SPINDLE_BRAKE_PIN, GPIO_OUT);
+    gpio_put(SPINDLE_BRAKE_PIN, 0);  // Start brake OFF
 
     // Enable interrupt on rising edge
     gpio_set_irq_enabled_with_callback(
@@ -72,8 +73,8 @@ void BLDC_MOTOR::handle_pulse() {
     uint32_t now = time_us_32();
     uint32_t dt_us = now - last_edge_time;
     
-    // Debounce: ignore edges faster than 100µs (noise)
-    if (dt_us < 100) {
+    // Debounce: ignore edges faster than configured debounce time
+    if (dt_us < BLDC_MIN_PULSE_DT_US) {
         return;
     }
     
@@ -98,14 +99,14 @@ void BLDC_MOTOR::handle_pulse() {
 
 void BLDC_MOTOR::set_direction(MotorDirection direction) {
     this->direction = direction;
-    gpio_put(BLDC_MOTOR_DIR_PIN, direction);  // 1=HIGH(CW), 0=LOW(CCW)f
+    gpio_put(SPINDLE_DIR_PIN, direction);  // 1=HIGH(CW), 0=LOW(CCW)
 }
 
 void BLDC_MOTOR::set_brake(bool brake) {
     this->brake = brake;
-    gpio_put(BLDC_MOTOR_BRAKE_PIN, brake);  // 1=HIGH(Brake), 0=LOW(Release)
+    gpio_put(SPINDLE_BRAKE_PIN, brake);  // 1=HIGH(Brake), 0=LOW(Release)
 }   
-void BLDC_MOTOR::get_brake() const {
+bool BLDC_MOTOR::get_brake() const {
     return brake;
 }
 
@@ -170,7 +171,8 @@ float BLDC_MOTOR::get_smoothed_rpm(float alpha) {
     // Typical: 0.1 = 10% new value, 90% old value
     static float smoothed_rpm = 0.0f;
     
-    if (alpha < 0.0f) alpha = 0.0f;
+    // Use default alpha from config if not specified
+    if (alpha < 0.0f) alpha = BLDC_SMOOTH_ALPHA;
     if (alpha > 1.0f) alpha = 1.0f;
     
     smoothed_rpm = (alpha * measured_rpm) + ((1.0f - alpha) * smoothed_rpm);

@@ -7,12 +7,12 @@
 
 #include "pico/stdlib.h"
 #include "move_queue.h"
-#include "encoder.h"
+// Encoder removed - no longer needed
 #include <cstdint>
 
 // Forward declarations
 class MoveQueue;
-class Encoder;
+// Encoder removed - no longer needed
 
 // =============================================================================
 // Scheduler Class
@@ -22,9 +22,8 @@ public:
     /**
      * @brief Constructor
      * @param move_queue Pointer to move queue instance
-     * @param spindle_encoder Pointer to spindle encoder instance
      */
-    Scheduler(MoveQueue* move_queue, Encoder* spindle_encoder);
+    Scheduler(MoveQueue* move_queue);
     
     /**
      * @brief Initialize and start the hardware timer ISR
@@ -65,7 +64,7 @@ public:
 
 private:
     MoveQueue* move_queue;
-    Encoder* spindle_encoder;
+    // Encoder removed - no longer needed
     repeating_timer_t timer;
     volatile uint32_t tick_count;
     uint32_t interval_us;

@@ -83,6 +83,82 @@
 #define TRAVERSE_MIN_WINDING_SPEED 1000 // Minimum speed during winding (steps/sec)
 
 // =============================================================================
+// SYSTEM CONSTANTS
+// =============================================================================
+#define NUM_AXES                2       // Number of axes (spindle + traverse)
+#define AXIS_SPINDLE           0       // Spindle axis index
+#define AXIS_TRAVERSE          1       // Traverse axis index
+
+// Move queue configuration
+#define MOVE_CHUNKS_CAPACITY    128     // Maximum chunks per axis
+#define STEP_PULSE_US          2       // Step pulse width (microseconds)
+
+// Spindle stepper pins (if using stepper instead of BLDC)
+#define SPINDLE_STEP_PIN       11      // Spindle step pin
+#define SPINDLE_ENA_PIN        12      // Spindle enable pin
+
+// TMC2209 configuration
+#define R_SENSE                 0.11f   // Sense resistor value (ohms)
+
+// Debug pin
+#define DEBUG_PIN              25      // Debug LED pin
+
+// Scheduler configuration
+#define HEARTBEAT_US           100     // Scheduler heartbeat interval (microseconds)
+#define SCHED_HEARTBEAT_PIN    25      // Scheduler heartbeat LED pin
+
+// =============================================================================
+// BLDC MOTOR CONFIGURATION
+// =============================================================================
+
+// BLDC Motor Direction
+#define BLDC_DIRECTION_CW      1       // Clockwise direction
+#define BLDC_DIRECTION_CCW     0       // Counter-clockwise direction
+
+// BLDC Motor Default Settings
+#define BLDC_DEFAULT_PPR       360     // Default pulses per revolution
+#define BLDC_DEBOUNCE_US       100     // Debounce time in microseconds
+#define BLDC_SMOOTH_ALPHA      0.1f    // Default smoothing factor (0.1 = 10% new, 90% old)
+
+// BLDC Motor Timing
+#define BLDC_RPM_CALC_INTERVAL 1000000 // RPM calculation interval (1 second in microseconds)
+#define BLDC_MIN_PULSE_DT_US   100     // Minimum pulse interval (debounce)
+
+// BLDC Motor Status
+#define BLDC_STATUS_READY      0
+#define BLDC_STATUS_RUNNING    1
+#define BLDC_STATUS_STOPPED    2
+#define BLDC_STATUS_ERROR      3
+
+// =============================================================================
+// SPINDLE STEPPER CONFIGURATION
+// =============================================================================
+
+// Spindle Stepper Settings
+#define SPINDLE_MICROSTEPS     4       // Spindle microstepping (4x)
+#define SPINDLE_GEAR_RATIO     0.5f    // Gear ratio (spindle:stepper)
+#define SPINDLE_DIR_INVERT     0       // Direction inversion (0=normal, 1=inverted)
+#define MAX_SPINDLE_SPS        2000.0f // Maximum steps per second
+
+// Motor Configuration
+#define MOTOR_MICROSTEPS       16      // Default microstepping
+
+// =============================================================================
+// ENCODER CONFIGURATION
+// =============================================================================
+
+// Encoder Settings
+#define ENCODER_CPR            360     // Counts per revolution
+#define ENCODER_INVERT         0       // Encoder direction inversion
+
+// =============================================================================
+// TRAVERSE CONFIGURATION
+// =============================================================================
+
+// Traverse Lead Screw
+#define TRAVERSE_PITCH_MM      5.0f    // Lead screw pitch (mm per revolution)
+
+// =============================================================================
 // SAFETY LIMITS
 // =============================================================================
 #define MAX_TRAVERSE_POS_MM     200.0f  // Maximum traverse position

@@ -38,9 +38,8 @@ void scheduler_queue_step(uint axis, uint32_t interval_us, int32_t add_us, uint3
 // Global pointer to scheduler instance for static callback
 static Scheduler* g_scheduler_instance = nullptr;
 
-Scheduler::Scheduler(MoveQueue* mq, Encoder* enc)
+Scheduler::Scheduler(MoveQueue* mq)
     : move_queue(mq)
-    , spindle_encoder(enc)
     , tick_count(0)
     , interval_us(HEARTBEAT_US)
     , running(false)

@@ -6,9 +6,8 @@
 #pragma once
 
 #include "move_queue.h"
-#include "encoder.h"
 #include "stepcompress.h"
-#include "lcd_display.h"
+// Encoder and LCD removed - no longer needed
 #include <cstdint>
 
 // =============================================================================
@@ -71,10 +70,8 @@ public:
     /**
      * @brief Constructor
      * @param mq Move queue instance
-     * @param enc Encoder instance
-     * @param lcd LCD display instance
      */
-    WindingController(MoveQueue* mq, Encoder* enc, LCDDisplay* lcd);
+    WindingController(MoveQueue* mq);
 
     void init();
     void set_parameters(const WindingParams& params);
@@ -90,8 +87,7 @@ public:
 
 private:
     MoveQueue* move_queue;
-    Encoder* encoder;
-    LCDDisplay* lcd;
+    // Encoder and LCD removed - no longer needed
     
     WindingState state;
     WindingParams params;
@@ -101,7 +97,7 @@ private:
     uint32_t turns_this_layer;
     float current_rpm;
     
-    int32_t last_encoder_position;
+    // Encoder removed - no longer needed
     uint32_t last_rpm_update_time;
     
     bool traverse_direction;  // true = forward, false = reverse

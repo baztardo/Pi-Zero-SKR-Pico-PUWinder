@@ -1,4 +1,4 @@
-/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/pico_bldc_controller.dir
+/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/pico_spindle_controller.dir
 /Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/edit_cache.dir
 /Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/rebuild_cache.dir
 /Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/pico-sdk/CMakeFiles/edit_cache.dir

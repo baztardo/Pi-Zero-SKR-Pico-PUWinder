@@ -7,23 +7,24 @@
 
 #include <cstdint>
 #include "hardware/gpio.h"
+#include "config.h"
 
 // =============================================================================
-// BLDCSpeedPulse Class
+// BLDC_MOTOR Class
 // =============================================================================
 
 enum MotorDirection {
-    DIRECTION_CCW = 0,
-    DIRECTION_CW = 1
+    DIRECTION_CCW = BLDC_DIRECTION_CCW,
+    DIRECTION_CW = BLDC_DIRECTION_CW
 };
 
-class BLDCSpeedPulse {
+class BLDC_MOTOR {
 public:
     /**
      * @brief Constructor
      * @param pulse_pin GPIO pin connected to SC speed pulse output
      */
-    BLDCSpeedPulse(uint pulse_pin);
+    BLDC_MOTOR(uint pulse_pin);
     
 
     void init();
@@ -38,6 +39,7 @@ public:
     void set_direction(MotorDirection direction);
     void set_brake(bool brake);
     bool get_brake() const;
+    float get_revolutions() const;
     
 private:
     uint pulse_pin;
