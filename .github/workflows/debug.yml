@@ -1,142 +1,142 @@
 name: Debug and Development Tools
 
 on:
-  workflow_dispatch:
-    inputs:
-      debug_type:
-        description: 'Debug type'
-        required: true
-        default: 'memory'
-        type: choice
-        options:
-        - memory
-        - performance
-        - static-analysis
-        - runtime
-  push:
-    branches: [ debug/* ]
+    workflow_dispatch:
+        inputs:
+            debug_type:
+                description: "Debug type"
+                required: true
+                default: "memory"
+                type: choice
+                options:
+                    - memory
+                    - performance
+                    - static-analysis
+                    - runtime
+    push:
+        branches: [debug/*]
 
 jobs:
-  # =============================================================================
-  # Memory Debugging
-  # =============================================================================
-  memory-debug:
-    if: github.event.inputs.debug_type == 'memory' || github.event.inputs.debug_type == ''
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install Valgrind and debugging tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y valgrind gdb cppcheck
-    
-    - name: Setup Pico SDK
-      run: |
-        git clone https://github.com/raspberrypi/pico-sdk.git
-        cd pico-sdk
-        git submodule update --init
-        echo "PICO_SDK_PATH=$PWD" >> $GITHUB_ENV
-    
-    - name: Build with debug symbols
-      run: |
-        cd pico_firmware
-        mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=Debug ..
-        make -j$(nproc)
-    
-    - name: Static analysis with cppcheck
-      run: |
-        cd pico_firmware
-        cppcheck --enable=all --inconclusive --std=c++17 src/ --xml 2> cppcheck-results.xml
-    
-    - name: Upload debug artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: debug-symbols
-        path: pico_firmware/build/
+    # =============================================================================
+    # Memory Debugging
+    # =============================================================================
+    memory-debug:
+        if: github.event.inputs.debug_type == 'memory' || github.event.inputs.debug_type == ''
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-  # =============================================================================
-  # Performance Profiling
-  # =============================================================================
-  performance-debug:
-    if: github.event.inputs.debug_type == 'performance'
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install profiling tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y perf-tools-unstable linux-tools-generic
-    
-    - name: Setup Python profiling
-      run: |
-        cd pi_zero
-        pip install py-spy memory-profiler line-profiler
-    
-    - name: Profile Python code
-      run: |
-        cd pi_zero
-        python -m memory_profiler test_spindle.py
-        python -m line_profiler test_gcode_interface.py
+            - name: Install Valgrind and debugging tools
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y valgrind gdb cppcheck
 
-  # =============================================================================
-  # Static Analysis
-  # =============================================================================
-  static-analysis:
-    if: github.event.inputs.debug_type == 'static-analysis'
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Install static analysis tools
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cppcheck clang-tidy
-        pip install bandit safety
-    
-    - name: C++ static analysis
-      run: |
-        cd pico_firmware
-        cppcheck --enable=all --inconclusive --std=c++17 src/
-        clang-tidy src/*.cpp -- -std=c++17
-    
-    - name: Python security analysis
-      run: |
-        cd pi_zero
-        bandit -r . -f json -o bandit-report.json
-        safety check --json --output safety-report.json
-    
-    - name: Upload analysis reports
-      uses: actions/upload-artifact@v3
-      with:
-        name: static-analysis-reports
-        path: |
-          pi_zero/bandit-report.json
-          pi_zero/safety-report.json
+            - name: Setup Pico SDK
+              run: |
+                  git clone https://github.com/raspberrypi/pico-sdk.git
+                  cd pico-sdk
+                  git submodule update --init
+                  echo "PICO_SDK_PATH=$PWD" >> $GITHUB_ENV
 
-  # =============================================================================
-  # Runtime Debugging
-  # =============================================================================
-  runtime-debug:
-    if: github.event.inputs.debug_type == 'runtime'
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Python debugging
-      run: |
-        cd pi_zero
-        pip install pytest-cov pytest-xdist
-    
-    - name: Run tests with coverage
-      run: |
-        cd pi_zero
-        python -m pytest test_*.py --cov=. --cov-report=xml --cov-report=html
-    
-    - name: Upload coverage reports
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-reports
-        path: pi_zero/htmlcov/
+            - name: Build with debug symbols
+              run: |
+                  cd pico_firmware
+                  mkdir build && cd build
+                  cmake -DCMAKE_BUILD_TYPE=Debug ..
+                  make -j$(nproc)
+
+            - name: Static analysis with cppcheck
+              run: |
+                  cd pico_firmware
+                  cppcheck --enable=all --inconclusive --std=c++17 src/ --xml 2> cppcheck-results.xml
+
+            - name: Upload debug artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                  name: debug-symbols
+                  path: pico_firmware/build/
+
+    # =============================================================================
+    # Performance Profiling
+    # =============================================================================
+    performance-debug:
+        if: github.event.inputs.debug_type == 'performance'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install profiling tools
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y perf-tools-unstable linux-tools-generic
+
+            - name: Setup Python profiling
+              run: |
+                  cd pi_zero
+                  pip install py-spy memory-profiler line-profiler
+
+            - name: Profile Python code
+              run: |
+                  cd pi_zero
+                  python -m memory_profiler test_spindle.py
+                  python -m line_profiler test_gcode_interface.py
+
+    # =============================================================================
+    # Static Analysis
+    # =============================================================================
+    static-analysis:
+        if: github.event.inputs.debug_type == 'static-analysis'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install static analysis tools
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y cppcheck clang-tidy
+                  pip install bandit safety
+
+            - name: C++ static analysis
+              run: |
+                  cd pico_firmware
+                  cppcheck --enable=all --inconclusive --std=c++17 src/
+                  clang-tidy src/*.cpp -- -std=c++17
+
+            - name: Python security analysis
+              run: |
+                  cd pi_zero
+                  bandit -r . -f json -o bandit-report.json
+                  safety check --json --output safety-report.json
+
+            - name: Upload analysis reports
+              uses: actions/upload-artifact@v3
+              with:
+                  name: static-analysis-reports
+                  path: |
+                      pi_zero/bandit-report.json
+                      pi_zero/safety-report.json
+
+    # =============================================================================
+    # Runtime Debugging
+    # =============================================================================
+    runtime-debug:
+        if: github.event.inputs.debug_type == 'runtime'
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup Python debugging
+              run: |
+                  cd pi_zero
+                  pip install pytest-cov pytest-xdist
+
+            - name: Run tests with coverage
+              run: |
+                  cd pi_zero
+                  python -m pytest test_*.py --cov=. --cov-report=xml --cov-report=html
+
+            - name: Upload coverage reports
+              uses: actions/upload-artifact@v3
+              with:
+                  name: coverage-reports
+                  path: pi_zero/htmlcov/

@@ -15,7 +15,9 @@
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": ["$gcc"]
+            "problemMatcher": [
+                "$gcc"
+            ]
         },
         {
             "label": "Clean Build",

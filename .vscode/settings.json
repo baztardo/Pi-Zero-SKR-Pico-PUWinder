@@ -4,35 +4,31 @@
     "C_Cpp.default.cStandard": "c17",
     "C_Cpp.default.cppStandard": "c++17",
     "C_Cpp.default.intelliSenseMode": "gcc-arm",
-    
     "python.defaultInterpreterPath": "./pi_zero/venv/bin/python",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": true,
     "python.formatting.provider": "black",
-    "python.sortImports.args": ["--profile", "black"],
-    
+    "python.sortImports.args": [
+        "--profile",
+        "black"
+    ],
     "files.associations": {
         "*.h": "c",
         "*.cpp": "cpp",
         "*.c": "c",
         "CMakeLists.txt": "cmake"
     },
-    
     "cmake.configureOnOpen": true,
     "cmake.buildDirectory": "${workspaceFolder}/pico_firmware/build",
-    
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
     },
-    
     "terminal.integrated.defaultProfile.linux": "bash",
     "terminal.integrated.cwd": "${workspaceFolder}",
-    
     "git.enableSmartCommit": true,
     "git.autofetch": true,
-    
     "extensions.recommendations": [
         "ms-vscode.cpptools",
         "ms-python.python",
