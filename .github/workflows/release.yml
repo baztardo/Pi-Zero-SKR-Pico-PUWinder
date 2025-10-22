@@ -74,7 +74,7 @@ jobs:
                   git log --oneline $(git describe --tags --abbrev=0 HEAD^)..HEAD >> CHANGELOG.md
 
             - name: Create Release
-              uses: softprops/action-gh-release@v1
+              uses: softprops/action-gh-release@v2
               with:
                   files: pi-zero-skr-pico-puwinder-${{ github.ref_name }}.tar.gz
                   body_path: CHANGELOG.md
