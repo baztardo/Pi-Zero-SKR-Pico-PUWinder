@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Community Support
+    url: https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/discussions
+    about: Please ask and answer questions here.
+  - name: Documentation
+    url: https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/wiki
+    about: Check our documentation for setup guides and troubleshooting.

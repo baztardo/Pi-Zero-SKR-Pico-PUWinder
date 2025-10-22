@@ -1,0 +1,75 @@
+{
+    "name": "Pi Zero SKR Pico PUWinder Development",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.pylint",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "ms-python.mypy-type-checker",
+                "github.copilot",
+                "github.copilot-chat",
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "ms-vscode.makefile-tools",
+                "ms-vscode.hexeditor",
+                "ms-vscode.vscode-serial-monitor"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.linting.enabled": true,
+                "python.linting.pylintEnabled": true,
+                "python.formatting.provider": "black",
+                "python.sortImports.args": [
+                    "--profile",
+                    "black"
+                ],
+                "C_Cpp.default.configurationProvider": "ms-vscode.cpptools",
+                "C_Cpp.default.cStandard": "c17",
+                "C_Cpp.default.cppStandard": "c++17",
+                "files.associations": {
+                    "*.h": "c",
+                    "*.cpp": "cpp",
+                    "*.c": "c",
+                    "CMakeLists.txt": "cmake"
+                },
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": true
+                }
+            }
+        }
+    },
+    "postCreateCommand": "pip install -r pi_zero/requirements.txt && pip install --upgrade pip",
+    "remoteUser": "vscode",
+    "portsAttributes": {
+        "8080": {
+            "label": "UART Simulation",
+            "onAutoForward": "notify"
+        },
+        "3000": {
+            "label": "Web Interface",
+            "onAutoForward": "openBrowser"
+        },
+        "8000": {
+            "label": "Documentation",
+            "onAutoForward": "openBrowser"
+        }
+    },
+    "forwardPorts": [
+        8080,
+        3000,
+        8000
+    ],
+    "mounts": [
+        "source=${localWorkspaceFolder}/.devcontainer/scripts,target=/usr/local/share/scripts,type=bind,consistency=cached"
+    ],
+    "postStartCommand": "echo 'Development environment ready! Run: python pi_zero/test_uart.py'"
+}

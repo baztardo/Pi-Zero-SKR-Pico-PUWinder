@@ -1,0 +1,27 @@
+# Code Owners
+# This file defines who owns which parts of the codebase
+
+# Global owners - these people will be requested for review on every PR
+* @your-username
+
+# Pi Zero Python code
+/pi_zero/ @your-username
+
+# Pico firmware C++ code
+/pico_firmware/ @your-username
+
+# Documentation
+/docs/ @your-username
+*.md @your-username
+
+# GitHub workflows and configuration
+/.github/ @your-username
+
+# VS Code configuration
+/.vscode/ @your-username
+
+# Build and configuration files
+CMakeLists.txt @your-username
+pyproject.toml @your-username
+requirements.txt @your-username
+Doxyfile @your-username
