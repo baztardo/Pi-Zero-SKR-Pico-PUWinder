@@ -41,6 +41,10 @@ public:
     bool get_brake() const;
     float get_revolutions() const;
     
+    // PWM control methods (from Code-snippets improvement)
+    void set_pwm_duty(float duty_percent);
+    void set_rpm_pwm(float rpm);
+    
     
 private:
     uint pulse_pin;

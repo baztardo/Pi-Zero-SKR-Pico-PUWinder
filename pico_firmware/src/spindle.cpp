@@ -6,7 +6,9 @@
 #include "spindle.h"
 #include "config.h"
 #include "pico/stdlib.h"
+#include "hardware/pwm.h"
 #include <cstdio>
+#include <cmath>
 
 // Global instance pointer for ISR
 static BLDC_MOTOR* g_speed_pulse_instance = nullptr;
@@ -52,6 +54,19 @@ void BLDC_MOTOR::init() {
         true,
         &BLDC_MOTOR::isr_wrapper
     );
+    
+    // Initialize PWM for spindle control (from Code-snippets improvement)
+    gpio_set_function(SPINDLE_PWM_PIN, GPIO_FUNC_PWM);
+    uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
+    uint channel = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
+    
+    // Set PWM frequency to 1kHz
+    pwm_set_clkdiv(slice_num, 125.0f / 1000.0f);
+    pwm_set_wrap(slice_num, 65535);
+    pwm_set_chan_level(slice_num, channel, 0);
+    pwm_set_enabled(slice_num, true);
+    
+    printf("PWM initialized on pin %d\n", SPINDLE_PWM_PIN);
     
     printf("[BLDC_MOTOR] Initialized on GPIO %u\n", pulse_pin);
     printf("[BLDC_MOTOR] Pulses per revolution: %u\n", pulses_per_revolution);
@@ -145,6 +160,36 @@ uint32_t BLDC_MOTOR::get_pulse_count() const {
 float BLDC_MOTOR::get_revolutions() const {
     if (pulses_per_revolution == 0) return 0.0f;
     return (float)edge_count / (float)pulses_per_revolution;
+}
+
+// =============================================================================
+// PWM Control Methods (from Code-snippets improvement)
+// =============================================================================
+void BLDC_MOTOR::set_pwm_duty(float duty_percent) {
+    // Clamp duty cycle to 0-100%
+    duty_percent = fmaxf(0.0f, fminf(100.0f, duty_percent));
+    
+    // Convert to PWM level
+    uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
+    uint channel = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
+    uint16_t pwm_level = (uint16_t)((duty_percent / 100.0f) * 65535);
+    
+    pwm_set_chan_level(slice_num, channel, pwm_level);
+    printf("Set spindle PWM to %.1f%% (level: %d)\n", duty_percent, pwm_level);
+}
+
+void BLDC_MOTOR::set_rpm_pwm(float rpm) {
+    // Clamp RPM to reasonable range
+    rpm = fmaxf(0.0f, fminf(3000.0f, rpm));
+    
+    if (rpm > 0) {
+        // Calculate PWM duty cycle based on RPM
+        float duty_percent = (rpm / 3000.0f) * 100.0f;
+        set_pwm_duty(duty_percent);
+    } else {
+        // Stop PWM
+        set_pwm_duty(0.0f);
+    }
 }
 
 // =============================================================================

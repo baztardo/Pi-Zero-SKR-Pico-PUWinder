@@ -347,36 +347,75 @@ bool GCodeInterface::parse_parameters(const char* cmd) {
     // Skip whitespace
     while (*cmd == ' ') cmd++;
     
-    // Parse parameters
+    // Enhanced token-based parsing (from Code-snippets improvement)
     while (*cmd) {
-        if (*cmd == 'X') {
-            params.X = parse_float(cmd + 1);
-            params.has_X = true;
-        }
-        else if (*cmd == 'Y') {
-            params.Y = parse_float(cmd + 1);
-            params.has_Y = true;
-        }
-        else if (*cmd == 'Z') {
-            params.Z = parse_float(cmd + 1);
-            params.has_Z = true;
-        }
-        else if (*cmd == 'F') {
-            params.F = parse_float(cmd + 1);
-            params.has_F = true;
-        }
-        else if (*cmd == 'S') {
-            params.S = parse_float(cmd + 1);
-            params.has_S = true;
-        }
-        else if (*cmd == 'P') {
-            params.P = parse_float(cmd + 1);
-            params.has_P = true;
+        // Skip whitespace
+        while (*cmd == ' ' || *cmd == '\t') cmd++;
+        if (!*cmd) break;
+        
+        char param = *cmd++;
+        float value = parse_float(cmd);
+        
+        // Enhanced parameter handling with validation
+        switch (param) {
+            case 'X': 
+                params.X = value; 
+                params.has_X = true;
+                // Clamp to reasonable range
+                if (params.X < -1000.0f || params.X > 1000.0f) {
+                    set_error("X parameter out of range");
+                    return false;
+                }
+                break;
+            case 'Y': 
+                params.Y = value; 
+                params.has_Y = true;
+                // Clamp to reasonable range
+                if (params.Y < -1000.0f || params.Y > 1000.0f) {
+                    set_error("Y parameter out of range");
+                    return false;
+                }
+                break;
+            case 'Z': 
+                params.Z = value; 
+                params.has_Z = true;
+                // Clamp to reasonable range
+                if (params.Z < -1000.0f || params.Z > 1000.0f) {
+                    set_error("Z parameter out of range");
+                    return false;
+                }
+                break;
+            case 'F': 
+                params.F = value; 
+                params.has_F = true;
+                // Clamp feed rate to reasonable range
+                if (params.F < 0.1f || params.F > 10000.0f) {
+                    set_error("F parameter out of range");
+                    return false;
+                }
+                break;
+            case 'S': 
+                params.S = value; 
+                params.has_S = true;
+                // Clamp spindle speed to reasonable range
+                if (params.S < 0.0f || params.S > 10000.0f) {
+                    set_error("S parameter out of range");
+                    return false;
+                }
+                break;
+            case 'P': 
+                params.P = value; 
+                params.has_P = true;
+                // Clamp pin number to reasonable range
+                if (params.P < 0.0f || params.P > 40.0f) {
+                    set_error("P parameter out of range");
+                    return false;
+                }
+                break;
         }
         
-        // Move to next parameter
-        while (*cmd && *cmd != ' ') cmd++;
-        while (*cmd == ' ') cmd++;
+        // Skip to next parameter
+        while (*cmd && *cmd != ' ' && *cmd != '\t') cmd++;
     }
     
     return true;
