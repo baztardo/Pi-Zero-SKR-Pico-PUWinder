@@ -8,6 +8,7 @@ import serial
 import time
 import threading
 from typing import Dict, Any, Optional
+from functools import wraps
 
 # =============================================================================
 # UART API Client
@@ -246,6 +247,58 @@ def test_uart_connection():
     api.disconnect()
     print("🎉 UART test completed")
     return True
+
+# =============================================================================
+# Error Handling Decorators (from Code-snippets improvement)
+# =============================================================================
+def handle_uart_error(func):
+    """Decorator for UART error handling"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except serial.SerialException as e:
+            print(f"UART Error in {func.__name__}: {e}")
+            return None
+        except Exception as e:
+            print(f"Error in {func.__name__}: {e}")
+            return None
+    return wrapper
+
+def safe_uart_operation(operation_func, max_retries=3):
+    """Safely execute UART operation with retries"""
+    for attempt in range(max_retries):
+        try:
+            result = operation_func()
+            if result is not None:
+                return result
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(1.0)
+    
+    print(f"Operation failed after {max_retries} attempts")
+    return None
+
+# =============================================================================
+# Enhanced UART Methods with Error Handling
+# =============================================================================
+class EnhancedUARTAPI(UARTAPI):
+    """Enhanced UART API with error handling decorators"""
+    
+    @handle_uart_error
+    def send_command_safe(self, command: str) -> Optional[str]:
+        """Send command with error handling"""
+        return self.send_command(command)
+    
+    @handle_uart_error
+    def get_machine_status_safe(self) -> Optional[Dict[str, Any]]:
+        """Get machine status with error handling"""
+        return self.get_machine_status()
+    
+    def safe_operation(self, operation_func, max_retries=3):
+        """Execute UART operation safely with retries"""
+        return safe_uart_operation(operation_func, max_retries)
 
 if __name__ == "__main__":
     test_uart_connection()
