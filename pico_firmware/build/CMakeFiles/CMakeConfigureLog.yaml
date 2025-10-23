@@ -20,8 +20,6 @@ events:
     names:
       - "uname"
     candidate_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -37,9 +35,8 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/uname"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/uname"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/uname"
       - "/opt/homebrew/bin/uname"
       - "/opt/homebrew/sbin/uname"
@@ -48,9 +45,6 @@ events:
     found: "/usr/bin/uname"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -67,6 +61,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
   -
     kind: "find-v1"
     backtrace:
@@ -95,9 +90,6 @@ events:
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -114,6 +106,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
   -
     kind: "find-v1"
     backtrace:
@@ -142,9 +135,6 @@ events:
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -161,6 +151,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
   -
     kind: "find-v1"
     backtrace:
@@ -189,9 +180,6 @@ events:
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-objcopy"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -208,6 +196,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
   -
     kind: "find-v1"
     backtrace:
@@ -236,9 +225,6 @@ events:
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-objdump"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -255,6 +241,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
   -
     kind: "message-v1"
     backtrace:
@@ -284,8 +271,6 @@ events:
       - "make"
       - "smake"
     candidate_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -301,9 +286,8 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/gmake"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/gmake"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/gmake"
       - "/opt/homebrew/bin/gmake"
       - "/opt/homebrew/sbin/gmake"
@@ -319,8 +303,7 @@ events:
       - "/usr/local/share/dotnet/gmake"
       - "/Users/ssnow/.dotnet/tools/gmake"
       - "/usr/local/go/bin/gmake"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/make"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/make"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/gmake"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/make"
       - "/opt/homebrew/bin/make"
       - "/opt/homebrew/sbin/make"
@@ -329,9 +312,6 @@ events:
     found: "/usr/bin/make"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -348,6 +328,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -377,9 +358,6 @@ events:
     found: "/opt/homebrew/share/cmake/Modules/CMakeCCompilerId.c.in"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -396,6 +374,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "message-v1"
@@ -455,9 +434,6 @@ events:
     found: "/opt/homebrew/share/cmake/Modules/CMakeCCompilerId.c.in"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -474,6 +450,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "message-v1"
@@ -519,8 +496,6 @@ events:
       - "ar"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -536,12 +511,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-ar"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -558,6 +531,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -581,8 +555,6 @@ events:
       - "ranlib"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -598,12 +570,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-ranlib"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -620,6 +590,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -643,8 +614,6 @@ events:
       - "strip"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -660,12 +629,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-strip"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -682,6 +649,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -705,8 +673,6 @@ events:
       - "ld"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -722,12 +688,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-ld"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -744,6 +708,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -767,8 +732,6 @@ events:
       - "nm"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -784,12 +747,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-nm"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -806,6 +767,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -829,8 +791,6 @@ events:
       - "readelf"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -846,12 +806,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-readelf"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -868,6 +826,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -891,8 +850,6 @@ events:
       - "dlltool"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -908,10 +865,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-dlltool"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-dlltool"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-dlltool"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-dlltool"
       - "/opt/homebrew/bin/arm-none-eabi-dlltool"
       - "/opt/homebrew/sbin/arm-none-eabi-dlltool"
@@ -927,9 +883,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-dlltool"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-dlltool"
       - "/usr/local/go/bin/arm-none-eabi-dlltool"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-dlltool"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/dlltool"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/dlltool"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/dlltool"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/dlltool"
       - "/opt/homebrew/bin/dlltool"
       - "/opt/homebrew/sbin/dlltool"
@@ -945,12 +900,10 @@ events:
       - "/usr/local/share/dotnet/dlltool"
       - "/Users/ssnow/.dotnet/tools/dlltool"
       - "/usr/local/go/bin/dlltool"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/dlltool"
     found: false
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -967,6 +920,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -990,8 +944,6 @@ events:
       - "addr2line"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1007,12 +959,10 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-addr2line"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1029,6 +979,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -1052,8 +1003,6 @@ events:
       - "tapi"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1069,10 +1018,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-tapi"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-tapi"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-tapi"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-tapi"
       - "/opt/homebrew/bin/arm-none-eabi-tapi"
       - "/opt/homebrew/sbin/arm-none-eabi-tapi"
@@ -1088,9 +1036,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-tapi"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-tapi"
       - "/usr/local/go/bin/arm-none-eabi-tapi"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-tapi"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/tapi"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/tapi"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/tapi"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/tapi"
       - "/opt/homebrew/bin/tapi"
       - "/opt/homebrew/sbin/tapi"
@@ -1106,12 +1053,10 @@ events:
       - "/usr/local/share/dotnet/tapi"
       - "/Users/ssnow/.dotnet/tools/tapi"
       - "/usr/local/go/bin/tapi"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/tapi"
     found: false
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1128,6 +1073,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -1153,8 +1099,6 @@ events:
       - "arm-none-eabi-gcc-ar"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1170,10 +1114,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar-14.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14.2"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar-14.2"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar-14.2"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar-14.2"
@@ -1189,9 +1132,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar-14.2"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar-14.2"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar-14.2"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar-14.2"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar-14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar-14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar-14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar-14"
@@ -1207,9 +1149,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar-14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar-14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar-14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar-14"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar14"
@@ -1225,12 +1166,10 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar14"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1247,6 +1186,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -1272,8 +1212,6 @@ events:
       - "arm-none-eabi-gcc-ranlib"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1289,10 +1227,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib-14.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14.2"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib-14.2"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib-14.2"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib-14.2"
@@ -1308,9 +1245,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib-14.2"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib-14.2"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib-14.2"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib-14.2"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib-14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib-14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib-14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib-14"
@@ -1326,9 +1262,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib-14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib-14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib-14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib-14"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib14"
@@ -1344,12 +1279,10 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib14"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1366,6 +1299,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -1395,9 +1329,6 @@ events:
     found: "/opt/homebrew/share/cmake/Modules/CMakeCXXCompilerId.cpp.in"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1414,6 +1345,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "message-v1"
@@ -1473,9 +1405,6 @@ events:
     found: "/opt/homebrew/share/cmake/Modules/CMakeCXXCompilerId.cpp.in"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1492,6 +1421,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "message-v1"
@@ -1539,8 +1469,6 @@ events:
       - "arm-none-eabi-gcc-ar"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1556,10 +1484,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar-14.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14.2"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar-14.2"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar-14.2"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar-14.2"
@@ -1575,9 +1502,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar-14.2"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar-14.2"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar-14.2"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar-14.2"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar-14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar-14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar-14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar-14"
@@ -1593,9 +1519,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar-14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar-14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar-14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar-14"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar14"
@@ -1611,12 +1536,10 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar14"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1633,6 +1556,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -1658,8 +1582,6 @@ events:
       - "arm-none-eabi-gcc-ranlib"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1675,10 +1597,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib-14.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14.2"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib-14.2"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib-14.2"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib-14.2"
@@ -1694,9 +1615,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib-14.2"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib-14.2"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib-14.2"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib-14.2"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib-14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib-14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib-14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib-14"
@@ -1712,9 +1632,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib-14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib-14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib-14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib-14"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib14"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib14"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib14"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib14"
@@ -1730,12 +1649,10 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib14"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib14"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib14"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib14"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1752,6 +1669,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "message-v1"
@@ -1790,8 +1708,6 @@ events:
       - "arm-none-eabi-gcc-ar"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1807,10 +1723,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar-"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar-"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar-"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar-"
@@ -1826,9 +1741,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar-"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar-"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar-"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar-"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar-"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ar-"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ar-"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ar-"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ar-"
@@ -1844,12 +1758,10 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ar-"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ar-"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ar-"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ar-"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ar"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1866,6 +1778,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "find-v1"
@@ -1891,8 +1804,6 @@ events:
       - "arm-none-eabi-gcc-ranlib"
     candidate_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -1908,10 +1819,9 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
     searched_directories:
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib-"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib-"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib-"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib-"
@@ -1927,9 +1837,8 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib-"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib-"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib-"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib-"
       - "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib-"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/arm-none-eabi-gcc-ranlib-"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/arm-none-eabi-gcc-ranlib-"
       - "/opt/homebrew/bin/arm-none-eabi-gcc-ranlib-"
       - "/opt/homebrew/sbin/arm-none-eabi-gcc-ranlib-"
@@ -1945,12 +1854,10 @@ events:
       - "/usr/local/share/dotnet/arm-none-eabi-gcc-ranlib-"
       - "/Users/ssnow/.dotnet/tools/arm-none-eabi-gcc-ranlib-"
       - "/usr/local/go/bin/arm-none-eabi-gcc-ranlib-"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/arm-none-eabi-gcc-ranlib-"
     found: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc-ranlib"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -1967,6 +1874,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_FIND_ROOT_PATH: "/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1"
   -
     kind: "try_compile-v1"
@@ -1977,8 +1885,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-88L2Xb"
-      binary: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-88L2Xb"
+      source: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-Lg1kFj"
+      binary: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-Lg1kFj"
     cmakeVariables:
       CMAKE_C_FLAGS: "-mcpu=cortex-m0plus -mthumb"
       CMAKE_C_FLAGS_DEBUG: "-Og -g"
@@ -1989,12 +1897,12 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-88L2Xb'
+        Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-Lg1kFj'
         
-        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5ef85/fast
-        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_5ef85.dir/build.make CMakeFiles/cmTC_5ef85.dir/build
-        Building C object CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o
-        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5612c/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_5612c.dir/build.make CMakeFiles/cmTC_5612c.dir/build
+        Building C object CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o
+        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
         Using built-in specs.
         COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc
         Target: arm-none-eabi
@@ -2002,8 +1910,8 @@ events:
         Thread model: single
         Supported LTO compression algorithms: zlib
         gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5ef85.dir/'
-         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1 -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_5ef85.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccqF3jEJ.s
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5612c.dir/'
+         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1 -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_5612c.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccYgarmK.s
         GNU C17 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) version 14.2.1 20241119 (arm-none-eabi)
         	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.29.30), GMP version 6.2.1, MPFR version 3.1.6, MPC version 1.0.3, isl version isl-0.15-1-g835ea3a-GMP
         
@@ -2020,14 +1928,14 @@ events:
          /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/include
         End of search list.
         Compiler executable checksum: 37d23b2e3347d18c1231e07805cbe085
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5ef85.dir/'
-         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccqF3jEJ.s
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5612c.dir/'
+         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccYgarmK.s
         GNU assembler version 2.43.1 (arm-none-eabi) using BFD version (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 2.43.1.20241119
         COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/
         LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.'
-        Linking C executable cmTC_5ef85.elf
-        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5ef85.dir/link.txt --verbose=1
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.'
+        Linking C executable cmTC_5612c.elf
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5612c.dir/link.txt --verbose=1
         Using built-in specs.
         COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc
         COLLECT_LTO_WRAPPER=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper
@@ -2038,11 +1946,11 @@ events:
         gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 
         COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/
         LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5ef85.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5ef85.elf.'
-         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccbaJCwS.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_5ef85.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5612c.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5612c.elf.'
+         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccbLKL3K.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_5612c.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o
         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: cannot find entry symbol _start; defaulting to 00008000
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5ef85.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5ef85.elf.'
-        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb  -Wl,--build-id=none -nostdlib  -v CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o -o cmTC_5ef85.elf
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5612c.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5612c.elf.'
+        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb  -Wl,--build-id=none -nostdlib  -v CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o -o cmTC_5612c.elf
         
       exitCode: 0
   -
@@ -2075,12 +1983,12 @@ events:
       Parsed C implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-88L2Xb']
+        ignore line: [Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-Lg1kFj']
         ignore line: []
-        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5ef85/fast]
-        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_5ef85.dir/build.make CMakeFiles/cmTC_5ef85.dir/build]
-        ignore line: [Building C object CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o]
-        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_5612c/fast]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_5612c.dir/build.make CMakeFiles/cmTC_5612c.dir/build]
+        ignore line: [Building C object CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc]
         ignore line: [Target: arm-none-eabi]
@@ -2088,8 +1996,8 @@ events:
         ignore line: [Thread model: single]
         ignore line: [Supported LTO compression algorithms: zlib]
         ignore line: [gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5ef85.dir/']
-        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1 -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_5ef85.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccqF3jEJ.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5612c.dir/']
+        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1 -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c -quiet -dumpdir CMakeFiles/cmTC_5612c.dir/ -dumpbase CMakeCCompilerABI.c.c -dumpbase-ext .c -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccYgarmK.s]
         ignore line: [GNU C17 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) version 14.2.1 20241119 (arm-none-eabi)]
         ignore line: [	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.29.30)  GMP version 6.2.1  MPFR version 3.1.6  MPC version 1.0.3  isl version isl-0.15-1-g835ea3a-GMP]
         ignore line: []
@@ -2106,14 +2014,14 @@ events:
         ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: 37d23b2e3347d18c1231e07805cbe085]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5ef85.dir/']
-        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccqF3jEJ.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5612c.dir/']
+        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccYgarmK.s]
         ignore line: [GNU assembler version 2.43.1 (arm-none-eabi) using BFD version (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 2.43.1.20241119]
         ignore line: [COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/]
         ignore line: [LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.']
-        ignore line: [Linking C executable cmTC_5ef85.elf]
-        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5ef85.dir/link.txt --verbose=1]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.']
+        ignore line: [Linking C executable cmTC_5612c.elf]
+        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5612c.dir/link.txt --verbose=1]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc]
         ignore line: [COLLECT_LTO_WRAPPER=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper]
@@ -2124,17 +2032,17 @@ events:
         ignore line: [gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) ]
         ignore line: [COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/]
         ignore line: [LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5ef85.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5ef85.elf.']
-        link line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccbaJCwS.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_5ef85.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5612c.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5612c.elf.']
+        link line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccbLKL3K.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_5612c.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o]
           arg [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccbaJCwS.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccbLKL3K.res] ==> ignore
           arg [--sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi] ==> ignore
           arg [-X] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_5ef85.elf] ==> ignore
+          arg [cmTC_5612c.elf] ==> ignore
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp]
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp]
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp]
@@ -2143,11 +2051,11 @@ events:
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib]
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib]
           arg [--build-id=none] ==> ignore
-          arg [CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o] ==> ignore
         ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: cannot find entry symbol _start]
         ignore line: [ defaulting to 00008000]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5ef85.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5ef85.elf.']
-        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb  -Wl --build-id=none -nostdlib  -v CMakeFiles/cmTC_5ef85.dir/CMakeCCompilerABI.c.o -o cmTC_5ef85.elf]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_5612c.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_5612c.elf.']
+        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-gcc -mcpu=cortex-m0plus -mthumb  -Wl --build-id=none -nostdlib  -v CMakeFiles/cmTC_5612c.dir/CMakeCCompilerABI.c.o -o cmTC_5612c.elf]
         ignore line: []
         ignore line: []
         collapse library dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp] ==> [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp]
@@ -2172,8 +2080,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-zWkoVq"
-      binary: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-zWkoVq"
+      source: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-5hgaVt"
+      binary: "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-5hgaVt"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "-mcpu=cortex-m0plus -mthumb"
       CMAKE_CXX_FLAGS_DEBUG: "-Og -g"
@@ -2185,12 +2093,12 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-zWkoVq'
+        Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-5hgaVt'
         
-        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_29ffd/fast
-        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_29ffd.dir/build.make CMakeFiles/cmTC_29ffd.dir/build
-        Building CXX object CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o
-        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c41ad/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_c41ad.dir/build.make CMakeFiles/cmTC_c41ad.dir/build
+        Building CXX object CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o
+        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         Using built-in specs.
         COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++
         Target: arm-none-eabi
@@ -2198,8 +2106,8 @@ events:
         Thread model: single
         Supported LTO compression algorithms: zlib
         gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_29ffd.dir/'
-         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1plus -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_29ffd.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccd8pdVT.s
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_c41ad.dir/'
+         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1plus -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_c41ad.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccoxM4uy.s
         GNU C++17 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) version 14.2.1 20241119 (arm-none-eabi)
         	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.29.30), GMP version 6.2.1, MPFR version 3.1.6, MPC version 1.0.3, isl version isl-0.15-1-g835ea3a-GMP
         
@@ -2222,14 +2130,14 @@ events:
          /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/include
         End of search list.
         Compiler executable checksum: 27b9f5562618372de894011fc251f42d
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_29ffd.dir/'
-         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccd8pdVT.s
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_c41ad.dir/'
+         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccoxM4uy.s
         GNU assembler version 2.43.1 (arm-none-eabi) using BFD version (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 2.43.1.20241119
         COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/
         LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.'
-        Linking CXX executable cmTC_29ffd.elf
-        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_29ffd.dir/link.txt --verbose=1
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.'
+        Linking CXX executable cmTC_c41ad.elf
+        /opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c41ad.dir/link.txt --verbose=1
         Using built-in specs.
         COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++
         COLLECT_LTO_WRAPPER=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper
@@ -2240,11 +2148,11 @@ events:
         gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 
         COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/
         LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_29ffd.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_29ffd.elf.'
-         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccjnw3nW.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_29ffd.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_c41ad.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_c41ad.elf.'
+         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccxPo8P6.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_c41ad.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o
         /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: cannot find entry symbol _start; defaulting to 00008000
-        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_29ffd.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_29ffd.elf.'
-        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb  -Wl,--build-id=none -nostdlib  -v CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_29ffd.elf
+        COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_c41ad.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_c41ad.elf.'
+        /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb  -Wl,--build-id=none -nostdlib  -v CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_c41ad.elf
         
       exitCode: 0
   -
@@ -2283,12 +2191,12 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|")?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-zWkoVq']
+        ignore line: [Change Dir: '/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/build/CMakeFiles/CMakeScratch/TryCompile-5hgaVt']
         ignore line: []
-        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_29ffd/fast]
-        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_29ffd.dir/build.make CMakeFiles/cmTC_29ffd.dir/build]
-        ignore line: [Building CXX object CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o]
-        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_c41ad/fast]
+        ignore line: [/Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_c41ad.dir/build.make CMakeFiles/cmTC_c41ad.dir/build]
+        ignore line: [Building CXX object CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++   -mcpu=cortex-m0plus -mthumb    -v -o CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o -c /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++]
         ignore line: [Target: arm-none-eabi]
@@ -2296,8 +2204,8 @@ events:
         ignore line: [Thread model: single]
         ignore line: [Supported LTO compression algorithms: zlib]
         ignore line: [gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) ]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_29ffd.dir/']
-        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1plus -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_29ffd.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccd8pdVT.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_c41ad.dir/']
+        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/cc1plus -quiet -v -imultilib thumb/v6-m/nofp -iprefix /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/ -isysroot /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -D__USES_INITFINI__ /opt/homebrew/share/cmake/Modules/CMakeCXXCompilerABI.cpp -quiet -dumpdir CMakeFiles/cmTC_c41ad.dir/ -dumpbase CMakeCXXCompilerABI.cpp.cpp -dumpbase-ext .cpp -mcpu=cortex-m0plus -mthumb -mfloat-abi=soft -mlibarch=armv6s-m -march=armv6s-m -version -o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccoxM4uy.s]
         ignore line: [GNU C++17 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) version 14.2.1 20241119 (arm-none-eabi)]
         ignore line: [	compiled by GNU C version Apple LLVM 13.0.0 (clang-1300.0.29.30)  GMP version 6.2.1  MPFR version 3.1.6  MPC version 1.0.3  isl version isl-0.15-1-g835ea3a-GMP]
         ignore line: []
@@ -2320,14 +2228,14 @@ events:
         ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/include]
         ignore line: [End of search list.]
         ignore line: [Compiler executable checksum: 27b9f5562618372de894011fc251f42d]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_29ffd.dir/']
-        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccd8pdVT.s]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_c41ad.dir/']
+        ignore line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/as -v -march=armv6s-m -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o /var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccoxM4uy.s]
         ignore line: [GNU assembler version 2.43.1 (arm-none-eabi) using BFD version (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) 2.43.1.20241119]
         ignore line: [COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/]
         ignore line: [LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.']
-        ignore line: [Linking CXX executable cmTC_29ffd.elf]
-        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_29ffd.dir/link.txt --verbose=1]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-v' '-o' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o' '-c' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.']
+        ignore line: [Linking CXX executable cmTC_c41ad.elf]
+        ignore line: [/opt/homebrew/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c41ad.dir/link.txt --verbose=1]
         ignore line: [Using built-in specs.]
         ignore line: [COLLECT_GCC=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++]
         ignore line: [COLLECT_LTO_WRAPPER=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper]
@@ -2338,17 +2246,17 @@ events:
         ignore line: [gcc version 14.2.1 20241119 (Arm GNU Toolchain 14.2.Rel1 (Build arm-14.52)) ]
         ignore line: [COMPILER_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/]
         ignore line: [LIBRARY_PATH=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/:/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_29ffd.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_29ffd.elf.']
-        link line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccjnw3nW.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_29ffd.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_c41ad.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_c41ad.elf.']
+        link line: [ /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2 -plugin /Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so -plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper -plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccxPo8P6.res --sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi -X -o cmTC_c41ad.elf -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1 -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib -L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib --build-id=none CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o]
           arg [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/collect2] ==> ignore
           arg [-plugin] ==> ignore
           arg [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/liblto_plugin.so] ==> ignore
           arg [-plugin-opt=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../libexec/gcc/arm-none-eabi/14.2.1/lto-wrapper] ==> ignore
-          arg [-plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccjnw3nW.res] ==> ignore
+          arg [-plugin-opt=-fresolution=/var/folders/sd/1lv__t6j2cd05mf5w1dv_wwc0000gn/T//ccxPo8P6.res] ==> ignore
           arg [--sysroot=/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi] ==> ignore
           arg [-X] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_29ffd.elf] ==> ignore
+          arg [cmTC_c41ad.elf] ==> ignore
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp]
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp]
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib/thumb/v6-m/nofp]
@@ -2357,11 +2265,11 @@ events:
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib]
           arg [-L/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib] ==> dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../arm-none-eabi/lib]
           arg [--build-id=none] ==> ignore
-          arg [CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
         ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/bin/ld: warning: cannot find entry symbol _start]
         ignore line: [ defaulting to 00008000]
-        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_29ffd.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_29ffd.elf.']
-        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb  -Wl --build-id=none -nostdlib  -v CMakeFiles/cmTC_29ffd.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_29ffd.elf]
+        ignore line: [COLLECT_GCC_OPTIONS='-mcpu=cortex-m0plus' '-mthumb' '-nostdlib' '-v' '-o' 'cmTC_c41ad.elf' '-mfloat-abi=soft' '-mlibarch=armv6s-m' '-march=armv6s-m' '-dumpdir' 'cmTC_c41ad.elf.']
+        ignore line: [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/arm-none-eabi-g++ -mcpu=cortex-m0plus -mthumb  -Wl --build-id=none -nostdlib  -v CMakeFiles/cmTC_c41ad.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_c41ad.elf]
         ignore line: []
         ignore line: []
         collapse library dir [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/bin/../lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp] ==> [/Users/ssnow/.pico-sdk/toolchain/14_2_Rel1/lib/gcc/arm-none-eabi/14.2.1/thumb/v6-m/nofp]
@@ -2521,9 +2429,6 @@ events:
     found: false
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -2540,6 +2445,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_INSTALL_PREFIX: "/usr/local"
       CMAKE_SYSTEM_PREFIX_PATH:
         - "/usr/local"
@@ -2693,12 +2599,6 @@ events:
       - "python3"
       - "python"
     candidate_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/Scripts/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
@@ -2744,6 +2644,9 @@ events:
       - "/usr/local/go/bin/bin/"
       - "/usr/local/go/bin/Scripts/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/Scripts/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
       - "/usr/local/bin/bin/"
       - "/usr/local/bin/Scripts/"
       - "/usr/local/bin/"
@@ -2805,738 +2708,6 @@ events:
       - "/opt/Scripts/"
       - "/opt/"
     searched_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.14d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.13d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.12d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.11d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.10d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.9d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.8d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.7d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.6d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.5d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.4d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.3d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.2d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.1d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3.0d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python3"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/bin/python"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.14d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.13d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.12d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.11d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.10d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.9d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.8d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.7d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.6d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.5d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.4d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.3d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.2d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.1d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3.0d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python3"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/Scripts/python"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.14d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.13d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.12d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.11d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.10d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.9d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.8d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.7d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.6d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.5d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.4d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.3d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.2d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.1d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0mu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0m"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0u"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0dmu"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0dm"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0du"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3.0d"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python3"
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/python"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.14d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.13d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.12d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.11d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.10d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.9d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.8d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.7d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.6d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.5d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.4d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.3d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.2d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.1d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3.0d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python3"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/bin/python"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.14d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.13d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.12d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.11d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.10d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.9d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.8d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.7d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.6d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.5d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.4d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.3d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.2d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.1d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3.0d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python3"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/Scripts/python"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.14d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.13d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.12d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.11d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.10d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.9d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.8d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.7d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.6d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.5d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.4d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.3d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.2d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.1d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0mu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0m"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0u"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0dmu"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0dm"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0du"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3.0d"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python3"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/python"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/bin/python3.14mu"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/bin/python3.14m"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/bin/python3.14u"
@@ -5734,9 +4905,6 @@ events:
     found: "/usr/bin/python3"
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -5753,6 +4921,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_INSTALL_PREFIX: "/usr/local"
       CMAKE_SYSTEM_PREFIX_PATH:
         - "/usr/local"
@@ -5784,8 +4953,6 @@ events:
     names:
       - "doxygen"
     candidate_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -5801,6 +4968,7 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
       - "/usr/local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/"
@@ -5826,8 +4994,6 @@ events:
       - "/Applications/Utilities/Doxygen.app/Contents/Resources/"
       - "/Applications/Utilities/Doxygen.app/Contents/MacOS/"
     searched_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/doxygen"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/doxygen"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/doxygen"
       - "/opt/homebrew/bin/doxygen"
       - "/opt/homebrew/sbin/doxygen"
@@ -5843,6 +5009,7 @@ events:
       - "/usr/local/share/dotnet/doxygen"
       - "/Users/ssnow/.dotnet/tools/doxygen"
       - "/usr/local/go/bin/doxygen"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/doxygen"
       - "/usr/local/bin/doxygen"
       - "/usr/local/sbin/doxygen"
       - "/usr/local/doxygen"
@@ -5870,9 +5037,6 @@ events:
     found: false
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -5889,6 +5053,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_INSTALL_PREFIX: "/usr/local"
       CMAKE_SYSTEM_PREFIX_PATH:
         - "/usr/local"
@@ -5920,8 +5085,6 @@ events:
     names:
       - "dot"
     candidate_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/"
       - "/opt/homebrew/bin/"
       - "/opt/homebrew/sbin/"
@@ -5937,6 +5100,7 @@ events:
       - "/usr/local/share/dotnet/"
       - "/Users/ssnow/.dotnet/tools/"
       - "/usr/local/go/bin/"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/"
       - "/usr/local/bin/"
       - "/usr/local/sbin/"
       - "/usr/local/"
@@ -5966,8 +5130,6 @@ events:
       - "/Applications/Utilities/Doxygen.app/Contents/Resources/"
       - "/Applications/Utilities/Doxygen.app/Contents/MacOS/"
     searched_directories:
-      - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin/dot"
-      - "/Applications/Cursor.app/Contents/Resources/app/bin/dot"
       - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin/dot"
       - "/opt/homebrew/bin/dot"
       - "/opt/homebrew/sbin/dot"
@@ -5983,6 +5145,7 @@ events:
       - "/usr/local/share/dotnet/dot"
       - "/Users/ssnow/.dotnet/tools/dot"
       - "/usr/local/go/bin/dot"
+      - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts/dot"
       - "/usr/local/bin/dot"
       - "/usr/local/sbin/dot"
       - "/usr/local/dot"
@@ -6014,9 +5177,6 @@ events:
     found: false
     search_context:
       ENV{PATH}:
-        - "/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-        - "/Applications/Cursor.app/Contents/Resources/app/bin"
-        - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
         - "/opt/homebrew/bin"
         - "/opt/homebrew/sbin"
@@ -6033,6 +5193,7 @@ events:
         - "~/.dotnet/tools"
         - "/usr/local/go/bin"
         - "/Users/ssnow/.nvm/versions/node/v22.20.0/bin"
+        - "/Users/ssnow/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts"
       CMAKE_INSTALL_PREFIX: "/usr/local"
       CMAKE_SYSTEM_PREFIX_PATH:
         - "/usr/local"
