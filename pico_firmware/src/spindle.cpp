@@ -91,6 +91,11 @@ void BLDC_MOTOR::handle_pulse() {
             // RPM = (60 seconds/minute) / (time_per_rev_seconds)
             measured_rpm = 60.0f / time_per_rev_sec;
             
+            // Clamp RPM to reasonable range (from Code-snippets improvement)
+            if (measured_rpm > 10000.0f) {
+                measured_rpm = 0.0f;  // Likely noise
+            }
+            
             // Also calculate pulse frequency (Hz)
             pulse_frequency = 1.0f / (dt_us / 1e6f);
         }

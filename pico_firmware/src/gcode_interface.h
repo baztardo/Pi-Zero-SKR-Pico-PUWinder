@@ -39,6 +39,7 @@ enum GCodeType {
     GCODE_M47,     // Set pin value
     GCODE_PING,    // Ping command
     GCODE_VERSION, // Version command
+    GCODE_STATUS,  // Status command
     GCODE_ERROR    // Error state
 };
 
@@ -116,6 +117,7 @@ private:
     bool execute_m47();
     bool execute_ping();
     bool execute_version();
+    bool execute_status();
     
     // Helper functions
     void log_command(const char* cmd);

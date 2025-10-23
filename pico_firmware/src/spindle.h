@@ -41,6 +41,7 @@ public:
     bool get_brake() const;
     float get_revolutions() const;
     
+    
 private:
     uint pulse_pin;
     volatile uint32_t edge_count;

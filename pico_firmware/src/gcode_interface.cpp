@@ -72,6 +72,19 @@ bool GCodeInterface::parse_command(const char* command) {
         current_command = GCODE_M5;
         return true;
     }
+    // Handle special commands (from Code-snippets improvement)
+    else if (strcmp(command, "PING") == 0) {
+        current_command = GCODE_PING;
+        return true;
+    }
+    else if (strcmp(command, "VERSION") == 0) {
+        current_command = GCODE_VERSION;
+        return true;
+    }
+    else if (strcmp(command, "STATUS") == 0) {
+        current_command = GCODE_STATUS;
+        return true;
+    }
     else if (command[0] == 'S') {
         current_command = GCODE_S;
         return parse_parameters(command + 1);
@@ -228,6 +241,9 @@ bool GCodeInterface::execute_command() {
             break;
         case GCODE_VERSION:
             result = execute_version();
+            break;
+        case GCODE_STATUS:
+            result = execute_status();
             break;
         default:
             set_error("Unsupported command");
@@ -672,6 +688,37 @@ bool GCodeInterface::execute_ping() {
 // =============================================================================
 bool GCodeInterface::execute_version() {
     send_response("Pico_Spindle_v1.0");
+    return true;
+}
+
+// =============================================================================
+// Execute STATUS (from Code-snippets improvement)
+// =============================================================================
+bool GCodeInterface::execute_status() {
+    extern BLDC_MOTOR* spindle_controller;
+    extern TraverseController* traverse_controller;
+    
+    char status_buffer[256];
+    float spindle_rpm = 0.0f;
+    float traverse_pos = 0.0f;
+    bool spindle_running = false;
+    
+    if (spindle_controller) {
+        spindle_rpm = spindle_controller->get_rpm();
+        spindle_running = !spindle_controller->get_brake();
+    }
+    
+    if (traverse_controller) {
+        traverse_pos = traverse_controller->get_current_position();
+    }
+    
+    snprintf(status_buffer, sizeof(status_buffer), 
+             "STATUS: Spindle=%.1fRPM(%s) Traverse=%.2fmm", 
+             spindle_rpm, 
+             spindle_running ? "RUN" : "STOP",
+             traverse_pos);
+    
+    send_response(status_buffer);
     return true;
 }
 
