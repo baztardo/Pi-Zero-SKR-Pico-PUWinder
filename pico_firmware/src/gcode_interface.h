@@ -10,40 +10,6 @@
 #include <cstdio>
 
 // =============================================================================
-// G-code Command Types
-// =============================================================================
-enum GCodeType {
-    GCODE_UNKNOWN = 0,
-    GCODE_G0,      // Rapid positioning
-    GCODE_G1,      // Linear interpolation
-    GCODE_G28,     // Home
-    GCODE_M3,      // Spindle CW
-    GCODE_M4,      // Spindle CCW
-    GCODE_M5,      // Spindle stop
-    GCODE_S,       // Set spindle speed
-    GCODE_M6,      // Tool change
-    GCODE_M7,      // Coolant on
-    GCODE_M8,      // Coolant off
-    GCODE_M9,      // Coolant off
-    GCODE_M10,     // Traverse brake on
-    GCODE_M11,     // Traverse brake off
-    GCODE_M12,     // Spindle brake on
-    GCODE_M13,     // Spindle brake off
-    GCODE_M14,     // Wire tension on
-    GCODE_M15,     // Wire tension off
-    GCODE_M16,     // Home all axes
-    GCODE_M17,     // Enable steppers
-    GCODE_M18,     // Disable steppers
-    GCODE_M19,     // Spindle orientation
-    GCODE_M42,     // Set pin state
-    GCODE_M47,     // Set pin value
-    GCODE_PING,    // Ping command
-    GCODE_VERSION, // Version command
-    GCODE_STATUS,  // Status command
-    GCODE_ERROR    // Error state
-};
-
-// =============================================================================
 // Token-based G-code Parsing (from Code-snippets improvement)
 // =============================================================================
 enum GCodeTokenType {
@@ -72,6 +38,7 @@ enum GCodeTokenType {
     TOKEN_M47 = 22,    // Set pin value
     TOKEN_PING = 23,   // Ping command
     TOKEN_VERSION = 24, // Version command
+    TOKEN_STATUS = 25,  // Status command
     TOKEN_UNKNOWN = 255
 };
 
@@ -106,7 +73,7 @@ public:
     
     // Status
     bool is_busy() const;
-    GCodeType get_current_command() const;
+    GCodeTokenType get_current_command() const;
     const GCodeParams& get_params() const;
     
     // Error handling
@@ -116,7 +83,7 @@ public:
     
 private:
     // Current command state
-    GCodeType current_command;
+    GCodeTokenType current_command;
     GCodeParams params;
     char command_buffer[256];
     char last_error[128];
@@ -125,16 +92,11 @@ private:
     bool busy;
     bool error_state;
     
-    // Command parsing
-    bool parse_g_command(const char* cmd);
-    bool parse_m_command(const char* cmd);
-    bool parse_parameters(const char* cmd);
-    float parse_float(const char* str);
-    
     // Token-based parsing (from Code-snippets improvement)
     GCodeTokenType parse_token(const char* command);
     bool parse_parameters_tokenized(const char* cmd);
     bool validate_parameters();
+    float parse_float(const char* str);
     
     // Command execution
     bool execute_g0_g1();
