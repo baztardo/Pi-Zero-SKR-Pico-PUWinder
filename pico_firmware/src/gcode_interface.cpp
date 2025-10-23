@@ -19,7 +19,7 @@
 // Constructor
 // =============================================================================
 GCodeInterface::GCodeInterface()
-    : current_command(GCODE_UNKNOWN)
+    : current_command(TOKEN_UNKNOWN)
     , busy(false)
     , error_state(false)
 {
@@ -53,116 +53,116 @@ bool GCodeInterface::parse_command(const char* command) {
     
     // Parse command type
     if (strncmp(command, "G0", 2) == 0 || strncmp(command, "G1", 2) == 0) {
-        current_command = (command[1] == '0') ? GCODE_G0 : GCODE_G1;
+        current_command = (command[1] == '0') ? TOKEN_G0 : TOKEN_G1;
         return parse_parameters(command + 2);
     }
     else if (strncmp(command, "G28", 3) == 0) {
-        current_command = GCODE_G28;
+        current_command = TOKEN_G28;
         return parse_parameters(command + 3);
     }
     else if (strncmp(command, "M3", 2) == 0) {
-        current_command = GCODE_M3;
+        current_command = TOKEN_M3;
         return parse_parameters(command + 2);
     }
     else if (strncmp(command, "M4", 2) == 0) {
-        current_command = GCODE_M4;
+        current_command = TOKEN_M4;
         return parse_parameters(command + 2);
     }
     else if (strncmp(command, "M5", 2) == 0) {
-        current_command = GCODE_M5;
+        current_command = TOKEN_M5;
         return true;
     }
     // Handle special commands (from Code-snippets improvement)
     else if (strcmp(command, "PING") == 0) {
-        current_command = GCODE_PING;
+        current_command = TOKEN_PING;
         return true;
     }
     else if (strcmp(command, "VERSION") == 0) {
-        current_command = GCODE_VERSION;
+        current_command = TOKEN_VERSION;
         return true;
     }
     else if (strcmp(command, "STATUS") == 0) {
-        current_command = GCODE_STATUS;
+        current_command = TOKEN_STATUS;
         return true;
     }
     else if (command[0] == 'S') {
-        current_command = GCODE_S;
+        current_command = TOKEN_S;
         return parse_parameters(command + 1);
     }
     else if (strncmp(command, "M6", 2) == 0) {
-        current_command = GCODE_M6;
+        current_command = TOKEN_M6;
         return true;
     }
     else if (strncmp(command, "M7", 2) == 0) {
-        current_command = GCODE_M7;
+        current_command = TOKEN_M7;
         return true;
     }
     else if (strncmp(command, "M8", 2) == 0) {
-        current_command = GCODE_M8;
+        current_command = TOKEN_M8;
         return true;
     }
     else if (strncmp(command, "M9", 2) == 0) {
-        current_command = GCODE_M9;
+        current_command = TOKEN_M9;
         return true;
     }
     else if (strncmp(command, "M10", 3) == 0) {
-        current_command = GCODE_M10;
+        current_command = TOKEN_M10;
         return true;
     }
     else if (strncmp(command, "M11", 3) == 0) {
-        current_command = GCODE_M11;
+        current_command = TOKEN_M11;
         return true;
     }
     else if (strncmp(command, "M12", 3) == 0) {
-        current_command = GCODE_M12;
+        current_command = TOKEN_M12;
         return true;
     }
     else if (strncmp(command, "M13", 3) == 0) {
-        current_command = GCODE_M13;
+        current_command = TOKEN_M13;
         return true;
     }
     else if (strncmp(command, "M14", 3) == 0) {
-        current_command = GCODE_M14;
+        current_command = TOKEN_M14;
         return true;
     }
     else if (strncmp(command, "M15", 3) == 0) {
-        current_command = GCODE_M15;
+        current_command = TOKEN_M15;
         return true;
     }
     else if (strncmp(command, "M16", 3) == 0) {
-        current_command = GCODE_M16;
+        current_command = TOKEN_M16;
         return true;
     }
     else if (strncmp(command, "M17", 3) == 0) {
-        current_command = GCODE_M17;
+        current_command = TOKEN_M17;
         return true;
     }
     else if (strncmp(command, "M18", 3) == 0) {
-        current_command = GCODE_M18;
+        current_command = TOKEN_M18;
         return true;
     }
     else if (strncmp(command, "M19", 3) == 0) {
-        current_command = GCODE_M19;
+        current_command = TOKEN_M19;
         return true;
     }
     else if (strncmp(command, "M42", 3) == 0) {
-        current_command = GCODE_M42;
+        current_command = TOKEN_M42;
         return parse_parameters(command + 3);
     }
     else if (strncmp(command, "M47", 3) == 0) {
-        current_command = GCODE_M47;
+        current_command = TOKEN_M47;
         return parse_parameters(command + 3);
     }
     else if (strcmp(command, "PING") == 0) {
-        current_command = GCODE_PING;
+        current_command = TOKEN_PING;
         return true;
     }
     else if (strcmp(command, "VERSION") == 0) {
-        current_command = GCODE_VERSION;
+        current_command = TOKEN_VERSION;
         return true;
     }
     else {
-        current_command = GCODE_UNKNOWN;
+        current_command = TOKEN_UNKNOWN;
         set_error("Unknown command");
         return false;
     }
@@ -172,7 +172,7 @@ bool GCodeInterface::parse_command(const char* command) {
 // Execute command
 // =============================================================================
 bool GCodeInterface::execute_command() {
-    if (current_command == GCODE_UNKNOWN) {
+    if (current_command == TOKEN_UNKNOWN) {
         set_error("No command to execute");
         return false;
     }
@@ -183,66 +183,66 @@ bool GCodeInterface::execute_command() {
     bool result = false;
     
     switch (current_command) {
-        case GCODE_G0:
-        case GCODE_G1:
+        case TOKEN_G0:
+        case TOKEN_G1:
             result = execute_g0_g1();
             break;
-        case GCODE_G28:
+        case TOKEN_G28:
             result = execute_g28();
             break;
-        case GCODE_M3:
-        case GCODE_M4:
+        case TOKEN_M3:
+        case TOKEN_M4:
             result = execute_m3_m4();
             break;
-        case GCODE_M5:
+        case TOKEN_M5:
             result = execute_m5();
             break;
-        case GCODE_S:
+        case TOKEN_S:
             result = execute_s();
             break;
-        case GCODE_M6:
+        case TOKEN_M6:
             result = execute_m6();
             break;
-        case GCODE_M7:
-        case GCODE_M8:
-        case GCODE_M9:
+        case TOKEN_M7:
+        case TOKEN_M8:
+        case TOKEN_M9:
             result = execute_m7_m8_m9();
             break;
-        case GCODE_M10:
-        case GCODE_M11:
+        case TOKEN_M10:
+        case TOKEN_M11:
             result = execute_m10_m11();
             break;
-        case GCODE_M12:
-        case GCODE_M13:
+        case TOKEN_M12:
+        case TOKEN_M13:
             result = execute_m12_m13();
             break;
-        case GCODE_M14:
-        case GCODE_M15:
+        case TOKEN_M14:
+        case TOKEN_M15:
             result = execute_m14_m15();
             break;
-        case GCODE_M16:
+        case TOKEN_M16:
             result = execute_m16();
             break;
-        case GCODE_M17:
-        case GCODE_M18:
+        case TOKEN_M17:
+        case TOKEN_M18:
             result = execute_m17_m18();
             break;
-        case GCODE_M19:
+        case TOKEN_M19:
             result = execute_m19();
             break;
-        case GCODE_M42:
+        case TOKEN_M42:
             result = execute_m42();
             break;
-        case GCODE_M47:
+        case TOKEN_M47:
             result = execute_m47();
             break;
-        case GCODE_PING:
+        case TOKEN_PING:
             result = execute_ping();
             break;
-        case GCODE_VERSION:
+        case TOKEN_VERSION:
             result = execute_version();
             break;
-        case GCODE_STATUS:
+        case TOKEN_STATUS:
             result = execute_status();
             break;
         default:
@@ -509,7 +509,7 @@ bool GCodeInterface::execute_m3_m4() {
     
     if (params.has_S) {
         // Set spindle speed and direction
-        if (current_command == GCODE_M3) {
+        if (current_command == TOKEN_M3) {
             spindle_controller->set_direction(DIRECTION_CW);
         } else {
             spindle_controller->set_direction(DIRECTION_CCW);
@@ -612,7 +612,7 @@ bool GCodeInterface::execute_m10_m11() {
         return false;
     }
     
-    bool enable = (current_command == GCODE_M10);
+    bool enable = (current_command == TOKEN_M10);
     // Use Klipper-style move queue for brake control
     move_queue->set_enable(AXIS_TRAVERSE, !enable); // Brake = disable motor
     send_response(enable ? "Traverse brake engaged" : "Traverse brake released");
@@ -623,7 +623,7 @@ bool GCodeInterface::execute_m10_m11() {
 // Execute M12/M13 (spindle brake)
 // =============================================================================
 bool GCodeInterface::execute_m12_m13() {
-    send_response(current_command == GCODE_M12 ? "Spindle brake engaged" : "Spindle brake released");
+    send_response(current_command == TOKEN_M12 ? "Spindle brake engaged" : "Spindle brake released");
     return true;
 }
 
@@ -631,7 +631,7 @@ bool GCodeInterface::execute_m12_m13() {
 // Execute M14/M15 (wire tension)
 // =============================================================================
 bool GCodeInterface::execute_m14_m15() {
-    send_response(current_command == GCODE_M14 ? "Wire tension enabled" : "Wire tension disabled");
+    send_response(current_command == TOKEN_M14 ? "Wire tension enabled" : "Wire tension disabled");
     return true;
 }
 
@@ -663,7 +663,7 @@ bool GCodeInterface::execute_m17_m18() {
         return false;
     }
     
-    if (current_command == GCODE_M17) {
+    if (current_command == TOKEN_M17) {
         // Enable both axes
         move_queue->set_enable(AXIS_SPINDLE, true);
         move_queue->set_enable(AXIS_TRAVERSE, true);
@@ -908,8 +908,8 @@ bool GCodeInterface::parse_parameters_tokenized(const char* cmd) {
 bool GCodeInterface::validate_parameters() {
     // Validate parameter combinations based on command type
     switch (current_command) {
-        case GCODE_G0:
-        case GCODE_G1:
+        case TOKEN_G0:
+        case TOKEN_G1:
             // G0/G1 should have at least one coordinate
             if (!params.has_X && !params.has_Y && !params.has_Z) {
                 set_error("G0/G1 requires at least one coordinate");
@@ -917,8 +917,8 @@ bool GCodeInterface::validate_parameters() {
             }
             break;
             
-        case GCODE_M3:
-        case GCODE_M4:
+        case TOKEN_M3:
+        case TOKEN_M4:
             // M3/M4 should have S parameter for speed
             if (!params.has_S) {
                 set_error("M3/M4 requires S parameter for speed");
@@ -926,7 +926,7 @@ bool GCodeInterface::validate_parameters() {
             }
             break;
             
-        case GCODE_M42:
+        case TOKEN_M42:
             // M42 requires P parameter for pin number
             if (!params.has_P) {
                 set_error("M42 requires P parameter for pin number");
