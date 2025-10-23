@@ -1,61 +1,38 @@
-# 🚀 NEXT STEPS - BLDC Integration
+Looking at the analysis from doc CODEBASE_ERRORS_FOUND.md, 
+COMPREHENSIVE_ERROR_ANALYSIS.md, and klipper_achitechture.md
 
-## ✅ COMPLETED:
-- Pi Zero setup ✅
-- UART working ✅  
-- Basic PING/PONG test ✅
+ Needs Improvement:
 
-## 🎯 NEXT: Add BLDC Control
+Hardware timer ISR (currently using software timer)
+Bisect algorithm in StepCompressor
+Complete G1 command implementation
+Error recovery mechanisms
 
-### Files to Create in Other Session:
+Recommended Next Steps
 
-**1. pico_firmware/src/bldc_control.h**
-```cpp
-#pragma once
-#include "pico/stdlib.h"
+Implement Hardware Timer ISR
 
-class BLDCControl {
-public:
-    BLDCControl(uint pwm_pin, uint speed_pin);
-    void init();
-    void set_rpm(float rpm);
-    void stop();
-    float get_measured_rpm();
-private:
-    uint pwm_pin;
-    uint speed_pin;
-    float target_rpm;
-};
-```
+Use RP2040 hardware timer
+Set to 20kHz frequency
+Ensure atomic operations
 
-**2. pico_firmware/src/bldc_control.cpp**
-- Copy from: /PU-Winder/EP-0172_BLDC_test/bldc_speed_pulse.cpp
-- Adapt for RPM control via PWM
 
-**3. Update pico_firmware/main.cpp**
-Add commands:
-- SET_BLDC_RPM <rpm>
-- GET_BLDC_RPM
-- STOP_BLDC
+Complete StepCompressor
 
-### Pi Zero Test:
-```python
-# pi_zero/test_bldc.py
-ser.write(b"SET_BLDC_RPM 1500\n")
-response = ser.readline()  # "ok"
+Implement Klipper's bisect algorithm
+Add velocity spike detection
+Optimize chunk boundaries
 
-ser.write(b"GET_BLDC_RPM\n") 
-rpm = ser.readline()  # "1523.4"
-```
 
-### Pins to Use:
-- BLDC PWM: GPIO 20 (PWM output to EP-0172 SC pin)
-- Speed pulse: GPIO 21 (read from EP-0172 speed output)
+Finish G-code Implementation
 
-## 🔧 Implementation Order:
-1. Add BLDC files (copy from EP-0172 code)
-2. Add to CMakeLists.txt
-3. Update main.cpp with BLDC commands
-4. Compile and test!
+Connect G1 to StepCompressor
+Add proper feedrate conversion
+Implement coordinate transformations
 
-Target: 1500-3000 RPM! 🚀
+
+Add Safety Features
+
+Endstop monitoring in ISR
+Emergency stop handling
+Stall detection

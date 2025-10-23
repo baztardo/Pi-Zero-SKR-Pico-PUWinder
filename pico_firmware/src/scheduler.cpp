@@ -6,6 +6,8 @@
 #include "pico/stdlib.h"
 #include "config.h"
 #include "pico/time.h"
+#include "hardware/timer.h"
+#include "hardware/irq.h"
 
 // Forward declaration of the stepper pulse handler
 void scheduler_tick();
@@ -52,34 +54,25 @@ Scheduler::Scheduler(MoveQueue* mq)
 bool Scheduler::start(uint32_t interval) {
     gpio_init(SCHED_HEARTBEAT_PIN);
     gpio_set_dir(SCHED_HEARTBEAT_PIN, GPIO_OUT);
-    gpio_put(SCHED_HEARTBEAT_PIN, 0);
-
-    for (int i = 0; i < 3; i++) {
-        gpio_put(SCHED_HEARTBEAT_PIN, 1);
-        sleep_ms(100);
-        gpio_put(SCHED_HEARTBEAT_PIN, 0);
-        sleep_ms(100);
-    }
-
-    if (running) return false;
     
-    interval_us = interval;
-    tick_count = 0;
+    // Use hardware timer instead of software timer
+    interval_us = 50; // 20kHz = 50us period
     
-    // Start repeating timer
-    // Negative interval means "call me every N microseconds from now"
-    bool success = add_repeating_timer_us(
-        -(int32_t)interval_us,
-        timer_callback,
-        this,
-        &timer
-    );
+    hardware_alarm_claim(0);
+    hardware_alarm_set_callback(0, [](uint alarm_num) {
+        hw_clear_bits(&timer_hw->intr, 1u << alarm_num);
+        timer_hw->alarm[alarm_num] = timer_hw->timerawl + 50;
+        if (g_scheduler_instance) {
+            g_scheduler_instance->handle_isr();
+        }
+    });
     
-    if (success) {
-        running = true;
-    }
+    timer_hw->alarm[0] = timer_hw->timerawl + 50;
+    hw_set_bits(&timer_hw->inte, 1u << 0);
+    irq_set_enabled(TIMER_IRQ_0, true);
     
-    return success;
+    running = true;
+    return true;
 }
 
 void Scheduler::stop() {
@@ -116,7 +109,7 @@ bool Scheduler::timer_callback(repeating_timer_t* rt) {
 
 void Scheduler::handle_isr() {
     tick_count++;
-
+    check_endstops(move_queue);
     // Encoder now updated by Core 1 (see main.cpp core1_entry)
     // Removed: spindle_encoder->update() to reduce Core 0 ISR load
     

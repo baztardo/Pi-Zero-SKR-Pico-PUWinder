@@ -376,31 +376,43 @@ float GCodeInterface::parse_float(const char* str) {
 // =============================================================================
 // Execute G0/G1 (rapid/linear move) - Klipper-style
 // =============================================================================
-bool GCodeInterface::execute_g0_g1() {
-    extern MoveQueue* move_queue;
-    extern WindingController* winding_controller;
+bool GCodeInterface::execute_g0_g1(const char* command) {
+    double target_y = current_y;
+    double feedrate = current_feedrate;
     
-    if (!move_queue || !winding_controller) {
-        set_error("Move queue or winding controller not initialized");
-        return false;
+    parse_parameters(command, "YF", &target_y, &feedrate);
+    
+    if (feedrate > 0.0) current_feedrate = feedrate;
+    
+    double distance_mm = fabs(target_y - current_y);
+    if (distance_mm < 0.001) return true;
+    
+    // Convert to steps
+    uint32_t total_steps = (uint32_t)(distance_mm * Y_STEPS_PER_MM);
+    double velocity_mms = current_feedrate / 60.0;
+    double cruise_velocity_sps = velocity_mms * Y_STEPS_PER_MM;
+    double accel_sps2 = Y_MAX_ACCEL * Y_STEPS_PER_MM;
+    
+    // Generate step chunks
+    std::vector<StepChunk> chunks;
+    StepCompressor::compress_trapezoid_into(
+        chunks, total_steps, 0.0, cruise_velocity_sps, accel_sps2);
+    
+    // Set direction
+    bool dir = (target_y > current_y);
+    winding_controller->set_traverse_direction(dir);
+    
+    // Push to queue
+    for (const auto& chunk : chunks) {
+        if (!move_queue->push_chunk(AXIS_TRAVERSE, chunk)) {
+            printf("ERROR: Move queue full\n");
+            return false;
+        }
     }
     
-    if (params.has_Y) {
-        // Use Klipper-style move queue for traverse movement
-        float target_y = params.Y;
-        float feedrate = params.has_F ? params.F : 1000.0f; // Default 1000 mm/min
-        
-        // TODO: Implement proper traverse movement using StepCompressor
-        // For now, just acknowledge the command
-        printf("G1 Y%.3f F%.1f - Move to Y=%.3f at %.1f mm/min\n", 
-               target_y, feedrate, target_y, feedrate);
-        
-        send_response("OK");
-        return true;
-    }
-    
-    set_error("No Y coordinate specified");
-    return false;
+    current_y = target_y;
+    printf("✓ G1 Y%.3f queued (%zu chunks)\n", target_y, chunks.size());
+    return true;
 }
 
 // =============================================================================

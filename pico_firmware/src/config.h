@@ -34,6 +34,9 @@
 #define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
 #define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
 
+#define Y_STEPS_PER_MM  80.0
+#define Y_MAX_ACCEL     100.0  // mm/s²
+
 // =============================================================================
 // TMC2209 UART (Shared bus)
 // =============================================================================
