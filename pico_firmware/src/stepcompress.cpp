@@ -24,31 +24,51 @@ std::vector<StepChunk> StepCompressor::compress_trapezoid(
     size_t pos = 0;
     while (pos < times.size()) {
         // Binary search for largest chunk that meets error tolerance
-        size_t left = pos + 1;
-        size_t right = std::min(times.size(), pos + 1000);
-        size_t best_end = left;
-        
-        while (left <= right) {
-            size_t mid = (left + right) / 2;
-            uint32_t iv;
-            int32_t ad;
-            double err;
-            
-            if (fit_chunk(times, pos, mid, iv, ad, err) && err <= max_err_us) {
+// Improved bisect: try to find optimal chunk size
+size_t left = pos + 1;
+size_t right = std::min(times.size(), pos + 64);  // Max 64 steps per chunk
+size_t best_end = left;
+double best_error = 1e9;
+uint32_t best_iv = 0;
+int32_t best_ad = 0;
+
+while (left <= right) {
+    size_t mid = (left + right) / 2;
+    uint32_t iv;
+    int32_t ad;
+    double err;
+    
+    if (fit_chunk(times, pos, mid, iv, ad, err)) {
+        if (err <= max_err_us) {
+            // This size works, save it as best if error improved
+            if (err < best_error) {
+                best_error = err;
                 best_end = mid;
-                left = mid + 1;
+                best_iv = iv;
+                best_ad = ad;
+            }
+            // Try larger
+            left = mid + 1;
             } else {
-                if (mid == 0) break;
+                // Error too big, try smaller
+                right = mid - 1;
+            }
+            } else {
+                // Fit failed, try smaller
                 right = mid - 1;
             }
         }
+
+        // Use best found
+        final_iv = best_iv;
+        final_ad = best_ad;
         
         // Create chunk
         uint32_t final_iv;
         int32_t final_ad;
         double final_err;
         
-        if (fit_chunk(times, pos, best_end, final_iv, final_ad, final_err)) {
+        if (best_end > pos) {  // We found a valid chunk
             StepChunk c;
             c.interval_us = final_iv;
             c.add_us = final_ad;

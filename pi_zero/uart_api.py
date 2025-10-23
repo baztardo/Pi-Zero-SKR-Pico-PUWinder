@@ -8,6 +8,7 @@ import serial
 import time
 import threading
 from typing import Dict, Any, Optional
+from functools import wraps
 
 # =============================================================================
 # UART API Client
@@ -21,28 +22,56 @@ class UARTAPI:
         self.connected = False
         
     def connect(self) -> bool:
-        """Connect to Pico via UART"""
+        """Connect to Pico via UART with retry logic"""
+        max_retries = 3
+        retry_delay = 1.0
+        
+        for attempt in range(max_retries):
+            try:
+                self.serial_conn = serial.Serial(
+                    port=self.port,
+                    baudrate=self.baudrate,
+                    timeout=self.timeout
+                )
+                time.sleep(0.1)  # Allow connection to stabilize
+                
+                # Flush any startup messages
+                self.serial_conn.reset_input_buffer()
+                startup_data = self.serial_conn.read_all()
+                if startup_data:
+                    print(f"Flushed startup data: {startup_data.decode('utf-8', errors='ignore').strip()}")
+                
+                # Test connection with PING
+                if self._test_connection():
+                    self.connected = True
+                    print(f"✅ Connected to {self.port} @ {self.baudrate} baud")
+                    return True
+                else:
+                    self.serial_conn.close()
+                    if attempt < max_retries - 1:
+                        print(f"Connection test failed, retrying in {retry_delay}s...")
+                        time.sleep(retry_delay)
+                
+            except serial.SerialException as e:
+                if attempt < max_retries - 1:
+                    print(f"Attempt {attempt + 1} failed: {e}, retrying in {retry_delay}s...")
+                    time.sleep(retry_delay)
+                else:
+                    print(f"❌ UART connection failed after {max_retries} attempts: {e}")
+                    self.connected = False
+                    return False
+        
+        print(f"❌ All {max_retries} connection attempts failed")
+        self.connected = False
+        return False
+    
+    def _test_connection(self) -> bool:
+        """Test UART connection with PING command"""
         try:
-            self.serial_conn = serial.Serial(
-                port=self.port,
-                baudrate=self.baudrate,
-                timeout=self.timeout
-            )
-            time.sleep(0.1)  # Allow connection to stabilize
-            
-            # Flush any startup messages
-            self.serial_conn.reset_input_buffer()
-            startup_data = self.serial_conn.read_all()
-            if startup_data:
-                print(f"Flushed startup data: {startup_data.decode('utf-8', errors='ignore').strip()}")
-            
-            self.connected = True
-            print(f"✅ Connected to {self.port} @ {self.baudrate} baud")
-            return True
-            
-        except serial.SerialException as e:
-            print(f"❌ UART connection failed: {e}")
-            self.connected = False
+            self.serial_conn.write("PING\n".encode())
+            response = self.serial_conn.readline().decode().strip()
+            return response == "PONG"
+        except Exception:
             return False
     
     def disconnect(self):
@@ -53,27 +82,41 @@ class UARTAPI:
         print("🔌 Disconnected from Pico")
     
     def send_command(self, command: str) -> Optional[str]:
-        """Send command to Pico and return response"""
+        """Send command to Pico and return response with retry logic"""
         if not self.connected or not self.serial_conn:
             print("❌ Not connected to Pico")
             return None
         
-        try:
-            # Send command
-            cmd_bytes = f"{command}\n".encode('utf-8')
-            self.serial_conn.write(cmd_bytes)
-            
-            # Read response
-            response = self.serial_conn.readline()
-            if response:
-                return response.decode('utf-8').strip()
-            else:
-                print(f"❌ No response to command: {command}")
-                return None
+        max_retries = 3
+        retry_delay = 0.5
+        
+        for attempt in range(max_retries):
+            try:
+                # Send command
+                cmd_bytes = f"{command}\n".encode('utf-8')
+                self.serial_conn.write(cmd_bytes)
                 
-        except Exception as e:
-            print(f"❌ Command error: {e}")
-            return None
+                # Read response
+                response = self.serial_conn.readline()
+                if response:
+                    return response.decode('utf-8').strip()
+                else:
+                    if attempt < max_retries - 1:
+                        print(f"No response to command: {command}, retrying...")
+                        time.sleep(retry_delay)
+                    else:
+                        print(f"❌ No response to command after {max_retries} attempts: {command}")
+                        return None
+                    
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    print(f"Command attempt {attempt + 1} failed: {e}, retrying...")
+                    time.sleep(retry_delay)
+                else:
+                    print(f"❌ Command error after {max_retries} attempts: {e}")
+                    return None
+        
+        return None
     
     def get_machine_status(self) -> Optional[Dict[str, Any]]:
         """Get machine status from Pico"""
@@ -204,6 +247,58 @@ def test_uart_connection():
     api.disconnect()
     print("🎉 UART test completed")
     return True
+
+# =============================================================================
+# Error Handling Decorators (from Code-snippets improvement)
+# =============================================================================
+def handle_uart_error(func):
+    """Decorator for UART error handling"""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except serial.SerialException as e:
+            print(f"UART Error in {func.__name__}: {e}")
+            return None
+        except Exception as e:
+            print(f"Error in {func.__name__}: {e}")
+            return None
+    return wrapper
+
+def safe_uart_operation(operation_func, max_retries=3):
+    """Safely execute UART operation with retries"""
+    for attempt in range(max_retries):
+        try:
+            result = operation_func()
+            if result is not None:
+                return result
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(1.0)
+    
+    print(f"Operation failed after {max_retries} attempts")
+    return None
+
+# =============================================================================
+# Enhanced UART Methods with Error Handling
+# =============================================================================
+class EnhancedUARTAPI(UARTAPI):
+    """Enhanced UART API with error handling decorators"""
+    
+    @handle_uart_error
+    def send_command_safe(self, command: str) -> Optional[str]:
+        """Send command with error handling"""
+        return self.send_command(command)
+    
+    @handle_uart_error
+    def get_machine_status_safe(self) -> Optional[Dict[str, Any]]:
+        """Get machine status with error handling"""
+        return self.get_machine_status()
+    
+    def safe_operation(self, operation_func, max_retries=3):
+        """Execute UART operation safely with retries"""
+        return safe_uart_operation(operation_func, max_retries)
 
 if __name__ == "__main__":
     test_uart_connection()

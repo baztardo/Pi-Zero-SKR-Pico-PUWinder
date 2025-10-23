@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from enum import Enum
 from winding_sync import WindingSyncController
 from uart_api import UARTAPI
+import re
 
 # =============================================================================
 # G-code API Client (UART-based)
@@ -37,19 +38,127 @@ class GCodeAPI:
             return None
         return self.uart_api.get_machine_status()
     
+    def parse_gcode_command(self, command: str) -> dict:
+        """Parse G-code command into components (from Code-snippets)"""
+        command = command.strip().upper()
+        
+        # Extract command type
+        if command.startswith('G'):
+            cmd_type = 'G'
+            cmd_num = command[1:].split()[0]
+        elif command.startswith('M'):
+            cmd_type = 'M'
+            cmd_num = command[1:].split()[0]
+        else:
+            return {'type': 'UNKNOWN', 'command': command}
+        
+        # Extract parameters
+        params = {}
+        parts = command.split()
+        for part in parts[1:]:
+            if len(part) > 1 and part[0].isalpha():
+                param_name = part[0]
+                try:
+                    param_value = float(part[1:])
+                    params[param_name] = param_value
+                except ValueError:
+                    params[param_name] = part[1:]
+        
+        return {
+            'type': cmd_type,
+            'number': cmd_num,
+            'command': command,
+            'parameters': params
+        }
+    
     def send_gcode(self, gcode: str) -> bool:
-        """Send G-code command to Pico"""
+        """Send G-code command to Pico with improved parsing"""
         if not self.connected:
             return False
-        return self.uart_api.send_gcode(gcode)
+        
+        # Parse and validate command
+        parsed = self.parse_gcode_command(gcode)
+        if parsed['type'] == 'UNKNOWN':
+            print(f"Unknown G-code command: {gcode}")
+            return False
+        
+        # Send the command
+        return self.uart_api.send_command(gcode) is not None
     
-    def set_spindle_rpm(self, rpm: float) -> bool:
-        """Set spindle RPM using M3 S command"""
-        return self.send_gcode(f"M3 S{rpm}")
+    def set_spindle_rpm(self, rpm: float, direction: str = 'CW') -> bool:
+        """Set spindle RPM with direction (from Code-snippets improvement)"""
+        # Clamp RPM to reasonable range
+        rpm = max(0, min(3000, rpm))
+        
+        if rpm > 0:
+            cmd = f"M{3 if direction.upper() == 'CW' else 4} S{rpm}"
+        else:
+            cmd = "M5"  # Stop spindle
+        
+        return self.send_gcode(cmd)
     
     def stop_spindle(self) -> bool:
         """Stop spindle using M5 command"""
         return self.send_gcode("M5")
+    
+    def move_traverse(self, position: float, feed_rate: float = 1000.0) -> bool:
+        """Move traverse to position (from Code-snippets improvement)"""
+        # Clamp feed rate to reasonable range
+        feed_rate = max(10.0, min(5000.0, feed_rate))
+        return self.send_gcode(f"G1 Y{position} F{feed_rate}")
+    
+    def home_traverse(self) -> bool:
+        """Home traverse axis (from Code-snippets improvement)"""
+        return self.send_gcode("G28 Y")
+    
+    def home_all_axes(self) -> bool:
+        """Home all axes (from Code-snippets improvement)"""
+        return self.send_gcode("G28")
+    
+    # Winding machine specific commands (from Code-snippets)
+    def set_wire_diameter(self, diameter: float) -> bool:
+        """Set wire diameter (M6 S command)"""
+        return self.send_gcode(f"M6 S{diameter}")
+    
+    def enable_traverse_brake(self) -> bool:
+        """Enable traverse brake (M10)"""
+        return self.send_gcode("M10")
+    
+    def disable_traverse_brake(self) -> bool:
+        """Disable traverse brake (M11)"""
+        return self.send_gcode("M11")
+    
+    def enable_wire_tension(self) -> bool:
+        """Enable wire tension (M12)"""
+        return self.send_gcode("M12")
+    
+    def disable_wire_tension(self) -> bool:
+        """Disable wire tension (M13)"""
+        return self.send_gcode("M13")
+    
+    def enable_cooling(self) -> bool:
+        """Enable cooling (M14)"""
+        return self.send_gcode("M14")
+    
+    def disable_cooling(self) -> bool:
+        """Disable cooling (M15)"""
+        return self.send_gcode("M15")
+    
+    def emergency_stop(self) -> bool:
+        """Emergency stop all systems (M16)"""
+        return self.send_gcode("M16")
+    
+    def enable_steppers(self) -> bool:
+        """Enable all steppers (M17)"""
+        return self.send_gcode("M17")
+    
+    def disable_steppers(self) -> bool:
+        """Disable all steppers (M18)"""
+        return self.send_gcode("M18")
+    
+    def set_gpio_pin(self, pin: int, state: int) -> bool:
+        """Set GPIO pin state (M42 P S)"""
+        return self.send_gcode(f"M42 P{pin} S{state}")
     
     def set_spindle_direction_cw(self) -> bool:
         """Set spindle clockwise using M3"""
@@ -197,6 +306,108 @@ class WindingParams:
         if self.turns_per_layer == 0:
             self.turns_per_layer = 1
         self.total_layers = (self.target_turns + self.turns_per_layer - 1) // self.turns_per_layer
+
+# =============================================================================
+# Controller Classes (from Code-snippets improvement)
+# =============================================================================
+class SpindleController:
+    """Spindle control with PWM and feedback"""
+    
+    def __init__(self, uart_connection):
+        self.uart = uart_connection
+        self.current_rpm = 0
+        self.target_rpm = 0
+        self.is_running = False
+        self.direction = 'CW'  # CW or CCW
+    
+    def set_rpm(self, rpm: float, direction: str = 'CW') -> bool:
+        """Set spindle RPM and direction"""
+        try:
+            self.target_rpm = max(0, min(3000, rpm))  # Clamp to 0-3000 RPM
+            self.direction = direction.upper()
+            
+            # Send command to Pico
+            if self.target_rpm > 0:
+                cmd = f"M{3 if direction.upper() == 'CW' else 4} S{self.target_rpm}\n"
+                self.uart.write(cmd.encode())
+                self.is_running = True
+            else:
+                self.stop()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error setting RPM: {e}")
+            return False
+    
+    def stop(self) -> bool:
+        """Stop spindle"""
+        try:
+            self.uart.write("M5\n".encode())
+            self.is_running = False
+            self.current_rpm = 0
+            self.target_rpm = 0
+            return True
+        except Exception as e:
+            print(f"Error stopping spindle: {e}")
+            return False
+    
+    def get_status(self) -> dict:
+        """Get current spindle status"""
+        return {
+            'current_rpm': self.current_rpm,
+            'target_rpm': self.target_rpm,
+            'is_running': self.is_running,
+            'direction': self.direction
+        }
+
+class TraverseController:
+    """Traverse control with stepper motor"""
+    
+    def __init__(self, uart_connection):
+        self.uart = uart_connection
+        self.current_position = 0.0
+        self.target_position = 0.0
+        self.is_moving = False
+        self.feed_rate = 1000.0  # mm/min
+    
+    def move_to(self, position: float, feed_rate: float = None) -> bool:
+        """Move traverse to position"""
+        try:
+            self.target_position = position
+            if feed_rate is not None:
+                self.feed_rate = feed_rate
+            
+            # Send G-code command
+            cmd = f"G1 Y{position} F{self.feed_rate}\n"
+            self.uart.write(cmd.encode())
+            self.is_moving = True
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error moving traverse: {e}")
+            return False
+    
+    def home(self) -> bool:
+        """Home traverse axis"""
+        try:
+            self.uart.write("G28 Y\n".encode())
+            self.current_position = 0.0
+            self.target_position = 0.0
+            return True
+        except Exception as e:
+            print(f"Error homing traverse: {e}")
+            return False
+    
+    def get_status(self) -> dict:
+        """Get current traverse status"""
+        return {
+            'current_position': self.current_position,
+            'target_position': self.target_position,
+            'is_moving': self.is_moving,
+            'feed_rate': self.feed_rate
+        }
 
 # =============================================================================
 # G-code Compatible Winding Controller
