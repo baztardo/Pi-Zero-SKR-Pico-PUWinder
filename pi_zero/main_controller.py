@@ -308,6 +308,108 @@ class WindingParams:
         self.total_layers = (self.target_turns + self.turns_per_layer - 1) // self.turns_per_layer
 
 # =============================================================================
+# Controller Classes (from Code-snippets improvement)
+# =============================================================================
+class SpindleController:
+    """Spindle control with PWM and feedback"""
+    
+    def __init__(self, uart_connection):
+        self.uart = uart_connection
+        self.current_rpm = 0
+        self.target_rpm = 0
+        self.is_running = False
+        self.direction = 'CW'  # CW or CCW
+    
+    def set_rpm(self, rpm: float, direction: str = 'CW') -> bool:
+        """Set spindle RPM and direction"""
+        try:
+            self.target_rpm = max(0, min(3000, rpm))  # Clamp to 0-3000 RPM
+            self.direction = direction.upper()
+            
+            # Send command to Pico
+            if self.target_rpm > 0:
+                cmd = f"M{3 if direction.upper() == 'CW' else 4} S{self.target_rpm}\n"
+                self.uart.write(cmd.encode())
+                self.is_running = True
+            else:
+                self.stop()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error setting RPM: {e}")
+            return False
+    
+    def stop(self) -> bool:
+        """Stop spindle"""
+        try:
+            self.uart.write("M5\n".encode())
+            self.is_running = False
+            self.current_rpm = 0
+            self.target_rpm = 0
+            return True
+        except Exception as e:
+            print(f"Error stopping spindle: {e}")
+            return False
+    
+    def get_status(self) -> dict:
+        """Get current spindle status"""
+        return {
+            'current_rpm': self.current_rpm,
+            'target_rpm': self.target_rpm,
+            'is_running': self.is_running,
+            'direction': self.direction
+        }
+
+class TraverseController:
+    """Traverse control with stepper motor"""
+    
+    def __init__(self, uart_connection):
+        self.uart = uart_connection
+        self.current_position = 0.0
+        self.target_position = 0.0
+        self.is_moving = False
+        self.feed_rate = 1000.0  # mm/min
+    
+    def move_to(self, position: float, feed_rate: float = None) -> bool:
+        """Move traverse to position"""
+        try:
+            self.target_position = position
+            if feed_rate is not None:
+                self.feed_rate = feed_rate
+            
+            # Send G-code command
+            cmd = f"G1 Y{position} F{self.feed_rate}\n"
+            self.uart.write(cmd.encode())
+            self.is_moving = True
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error moving traverse: {e}")
+            return False
+    
+    def home(self) -> bool:
+        """Home traverse axis"""
+        try:
+            self.uart.write("G28 Y\n".encode())
+            self.current_position = 0.0
+            self.target_position = 0.0
+            return True
+        except Exception as e:
+            print(f"Error homing traverse: {e}")
+            return False
+    
+    def get_status(self) -> dict:
+        """Get current traverse status"""
+        return {
+            'current_position': self.current_position,
+            'target_position': self.target_position,
+            'is_moving': self.is_moving,
+            'feed_rate': self.feed_rate
+        }
+
+# =============================================================================
 # G-code Compatible Winding Controller
 # =============================================================================
 class WindingController:
