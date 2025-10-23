@@ -774,3 +774,170 @@ void GCodeInterface::log_command(const char* cmd) {
 void GCodeInterface::log_error(const char* error) {
     printf("[GCode ERROR] %s\n", error);
 }
+
+// =============================================================================
+// Token-based Parsing (from Code-snippets improvement)
+// =============================================================================
+GCodeTokenType GCodeInterface::parse_token(const char* command) {
+    if (!command) return TOKEN_UNKNOWN;
+    
+    // Skip whitespace
+    while (*command == ' ' || *command == '\t') command++;
+    
+    // Parse G commands
+    if (command[0] == 'G') {
+        if (strncmp(command, "G0", 2) == 0) return TOKEN_G0;
+        if (strncmp(command, "G1", 2) == 0) return TOKEN_G1;
+        if (strncmp(command, "G28", 3) == 0) return TOKEN_G28;
+    }
+    
+    // Parse M commands
+    if (command[0] == 'M') {
+        if (strncmp(command, "M3", 2) == 0) return TOKEN_M3;
+        if (strncmp(command, "M4", 2) == 0) return TOKEN_M4;
+        if (strncmp(command, "M5", 2) == 0) return TOKEN_M5;
+        if (strncmp(command, "M6", 2) == 0) return TOKEN_M6;
+        if (strncmp(command, "M7", 2) == 0) return TOKEN_M7;
+        if (strncmp(command, "M8", 2) == 0) return TOKEN_M8;
+        if (strncmp(command, "M9", 2) == 0) return TOKEN_M9;
+        if (strncmp(command, "M10", 3) == 0) return TOKEN_M10;
+        if (strncmp(command, "M11", 3) == 0) return TOKEN_M11;
+        if (strncmp(command, "M12", 3) == 0) return TOKEN_M12;
+        if (strncmp(command, "M13", 3) == 0) return TOKEN_M13;
+        if (strncmp(command, "M14", 3) == 0) return TOKEN_M14;
+        if (strncmp(command, "M15", 3) == 0) return TOKEN_M15;
+        if (strncmp(command, "M16", 3) == 0) return TOKEN_M16;
+        if (strncmp(command, "M17", 3) == 0) return TOKEN_M17;
+        if (strncmp(command, "M18", 3) == 0) return TOKEN_M18;
+        if (strncmp(command, "M19", 3) == 0) return TOKEN_M19;
+        if (strncmp(command, "M42", 3) == 0) return TOKEN_M42;
+        if (strncmp(command, "M47", 3) == 0) return TOKEN_M47;
+    }
+    
+    // Parse S command
+    if (command[0] == 'S') return TOKEN_S;
+    
+    // Parse special commands
+    if (strcmp(command, "PING") == 0) return TOKEN_PING;
+    if (strcmp(command, "VERSION") == 0) return TOKEN_VERSION;
+    if (strcmp(command, "STATUS") == 0) return TOKEN_VERSION; // Note: STATUS not in token enum
+    
+    return TOKEN_UNKNOWN;
+}
+
+bool GCodeInterface::parse_parameters_tokenized(const char* cmd) {
+    if (!cmd) return true;
+    
+    // Skip whitespace
+    while (*cmd == ' ' || *cmd == '\t') cmd++;
+    
+    // Enhanced token-based parsing with validation
+    while (*cmd) {
+        // Skip whitespace
+        while (*cmd == ' ' || *cmd == '\t') cmd++;
+        if (!*cmd) break;
+        
+        char param = *cmd++;
+        float value = parse_float(cmd);
+        
+        // Enhanced parameter handling with validation
+        switch (param) {
+            case 'X': 
+                params.X = value; 
+                params.has_X = true;
+                // Clamp to reasonable range
+                if (params.X < -1000.0f || params.X > 1000.0f) {
+                    set_error("X parameter out of range");
+                    return false;
+                }
+                break;
+            case 'Y': 
+                params.Y = value; 
+                params.has_Y = true;
+                // Clamp to reasonable range
+                if (params.Y < -1000.0f || params.Y > 1000.0f) {
+                    set_error("Y parameter out of range");
+                    return false;
+                }
+                break;
+            case 'Z': 
+                params.Z = value; 
+                params.has_Z = true;
+                // Clamp to reasonable range
+                if (params.Z < -1000.0f || params.Z > 1000.0f) {
+                    set_error("Z parameter out of range");
+                    return false;
+                }
+                break;
+            case 'F': 
+                params.F = value; 
+                params.has_F = true;
+                // Clamp feed rate to reasonable range
+                if (params.F < 0.1f || params.F > 10000.0f) {
+                    set_error("F parameter out of range");
+                    return false;
+                }
+                break;
+            case 'S': 
+                params.S = value; 
+                params.has_S = true;
+                // Clamp spindle speed to reasonable range
+                if (params.S < 0.0f || params.S > 10000.0f) {
+                    set_error("S parameter out of range");
+                    return false;
+                }
+                break;
+            case 'P': 
+                params.P = value; 
+                params.has_P = true;
+                // Clamp pin number to reasonable range
+                if (params.P < 0.0f || params.P > 40.0f) {
+                    set_error("P parameter out of range");
+                    return false;
+                }
+                break;
+        }
+        
+        // Skip to next parameter
+        while (*cmd && *cmd != ' ' && *cmd != '\t') cmd++;
+    }
+    
+    return validate_parameters();
+}
+
+bool GCodeInterface::validate_parameters() {
+    // Validate parameter combinations based on command type
+    switch (current_command) {
+        case GCODE_G0:
+        case GCODE_G1:
+            // G0/G1 should have at least one coordinate
+            if (!params.has_X && !params.has_Y && !params.has_Z) {
+                set_error("G0/G1 requires at least one coordinate");
+                return false;
+            }
+            break;
+            
+        case GCODE_M3:
+        case GCODE_M4:
+            // M3/M4 should have S parameter for speed
+            if (!params.has_S) {
+                set_error("M3/M4 requires S parameter for speed");
+                return false;
+            }
+            break;
+            
+        case GCODE_M42:
+            // M42 requires P parameter for pin number
+            if (!params.has_P) {
+                set_error("M42 requires P parameter for pin number");
+                return false;
+            }
+            break;
+            
+        default:
+            // No specific validation required
+            break;
+    }
+    
+    return true;
+}
