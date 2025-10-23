@@ -90,6 +90,10 @@ private:
     void stepper_step();
     void stepper_move_to(float position, float feed_rate);
     bool stepper_home();
+    
+public:
+    // Additional methods
+    float get_current_position() const { return current_position_mm; }
 };
 
 // =============================================================================

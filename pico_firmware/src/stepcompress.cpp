@@ -59,13 +59,9 @@ while (left <= right) {
             }
         }
 
-        // Use best found
-        final_iv = best_iv;
-        final_ad = best_ad;
-        
         // Create chunk
-        uint32_t final_iv;
-        int32_t final_ad;
+        uint32_t final_iv = best_iv;
+        int32_t final_ad = best_ad;
         double final_err;
         
         if (best_end > pos) {  // We found a valid chunk

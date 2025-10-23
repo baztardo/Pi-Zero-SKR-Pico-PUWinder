@@ -54,19 +54,19 @@ bool GCodeInterface::parse_command(const char* command) {
     // Parse command type
     if (strncmp(command, "G0", 2) == 0 || strncmp(command, "G1", 2) == 0) {
         current_command = (command[1] == '0') ? TOKEN_G0 : TOKEN_G1;
-        return parse_parameters(command + 2);
+        return parse_parameters_tokenized(command + 2);
     }
     else if (strncmp(command, "G28", 3) == 0) {
         current_command = TOKEN_G28;
-        return parse_parameters(command + 3);
+        return parse_parameters_tokenized(command + 3);
     }
     else if (strncmp(command, "M3", 2) == 0) {
         current_command = TOKEN_M3;
-        return parse_parameters(command + 2);
+        return parse_parameters_tokenized(command + 2);
     }
     else if (strncmp(command, "M4", 2) == 0) {
         current_command = TOKEN_M4;
-        return parse_parameters(command + 2);
+        return parse_parameters_tokenized(command + 2);
     }
     else if (strncmp(command, "M5", 2) == 0) {
         current_command = TOKEN_M5;
@@ -87,7 +87,7 @@ bool GCodeInterface::parse_command(const char* command) {
     }
     else if (command[0] == 'S') {
         current_command = TOKEN_S;
-        return parse_parameters(command + 1);
+        return parse_parameters_tokenized(command + 1);
     }
     else if (strncmp(command, "M6", 2) == 0) {
         current_command = TOKEN_M6;
@@ -147,11 +147,11 @@ bool GCodeInterface::parse_command(const char* command) {
     }
     else if (strncmp(command, "M42", 3) == 0) {
         current_command = TOKEN_M42;
-        return parse_parameters(command + 3);
+        return parse_parameters_tokenized(command + 3);
     }
     else if (strncmp(command, "M47", 3) == 0) {
         current_command = TOKEN_M47;
-        return parse_parameters(command + 3);
+        return parse_parameters_tokenized(command + 3);
     }
     else if (strcmp(command, "PING") == 0) {
         current_command = TOKEN_PING;
@@ -286,7 +286,7 @@ bool GCodeInterface::is_busy() const {
 // =============================================================================
 // Get current command
 // =============================================================================
-GCodeType GCodeInterface::get_current_command() const {
+GCodeTokenType GCodeInterface::get_current_command() const {
     return current_command;
 }
 
@@ -323,103 +323,16 @@ void GCodeInterface::clear_error() {
 }
 
 // =============================================================================
-// Parse G command
+// Old parse_g_command removed - using token-based parsing instead
 // =============================================================================
-bool GCodeInterface::parse_g_command(const char* cmd) {
-    // Implementation for G commands
-    return true;
-}
 
 // =============================================================================
-// Parse M command
+// Old parse_m_command removed - using token-based parsing instead
 // =============================================================================
-bool GCodeInterface::parse_m_command(const char* cmd) {
-    // Implementation for M commands
-    return true;
-}
 
 // =============================================================================
-// Parse parameters
+// Old parse_parameters removed - using token-based parsing instead
 // =============================================================================
-bool GCodeInterface::parse_parameters(const char* cmd) {
-    if (!cmd) return true;
-    
-    // Skip whitespace
-    while (*cmd == ' ') cmd++;
-    
-    // Enhanced token-based parsing (from Code-snippets improvement)
-    while (*cmd) {
-        // Skip whitespace
-        while (*cmd == ' ' || *cmd == '\t') cmd++;
-        if (!*cmd) break;
-        
-        char param = *cmd++;
-        float value = parse_float(cmd);
-        
-        // Enhanced parameter handling with validation
-        switch (param) {
-            case 'X': 
-                params.X = value; 
-                params.has_X = true;
-                // Clamp to reasonable range
-                if (params.X < -1000.0f || params.X > 1000.0f) {
-                    set_error("X parameter out of range");
-                    return false;
-                }
-                break;
-            case 'Y': 
-                params.Y = value; 
-                params.has_Y = true;
-                // Clamp to reasonable range
-                if (params.Y < -1000.0f || params.Y > 1000.0f) {
-                    set_error("Y parameter out of range");
-                    return false;
-                }
-                break;
-            case 'Z': 
-                params.Z = value; 
-                params.has_Z = true;
-                // Clamp to reasonable range
-                if (params.Z < -1000.0f || params.Z > 1000.0f) {
-                    set_error("Z parameter out of range");
-                    return false;
-                }
-                break;
-            case 'F': 
-                params.F = value; 
-                params.has_F = true;
-                // Clamp feed rate to reasonable range
-                if (params.F < 0.1f || params.F > 10000.0f) {
-                    set_error("F parameter out of range");
-                    return false;
-                }
-                break;
-            case 'S': 
-                params.S = value; 
-                params.has_S = true;
-                // Clamp spindle speed to reasonable range
-                if (params.S < 0.0f || params.S > 10000.0f) {
-                    set_error("S parameter out of range");
-                    return false;
-                }
-                break;
-            case 'P': 
-                params.P = value; 
-                params.has_P = true;
-                // Clamp pin number to reasonable range
-                if (params.P < 0.0f || params.P > 40.0f) {
-                    set_error("P parameter out of range");
-                    return false;
-                }
-                break;
-        }
-        
-        // Skip to next parameter
-        while (*cmd && *cmd != ' ' && *cmd != '\t') cmd++;
-    }
-    
-    return true;
-}
 
 // =============================================================================
 // Parse float value
@@ -429,54 +342,27 @@ float GCodeInterface::parse_float(const char* str) {
 }
 
 // =============================================================================
-// Execute G0/G1 (rapid/linear move) - Klipper-style
+// Execute G0/G1 (rapid/linear move) - Token-based
 // =============================================================================
-bool GCodeInterface::execute_g0_g1(const char* command) {
-    double target_y = current_y;
-    double feedrate = current_feedrate;
+bool GCodeInterface::execute_g0_g1() {
+    extern TraverseController* traverse_controller;
+    extern MoveQueue* move_queue;
     
-    parse_parameters(command, "YF", &target_y, &feedrate);
-    
-    // Check soft limits
-    #if USE_SOFT_LIMITS
-    if (target_y < Y_MIN_POSITION_MM || target_y > Y_MAX_POSITION_MM) {
-        printf("ERROR: Target Y=%.3f out of bounds [%.1f, %.1f]\n",
-               target_y, Y_MIN_POSITION_MM, Y_MAX_POSITION_MM);
+    if (!traverse_controller || !move_queue) {
+        set_error("Traverse controller or move queue not initialized");
         return false;
     }
-    #endif
     
-    if (feedrate > 0.0) current_feedrate = feedrate;
-    
-    double distance_mm = fabs(target_y - current_y);
-    if (distance_mm < 0.001) return true;
-    
-    // Convert to steps
-    uint32_t total_steps = (uint32_t)(distance_mm * Y_STEPS_PER_MM);
-    double velocity_mms = current_feedrate / 60.0;
-    double cruise_velocity_sps = velocity_mms * Y_STEPS_PER_MM;
-    double accel_sps2 = Y_MAX_ACCEL * Y_STEPS_PER_MM;
-    
-    // Generate step chunks
-    std::vector<StepChunk> chunks;
-    StepCompressor::compress_trapezoid_into(
-        chunks, total_steps, 0.0, cruise_velocity_sps, accel_sps2);
-    
-    // Set direction
-    bool dir = (target_y > current_y);
-    winding_controller->set_traverse_direction(dir);
-    
-    // Push to queue
-    for (const auto& chunk : chunks) {
-        if (!move_queue->push_chunk(AXIS_TRAVERSE, chunk)) {
-            printf("ERROR: Move queue full\n");
-            return false;
-        }
+    // TODO: Implement proper traverse movement using StepCompressor
+    // For now, just move to the target position
+    if (params.has_Y) {
+        traverse_controller->move_to_position(params.Y);
+        send_response("OK");
+        return true;
     }
     
-    current_y = target_y;
-    printf("✓ G1 Y%.3f queued (%zu chunks)\n", target_y, chunks.size());
-    return true;
+    set_error("G0/G1 requires Y parameter");
+    return false;
 }
 
 // =============================================================================
