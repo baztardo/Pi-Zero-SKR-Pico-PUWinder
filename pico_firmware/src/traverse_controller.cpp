@@ -320,3 +320,63 @@ void TraverseController::step_timer_isr() {
         instance->generate_steps();
     }
 }
+
+// =============================================================================
+// Code-snippets Functions (from cpp_snippets.cpp)
+// =============================================================================
+void TraverseController::stepper_step() {
+    // Generate step pulse (from Code-snippets)
+    gpio_put(step_pin, 1);
+    sleep_us(10);  // Step pulse width
+    gpio_put(step_pin, 0);
+    steps_remaining--;
+}
+
+void TraverseController::stepper_move_to(float position, float feed_rate) {
+    // Move stepper to position (from Code-snippets)
+    target_position_mm = position;
+    current_speed_mm_per_sec = feed_rate / 60.0f;  // Convert mm/min to mm/s
+    
+    float distance = position - current_position_mm;
+    bool direction = distance > 0;
+    
+    gpio_put(dir_pin, direction);
+    
+    // Calculate number of steps (assuming 200 steps/mm)
+    uint32_t steps = (uint32_t)fabsf(distance * steps_per_mm);
+    
+    // Calculate step delay based on feed rate
+    uint32_t step_delay_us = (uint32_t)(60000000.0f / (feed_rate * steps_per_mm));
+    
+    printf("Moving %.2f mm at %.1f mm/min (%d steps)\n", 
+           distance, feed_rate, steps);
+    
+    for (uint32_t i = 0; i < steps; i++) {
+        stepper_step();
+        sleep_us(step_delay_us);
+    }
+    
+    current_position_mm = position;
+    moving = false;
+}
+
+bool TraverseController::stepper_home() {
+    // Home stepper motor (from Code-snippets)
+    printf("Homing stepper...\n");
+    
+    // Move towards home switch
+    gpio_put(dir_pin, 0);  // Move towards home
+    
+    while (!gpio_get(home_pin)) {
+        stepper_step();
+        sleep_us(1000);  // Slow homing speed
+    }
+    
+    current_position_mm = 0.0f;
+    target_position_mm = 0.0f;
+    steps_remaining = 0;
+    homed = true;
+    
+    printf("Stepper homed\n");
+    return true;
+}

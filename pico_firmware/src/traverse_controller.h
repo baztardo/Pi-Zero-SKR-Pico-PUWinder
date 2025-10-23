@@ -85,6 +85,11 @@ private:
     // Static ISR wrapper
     static void step_timer_isr();
     static TraverseController* instance;
+    
+    // Code-snippets Functions (from cpp_snippets.cpp)
+    void stepper_step();
+    void stepper_move_to(float position, float feed_rate);
+    bool stepper_home();
 };
 
 // =============================================================================

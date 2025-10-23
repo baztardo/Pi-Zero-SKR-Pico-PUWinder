@@ -127,23 +127,48 @@ int main() {
     printf("Pico Controller Ready (Klipper-style)\n");
     printf("Commands: G-code compatible (G0, G1, G28, M3, M4, M5, S, M6-M19, PING, VERSION)\n");
     
-    char buffer[64];
+    char buffer[256];  // Increased buffer size (from Code-snippets)
     int buffer_pos = 0;
     
+    // Status update timing (from Code-snippets)
+    uint32_t last_status_time = 0;
+    
+    printf("Pi Zero SKR Pico PUWinder - Main Control Loop\n");
+    printf("Ready for commands...\n");
+    
     while (true) {
-        // Check for UART data
+        // Check for UART commands (enhanced from Code-snippets)
         if (uart_is_readable(PI_UART_ID)) {
             char c = uart_getc(PI_UART_ID);
             
             if (c == '\n' || c == '\r') {
                 if (buffer_pos > 0) {
                     buffer[buffer_pos] = '\0';
+                    printf("Executing: %s\n", buffer);  // Log command (from Code-snippets)
                     process_command(buffer);
                     buffer_pos = 0;
                 }
             } else if (buffer_pos < sizeof(buffer) - 1) {
                 buffer[buffer_pos++] = c;
             }
+        }
+        
+        // Update status (from Code-snippets improvement)
+        uint32_t current_time = time_us_32();
+        if (current_time - last_status_time > 1000000) {  // Every 1 second
+            float spindle_rpm = 0.0f;
+            float traverse_pos = 0.0f;
+            
+            if (spindle_controller) {
+                spindle_rpm = spindle_controller->get_rpm();
+            }
+            if (traverse_controller) {
+                traverse_pos = traverse_controller->get_current_position();
+            }
+            
+            printf("Status - Spindle: %.1f RPM, Position: %.2f mm\n", 
+                   spindle_rpm, traverse_pos);
+            last_status_time = current_time;
         }
         
         // Klipper-style: Scheduler handles all stepping via ISR
