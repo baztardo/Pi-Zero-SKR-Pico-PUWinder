@@ -34,8 +34,18 @@
 #define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
 #define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
 
-#define Y_STEPS_PER_MM  80.0
-#define Y_MAX_ACCEL     100.0  // mm/s²
+// Traverse parameters
+#define Y_STEPS_PER_MM          80.0
+#define Y_MAX_ACCEL             100.0   // mm/s²
+#define Y_MAX_VELOCITY          200.0   // mm/s
+#define Y_MAX_POSITION_MM       200.0   // Soft limit (calculated)
+#define Y_MIN_POSITION_MM       0.0     // Home position
+
+// Home switch (your one endstop)
+#define Y_HOME_SWITCH_PIN       16
+
+// Soft limits enabled
+#define USE_SOFT_LIMITS         1
 
 // =============================================================================
 // TMC2209 UART (Shared bus)

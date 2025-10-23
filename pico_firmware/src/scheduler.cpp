@@ -54,24 +54,32 @@ Scheduler::Scheduler(MoveQueue* mq)
 bool Scheduler::start(uint32_t interval) {
     gpio_init(SCHED_HEARTBEAT_PIN);
     gpio_set_dir(SCHED_HEARTBEAT_PIN, GPIO_OUT);
+    gpio_put(SCHED_HEARTBEAT_PIN, 0);
     
-    // Use hardware timer instead of software timer
     interval_us = 50; // 20kHz = 50us period
     
+    // Claim hardware alarm 0
     hardware_alarm_claim(0);
+    
+    // Set up callback
     hardware_alarm_set_callback(0, [](uint alarm_num) {
+        // Clear interrupt
         hw_clear_bits(&timer_hw->intr, 1u << alarm_num);
+        // Schedule next (absolute time prevents drift)
         timer_hw->alarm[alarm_num] = timer_hw->timerawl + 50;
+        // Call ISR
         if (g_scheduler_instance) {
             g_scheduler_instance->handle_isr();
         }
     });
     
+    // Start first interrupt
     timer_hw->alarm[0] = timer_hw->timerawl + 50;
     hw_set_bits(&timer_hw->inte, 1u << 0);
     irq_set_enabled(TIMER_IRQ_0, true);
     
     running = true;
+    printf("Hardware timer started at 20kHz\n");
     return true;
 }
 

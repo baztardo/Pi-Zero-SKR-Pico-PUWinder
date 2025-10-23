@@ -382,6 +382,15 @@ bool GCodeInterface::execute_g0_g1(const char* command) {
     
     parse_parameters(command, "YF", &target_y, &feedrate);
     
+    // Check soft limits
+    #if USE_SOFT_LIMITS
+    if (target_y < Y_MIN_POSITION_MM || target_y > Y_MAX_POSITION_MM) {
+        printf("ERROR: Target Y=%.3f out of bounds [%.1f, %.1f]\n",
+               target_y, Y_MIN_POSITION_MM, Y_MAX_POSITION_MM);
+        return false;
+    }
+    #endif
+    
     if (feedrate > 0.0) current_feedrate = feedrate;
     
     double distance_mm = fabs(target_y - current_y);
