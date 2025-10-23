@@ -4,6 +4,7 @@
 
 #include "scheduler.h"
 #include "pico/stdlib.h"
+#include <cstdio>
 #include "config.h"
 #include "pico/time.h"
 #include "hardware/timer.h"
@@ -117,7 +118,7 @@ bool Scheduler::timer_callback(repeating_timer_t* rt) {
 
 void Scheduler::handle_isr() {
     tick_count++;
-    check_endstops(move_queue);
+    // check_endstops(move_queue);  // TODO: Implement endstop checking
     // Encoder now updated by Core 1 (see main.cpp core1_entry)
     // Removed: spindle_encoder->update() to reduce Core 0 ISR load
     
