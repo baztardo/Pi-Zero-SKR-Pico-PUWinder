@@ -39,6 +39,13 @@ enum GCodeTokenType {
     TOKEN_PING = 23,   // Ping command
     TOKEN_VERSION = 24, // Version command
     TOKEN_STATUS = 25,  // Status command
+    // ⭐ NEW: FluidNC-style Safety Commands
+    TOKEN_M0 = 26,     // Feed hold
+    TOKEN_M1 = 27,     // Resume from hold
+    TOKEN_M112 = 28,   // Emergency stop
+    TOKEN_M410 = 29,   // Quick stop
+    TOKEN_M999 = 30,   // Reset from emergency stop
+    TOKEN_G4 = 31,     // Dwell with planner sync
     TOKEN_UNKNOWN = 255
 };
 
@@ -123,6 +130,14 @@ private:
     bool execute_ping();
     bool execute_version();
     bool execute_status();
+    
+    // ⭐ NEW: FluidNC-style Safety Commands
+    bool execute_m0();     // Feed hold
+    bool execute_m1();      // Resume from hold
+    bool execute_m112();    // Emergency stop via G-code
+    bool execute_m410();    // Quick stop
+    bool execute_m999();    // Reset from emergency stop
+    bool execute_g4();      // Dwell with planner sync
     
     // Helper functions
     void log_command(const char* cmd);

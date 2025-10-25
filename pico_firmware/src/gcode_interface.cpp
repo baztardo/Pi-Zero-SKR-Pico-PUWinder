@@ -190,6 +190,9 @@ bool GCodeInterface::execute_command() {
         case TOKEN_G28:
             result = execute_g28();
             break;
+        case TOKEN_G4:
+            result = execute_g4();
+            break;
         case TOKEN_M3:
         case TOKEN_M4:
             result = execute_m3_m4();
@@ -244,6 +247,22 @@ bool GCodeInterface::execute_command() {
             break;
         case TOKEN_STATUS:
             result = execute_status();
+            break;
+        // ⭐ NEW: FluidNC-style Safety Commands
+        case TOKEN_M0:
+            result = execute_m0();
+            break;
+        case TOKEN_M1:
+            result = execute_m1();
+            break;
+        case TOKEN_M112:
+            result = execute_m112();
+            break;
+        case TOKEN_M410:
+            result = execute_m410();
+            break;
+        case TOKEN_M999:
+            result = execute_m999();
             break;
         default:
             set_error("Unsupported command");
@@ -674,7 +693,8 @@ GCodeTokenType GCodeInterface::parse_token(const char* command) {
     if (command[0] == 'G') {
         if (strncmp(command, "G0", 2) == 0) return TOKEN_G0;
         if (strncmp(command, "G1", 2) == 0) return TOKEN_G1;
-        if (strncmp(command, "G28", 3) == 0) return TOKEN_G28;
+           if (strncmp(command, "G28", 3) == 0) return TOKEN_G28;
+           if (strncmp(command, "G4", 2) == 0) return TOKEN_G4;
     }
     
     // Parse M commands
@@ -697,7 +717,13 @@ GCodeTokenType GCodeInterface::parse_token(const char* command) {
         if (strncmp(command, "M18", 3) == 0) return TOKEN_M18;
         if (strncmp(command, "M19", 3) == 0) return TOKEN_M19;
         if (strncmp(command, "M42", 3) == 0) return TOKEN_M42;
-        if (strncmp(command, "M47", 3) == 0) return TOKEN_M47;
+           if (strncmp(command, "M47", 3) == 0) return TOKEN_M47;
+           // ⭐ NEW: FluidNC-style Safety Commands
+           if (strncmp(command, "M0", 2) == 0) return TOKEN_M0;
+           if (strncmp(command, "M1", 2) == 0) return TOKEN_M1;
+           if (strncmp(command, "M112", 4) == 0) return TOKEN_M112;
+           if (strncmp(command, "M410", 4) == 0) return TOKEN_M410;
+           if (strncmp(command, "M999", 4) == 0) return TOKEN_M999;
     }
     
     // Parse S command
@@ -870,5 +896,148 @@ bool GCodeInterface::validate_pin_number() {
         set_error("Pin number out of range (0 to 40)");
         return false;
     }
+    return true;
+}
+
+// =============================================================================
+// ⭐ NEW: FluidNC-style Safety Commands Implementation
+// =============================================================================
+
+bool GCodeInterface::execute_m0() {
+    extern MoveQueue* move_queue;
+    
+    if (!move_queue) {
+        set_error("Move queue not initialized");
+        return false;
+    }
+    
+    printf("[M0] Feed hold requested\n");
+    move_queue->pause_feeding();
+    
+    send_response("PAUSED");
+    return true;
+}
+
+bool GCodeInterface::execute_m1() {
+    extern MoveQueue* move_queue;
+    
+    if (!move_queue) {
+        set_error("Move queue not initialized");
+        return false;
+    }
+    
+    // Don't allow resume if emergency stop is active
+    if (move_queue->is_emergency_stopped()) {
+        set_error("Cannot resume - emergency stop active. Use M999 to reset");
+        return false;
+    }
+    
+    printf("[M1] Resume requested\n");
+    move_queue->resume_feeding();
+    
+    send_response("RESUMED");
+    return true;
+}
+
+bool GCodeInterface::execute_m112() {
+    extern MoveQueue* move_queue;
+    
+    printf("[M112] Emergency stop triggered via G-code\n");
+    
+    if (move_queue) {
+        move_queue->emergency_stop();
+    }
+    
+    send_response("EMERGENCY_STOP");
+    return true;
+}
+
+bool GCodeInterface::execute_m410() {
+    extern MoveQueue* move_queue;
+    
+    if (!move_queue) {
+        set_error("Move queue not initialized");
+        return false;
+    }
+    
+    printf("[M410] Quick stop requested\n");
+    
+    // Pause feeding new moves
+    move_queue->pause_feeding();
+    
+    // Wait for current moves to finish
+    uint32_t start_time = time_us_32();
+    while ((move_queue->is_active(AXIS_SPINDLE) || 
+            move_queue->is_active(AXIS_TRAVERSE)) &&
+           (time_us_32() - start_time) < 5000000) {  // 5 second timeout
+        sleep_ms(10);
+    }
+    
+    // Clear any remaining queued moves
+    move_queue->clear_queue(AXIS_SPINDLE);
+    move_queue->clear_queue(AXIS_TRAVERSE);
+    
+    send_response("STOPPED");
+    return true;
+}
+
+bool GCodeInterface::execute_m999() {
+    extern MoveQueue* move_queue;
+    
+    printf("[M999] Reset from emergency stop\n");
+    
+    if (move_queue) {
+        // Re-enable motors
+        move_queue->set_enable(AXIS_TRAVERSE, true);
+        move_queue->set_enable(AXIS_SPINDLE, true);
+        move_queue->resume_feeding();
+    }
+    
+    printf("[M999] System reset complete\n");
+    send_response("RESET_OK");
+    return true;
+}
+
+bool GCodeInterface::execute_g4() {
+    if (!params.has_P) {
+        set_error("No delay specified");
+        return false;
+    }
+    
+    // G4 P0 = Special case: Sync planner (wait for all moves to complete)
+    if (params.P == 0.0f) {
+        printf("[G4 P0] Planner sync - waiting for all moves to complete\n");
+        
+        extern MoveQueue* move_queue;
+        if (move_queue) {
+            uint32_t start_time = time_us_32();
+            
+            // Wait for all queued and active moves to complete
+            while (move_queue->has_chunk(AXIS_SPINDLE) || 
+                   move_queue->has_chunk(AXIS_TRAVERSE) ||
+                   move_queue->is_active(AXIS_SPINDLE) ||
+                   move_queue->is_active(AXIS_TRAVERSE)) {
+                
+                sleep_ms(10);
+                
+                // Timeout after 10 seconds
+                if ((time_us_32() - start_time) > 10000000) {
+                    printf("[G4] WARNING: Timeout waiting for moves to complete\n");
+                    break;
+                }
+            }
+            
+            printf("[G4 P0] Planner synced - all moves complete\n");
+        }
+        
+        send_response("OK");
+        return true;
+    }
+    
+    // Normal dwell with delay
+    printf("[G4] Dwelling for %.1f ms\n", params.P);
+    sleep_ms((uint32_t)params.P);
+    
+    send_response("OK");
     return true;
 }
