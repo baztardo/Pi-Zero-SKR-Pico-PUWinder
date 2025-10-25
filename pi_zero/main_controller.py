@@ -33,10 +33,35 @@ class GCodeAPI:
         self.connected = False
     
     def get_machine_status(self) -> Optional[Dict[str, Any]]:
-        """Get machine status from Pico"""
+        """Get machine status from Pico using STATUS command"""
         if not self.connected:
             return None
-        return self.uart_api.get_machine_status()
+        
+        response = self.uart_api.send_command("STATUS")
+        if response and response.startswith("STATUS:"):
+            # Parse enhanced status format: "STATUS: Spindle=120.5RPM(RUN) Traverse=25.3mm"
+            status_data = {}
+            
+            # Extract spindle info
+            if "Spindle=" in response:
+                spindle_part = response.split("Spindle=")[1].split()[0]
+                if "RPM" in spindle_part:
+                    rpm_str = spindle_part.split("RPM")[0]
+                    status_data['spindle_rpm'] = float(rpm_str)
+                if "RUN" in spindle_part:
+                    status_data['spindle_running'] = True
+                elif "STOP" in spindle_part:
+                    status_data['spindle_running'] = False
+            
+            # Extract traverse position
+            if "Traverse=" in response:
+                traverse_part = response.split("Traverse=")[1].split()[0]
+                if "mm" in traverse_part:
+                    pos_str = traverse_part.split("mm")[0]
+                    status_data['traverse_position'] = float(pos_str)
+            
+            return status_data
+        return None
     
     def parse_gcode_command(self, command: str) -> dict:
         """Parse G-code command into components (from Code-snippets)"""
@@ -159,6 +184,34 @@ class GCodeAPI:
     def set_gpio_pin(self, pin: int, state: int) -> bool:
         """Set GPIO pin state (M42 P S)"""
         return self.send_gcode(f"M42 P{pin} S{state}")
+    
+    # ⭐ NEW: FluidNC-style Safety Commands
+    def feed_hold(self) -> bool:
+        """Feed hold (M0) - pause all motion"""
+        return self.send_gcode("M0")
+    
+    def resume_from_hold(self) -> bool:
+        """Resume from hold (M1) - resume motion"""
+        return self.send_gcode("M1")
+    
+    def emergency_stop(self) -> bool:
+        """Emergency stop (M112) - immediate stop all systems"""
+        return self.send_gcode("M112")
+    
+    def quick_stop(self) -> bool:
+        """Quick stop (M410) - stop new moves, finish current"""
+        return self.send_gcode("M410")
+    
+    def reset_from_emergency(self) -> bool:
+        """Reset from emergency stop (M999) - clear emergency state"""
+        return self.send_gcode("M999")
+    
+    def dwell_with_sync(self, milliseconds: float = 0.0) -> bool:
+        """Dwell with planner sync (G4 P) - wait for all moves to complete"""
+        if milliseconds == 0.0:
+            return self.send_gcode("G4 P0")  # Special case: sync planner
+        else:
+            return self.send_gcode(f"G4 P{milliseconds}")
     
     def set_spindle_direction_cw(self) -> bool:
         """Set spindle clockwise using M3"""
@@ -493,16 +546,36 @@ class WindingController:
         self.api.disconnect()
     
     def emergency_stop(self):
-        """Emergency stop"""
+        """Emergency stop using M112 command"""
         print("🚨 EMERGENCY STOP!")
         self.running = False
         self.state = WindingState.IDLE
         
-        # Emergency stop spindle
-        self.api.stop_spindle()
+        # Use M112 emergency stop command
+        self.api.emergency_stop()
         
         if self.control_thread:
             self.control_thread.join()
+    
+    def reset_from_emergency(self) -> bool:
+        """Reset from emergency stop using M999"""
+        print("🔄 Resetting from emergency stop")
+        return self.api.reset_from_emergency()
+    
+    def feed_hold(self) -> bool:
+        """Feed hold using M0"""
+        print("⏸️ Feed hold")
+        return self.api.feed_hold()
+    
+    def resume_from_hold(self) -> bool:
+        """Resume from hold using M1"""
+        print("▶️ Resume from hold")
+        return self.api.resume_from_hold()
+    
+    def quick_stop(self) -> bool:
+        """Quick stop using M410"""
+        print("⏹️ Quick stop")
+        return self.api.quick_stop()
     
     def get_status(self) -> dict:
         """Get current status"""
