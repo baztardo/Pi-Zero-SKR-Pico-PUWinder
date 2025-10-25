@@ -49,7 +49,7 @@ jobs:
                   tar -czf pi-zero-skr-pico-puwinder-${{ github.ref_name }}.tar.gz -C release .
 
             - name: Upload release artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: release-package
                   path: pi-zero-skr-pico-puwinder-${{ github.ref_name }}.tar.gz

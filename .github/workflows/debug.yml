@@ -51,7 +51,7 @@ jobs:
                   cppcheck --enable=all --inconclusive --std=c++17 src/ --xml 2> cppcheck-results.xml
 
             - name: Upload debug artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: debug-symbols
                   path: pico_firmware/build/
@@ -109,7 +109,7 @@ jobs:
                   safety check --json --output safety-report.json
 
             - name: Upload analysis reports
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: static-analysis-reports
                   path: |
@@ -136,7 +136,7 @@ jobs:
                   python -m pytest test_*.py --cov=. --cov-report=xml --cov-report=html
 
             - name: Upload coverage reports
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                   name: coverage-reports
                   path: pi_zero/htmlcov/
