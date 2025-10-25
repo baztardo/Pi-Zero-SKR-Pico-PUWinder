@@ -1,344 +1,286 @@
-# 🔧 Troubleshooting Guide - Pi Zero SKR Pico PUWinder
+# Troubleshooting Guide
 
-## 🤖 AI-Generated Troubleshooting
+## 🔧 Pi Zero SKR Pico PUWinder Troubleshooting
 
-This guide is automatically generated based on common issues and solutions.
+**AI-Generated Documentation** - Last Updated: 2025-10-25 03:51:01
 
-## 🚨 Common Issues
+### 🚨 Common Issues and Solutions
 
-### 1. UART Communication Problems
+#### 1. UART Communication Issues
 
-#### Issue: "Serial port not found"
-```bash
-# Error: SerialException: could not open port /dev/serial0
+**Problem**: Pi Zero cannot communicate with Pico
+```
+❌ Failed to connect to Pico
+❌ Timeout - no response
 ```
 
-#### Solutions:
-```bash
-# 1. Check UART is enabled
-sudo raspi-config
-# Navigate to: Interfacing Options → Serial
-# Select: Yes (login shell disabled, serial enabled)
+**Solutions**:
+1. **Check Wiring**:
+   ```
+   Pi Zero TX (GPIO 14) → Pico RX (GPIO 1)
+   Pi Zero RX (GPIO 15) → Pico TX (GPIO 0)
+   GND → GND
+   ```
 
-# 2. Check permissions
-sudo usermod -a -g dialout $USER
-# Logout and login again
+2. **Enable UART**:
+   ```bash
+   sudo raspi-config
+   # Interfacing Options → Serial
+   # Enable serial port hardware
+   ```
 
-# 3. Check device exists
-ls -la /dev/serial*
-# Should show: /dev/serial0 -> ttyAMA0
+3. **Check Baud Rate**:
+   ```python
+   # Should be 115200
+   api = GCodeAPI(baudrate=115200)
+   ```
 
-# 4. Test with minicom
-sudo apt install minicom
-sudo minicom -D /dev/serial0 -b 115200
+4. **Test Connection**:
+   ```bash
+   python3 pi_zero/test_uart.py
+   ```
+
+#### 2. Firmware Issues
+
+**Problem**: Pico firmware not responding
+```
+❌ PING failed: None
+❌ VERSION failed
 ```
 
-#### Debug Commands:
-```bash
-# Check UART status
-sudo dmesg | grep -i uart
+**Solutions**:
+1. **Reflash Firmware**:
+   ```bash
+   cd pico_firmware
+   mkdir build && cd build
+   cmake ..
+   make -j4
+   # Flash to Pico
+   ```
 
-# Check permissions
-ls -la /dev/serial0
+2. **Check Power Supply**:
+   - Ensure stable 5V supply
+   - Check current capacity
 
-# Test communication
-echo "PING" > /dev/serial0
-cat /dev/serial0
+3. **Reset Pico**:
+   - Press and hold BOOTSEL button
+   - Power on Pico
+   - Release BOOTSEL
+
+#### 3. Motor Control Issues
+
+**Problem**: Motors not moving
+```
+❌ M3 S500 failed
+❌ G1 Y50 F1000 failed
 ```
 
-### 2. Pico Firmware Issues
+**Solutions**:
+1. **Check Enable Pins**:
+   ```python
+   # Enable steppers
+   api.enable_steppers(True)
+   ```
 
-#### Issue: "Pico not responding"
-```bash
-# Error: No response from Pico
+2. **Check Motor Connections**:
+   ```
+   Spindle: PWM=GPIO24, Enable=GPIO21
+   Traverse: Step=GPIO6, Dir=GPIO5, Enable=GPIO7
+   ```
+
+3. **Check Power Supply**:
+   - Spindle: 12V/24V supply
+   - Stepper: 12V/24V supply
+
+4. **Test Individual Motors**:
+   ```python
+   # Test spindle
+   api.set_spindle_rpm(100, 'CW')
+   
+   # Test traverse
+   api.move_traverse(10.0, 100.0)
+   ```
+
+#### 4. Hall Sensor Issues
+
+**Problem**: Spindle RPM not reading correctly
+```
+❌ Hall sensor not working
+❌ RPM always 0
 ```
 
-#### Solutions:
-```bash
-# 1. Check firmware is flashed
-ls /media/your-username/RPI-RP2/
-# Should show: pico_spindle_controller.uf2
+**Solutions**:
+1. **Check Wiring**:
+   ```
+   Hall Sensor → GPIO 22
+   VCC → 3.3V
+   GND → GND
+   ```
 
-# 2. Reflash firmware
-cd pico_firmware
-mkdir build && cd build
-cmake ..
-make
-cp pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
+2. **Check Pull-up Resistors**:
+   - Add 10kΩ pull-up to 3.3V
+   - Check signal levels with oscilloscope
 
-# 3. Check Pico is in bootloader mode
-# Hold BOOTSEL button while connecting USB
-# Should appear as RPI-RP2 drive
+3. **Test Sensor**:
+   ```python
+   # Check if sensor is working
+   status = api.get_machine_status()
+   print(f"Spindle RPM: {status.get('spindle_rpm', 0)}")
+   ```
+
+#### 5. Safety System Issues
+
+**Problem**: Safety commands not working
+```
+❌ M112 (emergency stop) failed
+❌ M0 (feed hold) failed
 ```
 
-#### Debug Commands:
-```bash
-# Check Pico connection
-lsusb | grep -i pico
+**Solutions**:
+1. **Check Move Queue**:
+   ```python
+   # Ensure move queue is initialized
+   queue_status = api.get_move_queue_status()
+   ```
 
-# Check mount points
-ls /media/your-username/
+2. **Test Safety Commands**:
+   ```bash
+   python3 pi_zero/test_gcode_safety.py
+   ```
 
-# Test with picotool
-pip install picotool
-picotool info
+3. **Check Emergency Stop**:
+   ```python
+   # Test emergency stop
+   api.emergency_stop()
+   api.reset_from_emergency()
+   ```
+
+### 🔍 Diagnostic Commands
+
+#### 1. System Status Check
+```python
+from main_controller import GCodeAPI
+
+api = GCodeAPI()
+api.connect()
+
+# Check system status
+status = api.get_machine_status()
+print(f"Status: {status}")
+
+# Check move queue
+queue_status = api.get_move_queue_status()
+print(f"Queue: {queue_status}")
+
+# Check scheduler
+scheduler_status = api.get_scheduler_status()
+print(f"Scheduler: {scheduler_status}")
 ```
 
-### 3. Python Dependencies
-
-#### Issue: "ModuleNotFoundError"
-```bash
-# Error: ModuleNotFoundError: No module named 'serial'
+#### 2. Hardware Test
+```python
+# Test all GPIO pins
+for pin in [3, 4, 5, 6, 7, 21, 22, 24, 25]:
+    api.set_gpio_pin(pin, 1)
+    time.sleep(0.1)
+    api.set_gpio_pin(pin, 0)
 ```
 
-#### Solutions:
-```bash
-# 1. Install missing packages
-pip install pyserial pytest
+#### 3. Communication Test
+```python
+# Test all G-code commands
+commands = [
+    "PING", "VERSION", "STATUS",
+    "M3 S100", "M5", "G28", "M17", "M18"
+]
 
-# 2. Install all requirements
-cd pi_zero
-pip install -r requirements.txt
-
-# 3. Use virtual environment
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+for cmd in commands:
+    response = api.uart_api.send_command(cmd)
+    print(f"{cmd}: {response}")
 ```
 
-#### Debug Commands:
-```bash
-# Check installed packages
-pip list | grep serial
+### 📊 Performance Monitoring
 
-# Check Python path
-python -c "import sys; print(sys.path)"
+#### 1. System Metrics
+```python
+# Monitor system performance
+import time
 
-# Test imports
-python -c "import serial; print('pyserial OK')"
+start_time = time.time()
+for i in range(100):
+    status = api.get_machine_status()
+    time.sleep(0.1)
+
+elapsed = time.time() - start_time
+print(f"Average response time: {elapsed/100:.3f}s per command")
 ```
 
-### 4. Build Issues
-
-#### Issue: "CMake failed"
+#### 2. Memory Usage
 ```bash
-# Error: CMake Error: Could not find PICO_SDK_PATH
+# Check Pi Zero memory usage
+free -h
+
+# Check Python memory usage
+ps aux | grep python
 ```
 
-#### Solutions:
+#### 3. CPU Usage
 ```bash
-# 1. Set PICO_SDK_PATH
-export PICO_SDK_PATH=/path/to/pico-sdk
-echo 'export PICO_SDK_PATH=/path/to/pico-sdk' >> ~/.bashrc
-
-# 2. Install dependencies
-sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
-
-# 3. Clean build
-rm -rf build
-mkdir build && cd build
-cmake ..
-make
+# Monitor CPU usage
+top -p $(pgrep -f python)
 ```
 
-#### Debug Commands:
+### 🆘 Emergency Procedures
+
+#### 1. Complete System Reset
 ```bash
-# Check environment
-echo $PICO_SDK_PATH
+# Stop all processes
+sudo pkill -f python
 
-# Check CMake version
-cmake --version
+# Reset GPIO pins
+sudo gpio reset
 
-# Check toolchain
-arm-none-eabi-gcc --version
+# Restart system
+sudo reboot
 ```
 
-### 5. GitHub Actions Failures
-
-#### Issue: "Workflow failed"
+#### 2. Firmware Recovery
 ```bash
-# Error: Job failed in GitHub Actions
+# Enter bootloader mode
+# Hold BOOTSEL button while powering on
+
+# Flash firmware
+sudo picotool load pico_firmware/build/pico_spindle_controller.uf2
 ```
 
-#### Solutions:
+#### 3. Configuration Reset
 ```bash
-# 1. Check workflow logs
-# Go to: GitHub → Actions → Failed workflow
-# Click on failed job to see details
+# Backup current config
+cp pi_zero/machine.cfg pi_zero/machine.cfg.backup
 
-# 2. Test locally
-cd pi_zero
-python test_github_integration.py
-
-# 3. Check dependencies
-pip install -r requirements.txt
-
-# 4. Use simple CI
-# Rename: .github/workflows/simple-ci.yml → ci.yml
+# Reset to defaults
+git checkout pi_zero/machine.cfg
 ```
 
-#### Debug Commands:
-```bash
-# Test Python syntax
-python -m py_compile *.py
+### 📞 Getting Help
 
-# Test imports
-python -c "import sys; sys.path.append('.'); import test_github_integration"
-
-# Check file permissions
-ls -la *.py
-```
-
-## 🔍 Diagnostic Tools
-
-### 1. System Information
-```bash
-# Check Pi Zero specs
-cat /proc/cpuinfo
-cat /proc/meminfo
-
-# Check Python version
-python --version
-pip --version
-
-# Check installed packages
-pip list
-```
-
-### 2. Hardware Status
-```bash
-# Check GPIO
-gpio readall
-
-# Check UART
-sudo dmesg | grep -i uart
-
-# Check USB devices
-lsusb
-```
-
-### 3. Network Status
-```bash
-# Check WiFi
-iwconfig
-
-# Check IP address
-ip addr show
-
-# Check GitHub connection
-ping github.com
-```
-
-### 4. Log Analysis
+#### 1. Check Logs
 ```bash
 # System logs
 sudo journalctl -f
 
-# Application logs
-tail -f logs/winder.log
-
-# Error logs
-grep -i error logs/winder.log
+# Python logs
+tail -f /var/log/python.log
 ```
 
-## 🛠️ Advanced Troubleshooting
+#### 2. GitHub Issues
+- **Report Issues**: [GitHub Issues](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/issues)
+- **Check Existing**: Search for similar issues
+- **Provide Details**: Include logs, configuration, hardware setup
 
-### 1. Performance Issues
-```bash
-# Check CPU usage
-top
-
-# Check memory usage
-free -h
-
-# Check disk usage
-df -h
-
-# Check temperature
-vcgencmd measure_temp
-```
-
-### 2. Communication Debugging
-```bash
-# Monitor UART traffic
-sudo cat /dev/serial0 | hexdump -C
-
-# Test with different baud rates
-stty -F /dev/serial0 9600
-stty -F /dev/serial0 115200
-```
-
-### 3. Firmware Debugging
-```bash
-# Check firmware version
-picotool info
-
-# Read firmware
-picotool read -o firmware.uf2
-
-# Verify firmware
-picotool verify firmware.uf2
-```
-
-## 📞 Getting Help
-
-### 1. GitHub Issues
-- Use issue templates
-- Include system information
-- Provide error logs
-- Describe steps to reproduce
-
-### 2. Community Support
-- GitHub Discussions
-- Stack Overflow
-- Raspberry Pi forums
-- Pico SDK documentation
-
-### 3. Professional Support
-- Contact maintainers
-- Hire consultants
-- Training courses
-- Custom development
-
-## 🔄 Prevention
-
-### 1. Regular Maintenance
-```bash
-# Update system
-sudo apt update && sudo apt upgrade
-
-# Update Python packages
-pip install --upgrade pip
-pip install --upgrade -r requirements.txt
-
-# Clean build files
-rm -rf build/
-```
-
-### 2. Backup Strategy
-```bash
-# Backup configuration
-cp -r pi_zero/config/ backup/
-
-# Backup firmware
-cp pico_firmware/build/*.uf2 backup/
-
-# Backup code
-git push origin main
-```
-
-### 3. Monitoring
-```bash
-# Set up log rotation
-sudo logrotate -f /etc/logrotate.conf
-
-# Monitor disk space
-df -h | grep -E "(Filesystem|/dev/root)"
-
-# Monitor system health
-vcgencmd get_throttled
-```
+#### 3. Community Support
+- **GitHub Discussions**: [Discussions](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/discussions)
+- **Documentation**: [Project Docs](https://baztardo.github.io/Pi-Zero-SKR-Pico-PUWinder/)
 
 ---
-
-*This troubleshooting guide is automatically generated and updated by AI to ensure accuracy and completeness.*
+*This documentation is automatically generated by AI and updated on every push.*

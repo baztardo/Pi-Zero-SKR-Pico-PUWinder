@@ -1,134 +1,111 @@
-# Pi Zero SKR Pico PUWinder - Project Overview
+# Project Overview
 
-## 🤖 AI-Generated Documentation
+## 🤖 Pi Zero SKR Pico PUWinder
 
-This documentation is automatically generated using AI to ensure it stays up-to-date with the codebase.
+**AI-Generated Documentation** - Last Updated: 2025-10-25 03:51:01
 
-## 🎯 Project Purpose
+### 📋 Project Description
 
-The Pi Zero SKR Pico PUWinder is a precision winding machine controller that combines:
-- **Raspberry Pi Zero** as the high-level controller (brain)
-- **SKR Pico** as the real-time hardware controller (slave)
-- **G-code compatible** architecture for easy programming
-- **AI-powered** development and documentation
+The Pi Zero SKR Pico PUWinder is a precision winding machine controller that combines the computational power of a Raspberry Pi Zero with the real-time control capabilities of an SKR Pico microcontroller. This system provides industrial-grade precision for wire winding applications.
 
-## 🏗️ Architecture
+### 🏗️ Architecture
 
-### High-Level Controller (Pi Zero)
-- **Python-based** control system
-- **G-code processing** and interpretation
-- **UART communication** with hardware controller
-- **Web interface** for monitoring and control
-- **AI-assisted** development workflow
+#### High-Level Controller (Pi Zero)
+- **Role**: Brain of the system
+- **Responsibilities**: 
+  - G-code command processing
+  - High-level winding logic
+  - User interface and display
+  - Safety monitoring
+- **Communication**: UART to Pico
 
-### Hardware Controller (SKR Pico)
-- **C++ firmware** for real-time control
-- **BLDC motor control** for spindle
-- **Stepper motor control** for traverse
-- **Hall sensor feedback** for position tracking
-- **PWM control** for speed regulation
+#### Low-Level Controller (SKR Pico)
+- **Role**: Real-time hardware control
+- **Responsibilities**:
+  - Stepper motor control (traverse)
+  - BLDC motor control (spindle)
+  - Hall sensor feedback
+  - ISR-driven step generation
+- **Communication**: UART from Pi Zero
 
-## 🔧 Key Components
+### 🔧 Key Components
 
-### Pi Zero Components
-- `main_controller.py` - Main control logic
-- `uart_api.py` - UART communication
-- `test_*.py` - Test suites
-- `machine.cfg` - Hardware configuration
+#### Hardware
+- **Spindle**: BLDC motor with Hall sensor feedback
+- **Traverse**: Stepper motor with TMC2209 driver
+- **Communication**: UART between Pi Zero and Pico
+- **Safety**: Emergency stop, feed hold, quick stop
 
-### Pico Firmware Components
-- `main.cpp` - Main application
-- `spindle.cpp` - BLDC motor control
-- `traverse_controller.cpp` - Stepper control
-- `gcode_interface.cpp` - G-code processing
-- `winding_controller.cpp` - Winding logic
+#### Software
+- **Pi Zero**: Python-based G-code interpreter
+- **Pico**: C++ firmware with real-time ISR
+- **Protocol**: G-code compatible commands
+- **Safety**: FluidNC-style safety features
 
-## 🚀 Features
+### 🎯 Features
 
-### Core Functionality
-- **Precision winding** with synchronized traverse
-- **Real-time RPM control** using BLDC motor
-- **G-code compatibility** for easy programming
-- **UART communication** between controllers
-- **Hardware abstraction** for easy maintenance
+#### G-code Compatibility
+- Standard G-codes: G0, G1, G28, G4
+- Spindle control: M3, M4, M5, S
+- Winding-specific: M6-M19
+- Safety commands: M0, M1, M112, M410, M999
 
-### AI-Powered Development
-- **Automated testing** with GitHub Actions
-- **AI code completion** with GitHub Copilot
-- **Cloud development** with GitHub Codespaces
-- **Automated documentation** generation
-- **Smart error detection** and suggestions
+#### Safety Features
+- **Feed Hold (M0)**: Pause all motion
+- **Resume (M1)**: Resume from hold
+- **Emergency Stop (M112)**: Immediate stop
+- **Quick Stop (M410)**: Stop new moves, finish current
+- **Reset (M999)**: Clear emergency state
 
-## 📊 Performance Specifications
+#### Precision Control
+- **Spindle RPM**: 0-3000 RPM with Hall sensor feedback
+- **Traverse Position**: 0-200mm with 0.1mm precision
+- **Synchronization**: Real-time spindle-traverse sync
+- **Ramping**: Smooth acceleration/deceleration
 
-### Spindle Control
-- **Speed Range**: 0-3000 RPM
-- **Control Method**: PWM with Hall sensor feedback
-- **Resolution**: 16-bit PWM (65535 levels)
-- **Response Time**: < 100ms
+### 📁 Project Structure
 
-### Traverse Control
-- **Speed Range**: 0-1000 mm/min
-- **Resolution**: 0.1 mm
-- **Synchronization**: Real-time with spindle RPM
-- **Accuracy**: ±0.05 mm
+```
+Pi-Zero-SKR-Pico-PUWinder/
+├── pi_zero/                 # Pi Zero Python code
+│   ├── main_controller.py   # Main G-code API
+│   ├── uart_api.py         # UART communication
+│   ├── winding_sync.py     # Winding synchronization
+│   └── test_*.py           # Test suites
+├── pico_firmware/          # Pico C++ firmware
+│   ├── main.cpp           # Main application
+│   ├── src/               # Source files
+│   │   ├── spindle.cpp     # BLDC motor control
+│   │   ├── traverse_controller.cpp  # Stepper control
+│   │   ├── gcode_interface.cpp      # G-code parser
+│   │   ├── move_queue.cpp           # Move queue
+│   │   └── scheduler.cpp            # ISR scheduler
+│   └── CMakeLists.txt     # Build configuration
+├── docs/                  # Documentation
+└── .github/workflows/     # CI/CD workflows
+```
 
-### Communication
-- **Protocol**: UART
-- **Baud Rate**: 115200
-- **Data Format**: G-code commands
-- **Latency**: < 10ms
+### 🚀 Getting Started
 
-## 🔄 Development Workflow
+1. **Hardware Setup**: Connect Pi Zero to SKR Pico via UART
+2. **Firmware**: Flash Pico with C++ firmware
+3. **Software**: Install Python dependencies on Pi Zero
+4. **Configuration**: Set up machine.cfg with your hardware
+5. **Testing**: Run test suites to verify functionality
 
-### 1. Code Development
-- Use **Cursor** with **GitHub Copilot** for AI assistance
-- Write code with **type hints** for better AI suggestions
-- Use **meaningful comments** for context
+### 🔗 External Links
 
-### 2. Testing
-- **Local testing** with simulation mode
-- **Automated testing** with GitHub Actions
-- **Hardware testing** with actual devices
+- **GitHub Repository**: [Pi-Zero-SKR-Pico-PUWinder](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder)
+- **CI/CD Status**: [GitHub Actions](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/actions)
+- **Issues**: [GitHub Issues](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/issues)
 
-### 3. Documentation
-- **AI-generated** API documentation
-- **Automated updates** on code changes
-- **Interactive examples** and tutorials
+### 📊 Statistics
 
-### 4. Deployment
-- **Automated builds** with GitHub Actions
-- **Release management** with version tags
-- **Artifact generation** for firmware
-
-## 🎯 Use Cases
-
-### Industrial Applications
-- **Coil winding** for transformers
-- **Motor winding** for electric motors
-- **Cable winding** for electrical cables
-- **Fiber winding** for composite materials
-
-### Educational Applications
-- **Learning G-code** programming
-- **Understanding** motor control
-- **Exploring** real-time systems
-- **Practicing** embedded programming
-
-## 🔮 Future Enhancements
-
-### Planned Features
-- **Multi-spindle support** for complex winding
-- **Advanced algorithms** for optimal winding patterns
-- **Machine learning** for predictive maintenance
-- **Cloud integration** for remote monitoring
-
-### AI Improvements
-- **Smart parameter optimization** based on material properties
-- **Predictive failure detection** using sensor data
-- **Automatic quality control** with computer vision
-- **Natural language** G-code generation
+- **Total Files**: 83
+- **Python Files**: 18
+- **C++ Files**: 65
+- **Test Files**: 9
+- **Documentation**: 10
 
 ---
-
-*This documentation is automatically generated and updated by AI to ensure accuracy and completeness.*
+*This documentation is automatically generated by AI and updated on every push.*

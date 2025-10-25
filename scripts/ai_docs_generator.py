@@ -1,285 +1,275 @@
 #!/usr/bin/env python3
 """
 AI Documentation Generator
-Automatically generates documentation using AI for the Pi Zero SKR Pico PUWinder project
+Purpose: Generate comprehensive documentation for the Pi Zero SKR Pico PUWinder project
 """
 
 import os
-import re
 import ast
-import json
-import subprocess
 from pathlib import Path
-from typing import List, Dict, Any
-import argparse
+from datetime import datetime
 
-class AIDocsGenerator:
-    def __init__(self, project_root: str = "."):
-        self.project_root = Path(project_root)
-        self.pi_zero_dir = self.project_root / "pi_zero"
-        self.pico_firmware_dir = self.project_root / "pico_firmware"
-        self.docs_dir = self.project_root / "docs"
-        self.docs_dir.mkdir(exist_ok=True)
+def analyze_python_file(file_path):
+    """Analyze a Python file and extract information"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
         
-    def generate_all_docs(self):
-        """Generate all documentation using AI"""
-        print("🤖 AI Documentation Generator Starting...")
+        tree = ast.parse(content)
         
-        # Generate Python API docs
-        self.generate_python_api_docs()
+        classes = []
+        functions = []
+        imports = []
         
-        # Generate C++ API docs
-        self.generate_cpp_api_docs()
+        for node in ast.walk(tree):
+            if isinstance(node, ast.ClassDef):
+                classes.append({
+                    'name': node.name,
+                    'docstring': ast.get_docstring(node) or '',
+                    'methods': [n.name for n in node.body if isinstance(n, ast.FunctionDef)]
+                })
+            elif isinstance(node, ast.FunctionDef) and not isinstance(node.parent, ast.ClassDef):
+                functions.append({
+                    'name': node.name,
+                    'docstring': ast.get_docstring(node) or ''
+                })
+            elif isinstance(node, ast.Import):
+                imports.extend([n.name for n in node.names])
+            elif isinstance(node, ast.ImportFrom):
+                imports.extend([n.name for n in node.names])
         
-        # Generate project overview
-        self.generate_project_overview()
+        return {
+            'classes': classes,
+            'functions': functions,
+            'imports': imports,
+            'lines': len(content.splitlines())
+        }
+    except Exception as e:
+        print(f"Error analyzing {file_path}: {e}")
+        return None
+
+def analyze_cpp_file(file_path):
+    """Analyze a C++ file and extract information"""
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read()
         
-        # Generate setup guide
-        self.generate_setup_guide()
+        classes = []
+        functions = []
         
-        # Generate troubleshooting guide
-        self.generate_troubleshooting_guide()
+        # Simple regex-based extraction (could be improved)
+        import re
         
-        # Generate README
-        self.generate_readme()
+        # Find class definitions
+        class_pattern = r'class\s+(\w+)\s*\{'
+        for match in re.finditer(class_pattern, content):
+            classes.append({'name': match.group(1)})
         
-        print("✅ AI Documentation Generation Complete!")
+        # Find function definitions
+        func_pattern = r'(\w+)\s+(\w+)\s*\([^)]*\)\s*\{'
+        for match in re.finditer(func_pattern, content):
+            functions.append({'name': match.group(2)})
         
-    def generate_python_api_docs(self):
-        """Generate Python API documentation using AI"""
-        print("📝 Generating Python API documentation...")
-        
-        python_files = list(self.pi_zero_dir.glob("*.py"))
-        api_docs = []
-        
-        for file_path in python_files:
-            if file_path.name.startswith("test_"):
-                continue
-                
-            print(f"  Processing {file_path.name}...")
-            
-            # Parse Python file
-            with open(file_path, 'r') as f:
-                content = f.read()
-                
-            try:
-                tree = ast.parse(content)
-                file_docs = self._analyze_python_file(tree, file_path.name)
-                api_docs.append(file_docs)
-            except SyntaxError as e:
-                print(f"    ⚠️ Syntax error in {file_path.name}: {e}")
-                continue
-                
-        # Generate API documentation
-        self._write_api_docs(api_docs, "python_api.md")
-        
-    def generate_cpp_api_docs(self):
-        """Generate C++ API documentation using AI"""
-        print("📝 Generating C++ API documentation...")
-        
-        cpp_files = list((self.pico_firmware_dir / "src").glob("*.cpp"))
-        h_files = list((self.pico_firmware_dir / "src").glob("*.h"))
-        
-        api_docs = []
-        
-        for file_path in h_files + cpp_files:
-            print(f"  Processing {file_path.name}...")
-            
-            with open(file_path, 'r') as f:
-                content = f.read()
-                
-            file_docs = self._analyze_cpp_file(content, file_path.name)
-            api_docs.append(file_docs)
-            
-        # Generate API documentation
-        self._write_api_docs(api_docs, "cpp_api.md")
-        
-    def generate_project_overview(self):
-        """Generate project overview using AI"""
-        print("📝 Generating project overview...")
-        
-        overview = f"""# Pi Zero SKR Pico PUWinder - Project Overview
+        return {
+            'classes': classes,
+            'functions': functions,
+            'lines': len(content.splitlines())
+        }
+    except Exception as e:
+        print(f"Error analyzing {file_path}: {e}")
+        return None
 
-## 🤖 AI-Generated Documentation
+def generate_project_overview():
+    """Generate project overview documentation"""
+    content = """# Project Overview
 
-This documentation is automatically generated using AI to ensure it stays up-to-date with the codebase.
+## 🤖 Pi Zero SKR Pico PUWinder
 
-## 🎯 Project Purpose
+**AI-Generated Documentation** - Last Updated: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """
 
-The Pi Zero SKR Pico PUWinder is a precision winding machine controller that combines:
-- **Raspberry Pi Zero** as the high-level controller (brain)
-- **SKR Pico** as the real-time hardware controller (slave)
-- **G-code compatible** architecture for easy programming
-- **AI-powered** development and documentation
+### 📋 Project Description
 
-## 🏗️ Architecture
+The Pi Zero SKR Pico PUWinder is a precision winding machine controller that combines the computational power of a Raspberry Pi Zero with the real-time control capabilities of an SKR Pico microcontroller. This system provides industrial-grade precision for wire winding applications.
 
-### High-Level Controller (Pi Zero)
-- **Python-based** control system
-- **G-code processing** and interpretation
-- **UART communication** with hardware controller
-- **Web interface** for monitoring and control
-- **AI-assisted** development workflow
+### 🏗️ Architecture
 
-### Hardware Controller (SKR Pico)
-- **C++ firmware** for real-time control
-- **BLDC motor control** for spindle
-- **Stepper motor control** for traverse
-- **Hall sensor feedback** for position tracking
-- **PWM control** for speed regulation
+#### High-Level Controller (Pi Zero)
+- **Role**: Brain of the system
+- **Responsibilities**: 
+  - G-code command processing
+  - High-level winding logic
+  - User interface and display
+  - Safety monitoring
+- **Communication**: UART to Pico
 
-## 🔧 Key Components
+#### Low-Level Controller (SKR Pico)
+- **Role**: Real-time hardware control
+- **Responsibilities**:
+  - Stepper motor control (traverse)
+  - BLDC motor control (spindle)
+  - Hall sensor feedback
+  - ISR-driven step generation
+- **Communication**: UART from Pi Zero
 
-### Pi Zero Components
-- `main_controller.py` - Main control logic
-- `uart_api.py` - UART communication
-- `test_*.py` - Test suites
-- `machine.cfg` - Hardware configuration
+### 🔧 Key Components
 
-### Pico Firmware Components
-- `main.cpp` - Main application
-- `spindle.cpp` - BLDC motor control
-- `traverse_controller.cpp` - Stepper control
-- `gcode_interface.cpp` - G-code processing
-- `winding_controller.cpp` - Winding logic
+#### Hardware
+- **Spindle**: BLDC motor with Hall sensor feedback
+- **Traverse**: Stepper motor with TMC2209 driver
+- **Communication**: UART between Pi Zero and Pico
+- **Safety**: Emergency stop, feed hold, quick stop
 
-## 🚀 Features
+#### Software
+- **Pi Zero**: Python-based G-code interpreter
+- **Pico**: C++ firmware with real-time ISR
+- **Protocol**: G-code compatible commands
+- **Safety**: FluidNC-style safety features
 
-### Core Functionality
-- **Precision winding** with synchronized traverse
-- **Real-time RPM control** using BLDC motor
-- **G-code compatibility** for easy programming
-- **UART communication** between controllers
-- **Hardware abstraction** for easy maintenance
+### 🎯 Features
 
-### AI-Powered Development
-- **Automated testing** with GitHub Actions
-- **AI code completion** with GitHub Copilot
-- **Cloud development** with GitHub Codespaces
-- **Automated documentation** generation
-- **Smart error detection** and suggestions
+#### G-code Compatibility
+- Standard G-codes: G0, G1, G28, G4
+- Spindle control: M3, M4, M5, S
+- Winding-specific: M6-M19
+- Safety commands: M0, M1, M112, M410, M999
 
-## 📊 Performance Specifications
+#### Safety Features
+- **Feed Hold (M0)**: Pause all motion
+- **Resume (M1)**: Resume from hold
+- **Emergency Stop (M112)**: Immediate stop
+- **Quick Stop (M410)**: Stop new moves, finish current
+- **Reset (M999)**: Clear emergency state
 
-### Spindle Control
-- **Speed Range**: 0-3000 RPM
-- **Control Method**: PWM with Hall sensor feedback
-- **Resolution**: 16-bit PWM (65535 levels)
-- **Response Time**: < 100ms
+#### Precision Control
+- **Spindle RPM**: 0-3000 RPM with Hall sensor feedback
+- **Traverse Position**: 0-200mm with 0.1mm precision
+- **Synchronization**: Real-time spindle-traverse sync
+- **Ramping**: Smooth acceleration/deceleration
 
-### Traverse Control
-- **Speed Range**: 0-1000 mm/min
-- **Resolution**: 0.1 mm
-- **Synchronization**: Real-time with spindle RPM
-- **Accuracy**: ±0.05 mm
+### 📁 Project Structure
 
-### Communication
-- **Protocol**: UART
-- **Baud Rate**: 115200
-- **Data Format**: G-code commands
-- **Latency**: < 10ms
+```
+Pi-Zero-SKR-Pico-PUWinder/
+├── pi_zero/                 # Pi Zero Python code
+│   ├── main_controller.py   # Main G-code API
+│   ├── uart_api.py         # UART communication
+│   ├── winding_sync.py     # Winding synchronization
+│   └── test_*.py           # Test suites
+├── pico_firmware/          # Pico C++ firmware
+│   ├── main.cpp           # Main application
+│   ├── src/               # Source files
+│   │   ├── spindle.cpp     # BLDC motor control
+│   │   ├── traverse_controller.cpp  # Stepper control
+│   │   ├── gcode_interface.cpp      # G-code parser
+│   │   ├── move_queue.cpp           # Move queue
+│   │   └── scheduler.cpp            # ISR scheduler
+│   └── CMakeLists.txt     # Build configuration
+├── docs/                  # Documentation
+└── .github/workflows/     # CI/CD workflows
+```
 
-## 🔄 Development Workflow
+### 🚀 Getting Started
 
-### 1. Code Development
-- Use **Cursor** with **GitHub Copilot** for AI assistance
-- Write code with **type hints** for better AI suggestions
-- Use **meaningful comments** for context
+1. **Hardware Setup**: Connect Pi Zero to SKR Pico via UART
+2. **Firmware**: Flash Pico with C++ firmware
+3. **Software**: Install Python dependencies on Pi Zero
+4. **Configuration**: Set up machine.cfg with your hardware
+5. **Testing**: Run test suites to verify functionality
 
-### 2. Testing
-- **Local testing** with simulation mode
-- **Automated testing** with GitHub Actions
-- **Hardware testing** with actual devices
+### 🔗 External Links
 
-### 3. Documentation
-- **AI-generated** API documentation
-- **Automated updates** on code changes
-- **Interactive examples** and tutorials
+- **GitHub Repository**: [Pi-Zero-SKR-Pico-PUWinder](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder)
+- **CI/CD Status**: [GitHub Actions](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/actions)
+- **Issues**: [GitHub Issues](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/issues)
 
-### 4. Deployment
-- **Automated builds** with GitHub Actions
-- **Release management** with version tags
-- **Artifact generation** for firmware
+### 📊 Statistics
 
-## 🎯 Use Cases
-
-### Industrial Applications
-- **Coil winding** for transformers
-- **Motor winding** for electric motors
-- **Cable winding** for electrical cables
-- **Fiber winding** for composite materials
-
-### Educational Applications
-- **Learning G-code** programming
-- **Understanding** motor control
-- **Exploring** real-time systems
-- **Practicing** embedded programming
-
-## 🔮 Future Enhancements
-
-### Planned Features
-- **Multi-spindle support** for complex winding
-- **Advanced algorithms** for optimal winding patterns
-- **Machine learning** for predictive maintenance
-- **Cloud integration** for remote monitoring
-
-### AI Improvements
-- **Smart parameter optimization** based on material properties
-- **Predictive failure detection** using sensor data
-- **Automatic quality control** with computer vision
-- **Natural language** G-code generation
+- **Total Files**: """ + str(len(list(Path('.').rglob('*.py'))) + len(list(Path('.').rglob('*.cpp'))) + len(list(Path('.').rglob('*.h')))) + """
+- **Python Files**: """ + str(len(list(Path('.').rglob('*.py')))) + """
+- **C++ Files**: """ + str(len(list(Path('.').rglob('*.cpp'))) + len(list(Path('.').rglob('*.h')))) + """
+- **Test Files**: """ + str(len(list(Path('.').rglob('test_*.py')))) + """
+- **Documentation**: """ + str(len(list(Path('docs').rglob('*.md'))) if Path('docs').exists() else 0) + """
 
 ---
-
-*This documentation is automatically generated and updated by AI to ensure accuracy and completeness.*
+*This documentation is automatically generated by AI and updated on every push.*
 """
-        
-        with open(self.docs_dir / "project_overview.md", 'w') as f:
-            f.write(overview)
-            
-    def generate_setup_guide(self):
-        """Generate setup guide using AI"""
-        print("📝 Generating setup guide...")
-        
-        setup_guide = f"""# 🚀 Setup Guide - Pi Zero SKR Pico PUWinder
+    return content
 
-## 🤖 AI-Generated Setup Instructions
+def generate_setup_guide():
+    """Generate setup guide documentation"""
+    content = """# Setup Guide
 
-This guide is automatically generated to ensure it matches your current codebase.
+## 🛠️ Pi Zero SKR Pico PUWinder Setup
 
-## 📋 Prerequisites
+**AI-Generated Documentation** - Last Updated: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """
 
-### Hardware Requirements
-- **Raspberry Pi Zero W** (or Pi Zero 2 W)
-- **SKR Pico v1.0** (or compatible)
-- **BLDC Motor** with Hall sensors
-- **Stepper Motor** for traverse
-- **Power Supply** 5V 3A minimum
-- **SD Card** 32GB Class 10 minimum
+### 📋 Prerequisites
 
-### Software Requirements
-- **Python 3.11+** on Pi Zero
-- **Pico SDK** for firmware development
-- **Git** for version control
-- **GitHub account** for CI/CD
+#### Hardware Requirements
+- Raspberry Pi Zero (or Zero W)
+- SKR Pico v1.0 microcontroller
+- BLDC motor with Hall sensor
+- Stepper motor with TMC2209 driver
+- UART connection between Pi Zero and Pico
 
-## 🔧 Hardware Setup
+#### Software Requirements
+- Raspberry Pi OS (latest)
+- Python 3.11+
+- Pico SDK (for firmware compilation)
+- CMake (for building firmware)
 
-### 1. Pi Zero Configuration
+### 🔧 Hardware Setup
+
+#### 1. Pi Zero Configuration
 ```bash
 # Enable UART
 sudo raspi-config
 # Navigate to: Interfacing Options → Serial
-# Select: Yes (login shell disabled, serial enabled)
+# Enable: Would you like a login shell to be accessible over serial? → No
+# Enable: Would you like the serial port hardware to be enabled? → Yes
+```
 
+#### 2. UART Connection
+```
+Pi Zero          SKR Pico
+GPIO 14 (TXD) →  GPIO 1 (RX)
+GPIO 15 (RXD) ←  GPIO 0 (TX)
+GND           →  GND
+```
+
+#### 3. Motor Connections
+```
+Spindle (BLDC):
+- PWM: GPIO 24
+- Enable: GPIO 21
+- Direction: GPIO 4
+- Brake: GPIO 3
+- Hall Sensor: GPIO 22
+
+Traverse (Stepper):
+- Step: GPIO 6
+- Direction: GPIO 5
+- Enable: GPIO 7
+- Home Switch: GPIO 16
+```
+
+### 💻 Software Installation
+
+#### 1. Pi Zero Setup
+```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install dependencies
-sudo apt install -y python3-pip git cmake
+# Install Python dependencies
+sudo apt install python3-serial python3-pip -y
+pip3 install pyserial pytest
+
+# Clone repository
+git clone https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder.git
+cd Pi-Zero-SKR-Pico-PUWinder
 ```
 
-### 2. SKR Pico Configuration
+#### 2. Pico Firmware Setup
 ```bash
 # Install Pico SDK
 git clone https://github.com/raspberrypi/pico-sdk.git
@@ -287,914 +277,1192 @@ cd pico-sdk
 git submodule update --init
 
 # Set environment variable
-echo 'export PICO_SDK_PATH=$PWD' >> ~/.bashrc
-source ~/.bashrc
-```
+export PICO_SDK_PATH=/path/to/pico-sdk
 
-### 3. Wiring Connections
-```
-Pi Zero          SKR Pico
-GPIO 14 (TXD) →  GPIO 0 (RX)
-GPIO 15 (RXD) →  GPIO 1 (TX)
-GND           →  GND
-5V            →  VIN
-```
-
-## 💻 Software Setup
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder.git
-cd Pi-Zero-SKR-Pico-PUWinder
-```
-
-### 2. Pi Zero Setup
-```bash
-cd pi_zero
-pip install -r requirements.txt
-
-# Test UART communication
-python test_uart.py
-
-# Test spindle control
-python test_spindle.py
-```
-
-### 3. Pico Firmware Setup
-```bash
+# Build firmware
 cd pico_firmware
 mkdir build && cd build
 cmake ..
-make
-
-# Flash firmware to Pico
-cp pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
+make -j4
 ```
 
-## 🧪 Testing Setup
+### ⚙️ Configuration
 
-### 1. Basic Communication Test
+#### 1. Machine Configuration
+Edit `pi_zero/machine.cfg` to match your hardware:
+
+```ini
+# Spindle Configuration
+[spindle]
+pin: gpio24          # PWM output
+enable_pin: gpio21   # Enable pin
+direction_pin: gpio4 # Direction control
+brake_pin: gpio3     # Brake control
+hall_pin: gpio22     # Hall sensor
+
+# Traverse Configuration
+[stepper_y]
+step_pin: gpio6      # Step pin
+dir_pin: gpio5       # Direction pin
+enable_pin: !gpio7   # Enable pin
+position_endstop: gpio16  # Home switch
+```
+
+#### 2. Test Configuration
 ```bash
-# On Pi Zero
-cd pi_zero
-python test_uart.py
+# Test UART communication
+python3 pi_zero/test_uart.py
 
-# Expected output:
-# ✅ Opened /dev/serial0 @ 115200 baud
-# 📤 Sending: PING
-# 📥 Waiting for response...
-# ✅ Received: 'PONG'
-# 🎉 SUCCESS! UART communication working!
+# Test G-code commands
+python3 pi_zero/test_gcode_safety.py
+
+# Test comprehensive features
+python3 pi_zero/test_comprehensive_features.py
 ```
 
-### 2. Spindle Control Test
+### 🧪 Testing
+
+#### 1. Basic Connectivity Test
 ```bash
-# Test spindle commands
-python test_spindle.py
-
-# Expected output:
-# ✅ Spindle control test passed
-# ✅ RPM control working
-# ✅ Direction control working
+python3 pi_zero/test_uart.py
 ```
 
-### 3. G-code Interface Test
+Expected output:
+```
+✅ Opened /dev/serial0 @ 115200 baud
+✅ Received: 'PONG'
+✅ Received: Pico_Spindle_v1.0
+```
+
+#### 2. G-code Safety Test
 ```bash
-# Test G-code processing
-python test_gcode_interface.py
-
-# Expected output:
-# ✅ G-code parsing working
-# ✅ Command execution working
-# ✅ Error handling working
+python3 pi_zero/test_gcode_safety.py
 ```
 
-## 🔄 Development Setup
+Expected output:
+```
+✅ M0 (feed hold) - OK
+✅ M1 (resume from hold) - OK
+✅ M112 (emergency stop) - OK
+✅ M999 (reset from emergency stop) - OK
+```
 
-### 1. GitHub Integration
+#### 3. Comprehensive Feature Test
 ```bash
-# Configure Git
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-
-# Set up GitHub CLI
-gh auth login
+python3 pi_zero/test_comprehensive_features.py
 ```
 
-### 2. Cursor IDE Setup
+### 🚀 Running the System
+
+#### 1. Start the Main Controller
 ```bash
-# Install Cursor
-# Download from: https://cursor.sh
-
-# Open project
-cursor .
-
-# Install extensions:
-# - Python
-# - C/C++
-# - GitHub Copilot
-# - GitHub Copilot Chat
+python3 pi_zero/main_controller.py
 ```
 
-### 3. GitHub Codespaces (Alternative)
-```bash
-# Go to GitHub repository
-# Click "Code" → "Codespaces"
-# Click "Create codespace on main"
-# Wait for environment setup
+#### 2. Basic G-code Commands
+```python
+from main_controller import GCodeAPI
+
+# Connect to Pico
+api = GCodeAPI()
+api.connect()
+
+# Start spindle
+api.set_spindle_rpm(500, 'CW')
+
+# Move traverse
+api.move_traverse(50.0, 1000.0)
+
+# Stop spindle
+api.stop_spindle()
 ```
 
-## 🚀 Quick Start
+### 🔧 Troubleshooting
 
-### 1. Start the System
-```bash
-# On Pi Zero
-cd pi_zero
-python main_controller.py
-```
+#### Common Issues
 
-### 2. Send Test Commands
-```bash
-# In another terminal
-python test_uart.py
+1. **UART Communication Failed**
+   - Check wiring connections
+   - Verify UART is enabled in raspi-config
+   - Check baud rate (115200)
 
-# Send G-code commands
-echo "M3 S1000" | python uart_api.py
-echo "G1 Y10 F1000" | python uart_api.py
-echo "M5" | python uart_api.py
-```
+2. **Firmware Not Responding**
+   - Reflash Pico firmware
+   - Check power supply
+   - Verify UART pins
 
-### 3. Monitor Performance
-```bash
-# Check system status
-python test_github_integration.py
+3. **Motor Not Moving**
+   - Check motor connections
+   - Verify enable pins
+   - Check power supply
 
-# Monitor logs
-tail -f logs/winder.log
-```
+4. **Hall Sensor Not Working**
+   - Check sensor wiring
+   - Verify pull-up resistors
+   - Check signal levels
 
-## 🔧 Troubleshooting
+### 📞 Support
 
-### Common Issues
-
-#### UART Communication Fails
-```bash
-# Check UART is enabled
-sudo raspi-config
-# Interfacing Options → Serial → Yes
-
-# Check permissions
-sudo usermod -a -G dialout $USER
-# Logout and login again
-```
-
-#### Pico Not Responding
-```bash
-# Check firmware is flashed
-ls /media/your-username/RPI-RP2/
-
-# Reflash firmware
-cp pico_firmware/build/pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
-```
-
-#### Python Dependencies Missing
-```bash
-# Install missing packages
-pip install pyserial pytest
-
-# Or install all requirements
-pip install -r requirements.txt
-```
-
-### Getting Help
-
-#### Check Logs
-```bash
-# System logs
-sudo journalctl -u your-service
-
-# Application logs
-tail -f logs/winder.log
-```
-
-#### GitHub Issues
-- Use the issue templates in the repository
-- Include hardware configuration
-- Provide error logs
-- Describe steps to reproduce
-
-## 📚 Next Steps
-
-### 1. Explore Examples
-- Check `examples/` directory
-- Run sample programs
-- Modify parameters
-
-### 2. Read Documentation
-- API documentation in `docs/`
-- Configuration guide
-- Troubleshooting tips
-
-### 3. Join Community
-- GitHub Discussions
-- Issue tracker
-- Pull requests
+- **GitHub Issues**: [Report Issues](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/issues)
+- **Documentation**: [Project Docs](https://baztardo.github.io/Pi-Zero-SKR-Pico-PUWinder/)
+- **CI/CD Status**: [GitHub Actions](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/actions)
 
 ---
-
-*This setup guide is automatically generated and updated by AI to ensure accuracy.*
+*This documentation is automatically generated by AI and updated on every push.*
 """
-        
-        with open(self.docs_dir / "setup_guide.md", 'w') as f:
-            f.write(setup_guide)
-            
-    def generate_troubleshooting_guide(self):
-        """Generate troubleshooting guide using AI"""
-        print("📝 Generating troubleshooting guide...")
-        
-        troubleshooting = f"""# 🔧 Troubleshooting Guide - Pi Zero SKR Pico PUWinder
+    return content
 
-## 🤖 AI-Generated Troubleshooting
+def generate_troubleshooting_guide():
+    """Generate troubleshooting guide"""
+    content = """# Troubleshooting Guide
 
-This guide is automatically generated based on common issues and solutions.
+## 🔧 Pi Zero SKR Pico PUWinder Troubleshooting
 
-## 🚨 Common Issues
+**AI-Generated Documentation** - Last Updated: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """
 
-### 1. UART Communication Problems
+### 🚨 Common Issues and Solutions
 
-#### Issue: "Serial port not found"
-```bash
-# Error: SerialException: could not open port /dev/serial0
+#### 1. UART Communication Issues
+
+**Problem**: Pi Zero cannot communicate with Pico
+```
+❌ Failed to connect to Pico
+❌ Timeout - no response
 ```
 
-#### Solutions:
-```bash
-# 1. Check UART is enabled
-sudo raspi-config
-# Navigate to: Interfacing Options → Serial
-# Select: Yes (login shell disabled, serial enabled)
+**Solutions**:
+1. **Check Wiring**:
+   ```
+   Pi Zero TX (GPIO 14) → Pico RX (GPIO 1)
+   Pi Zero RX (GPIO 15) → Pico TX (GPIO 0)
+   GND → GND
+   ```
 
-# 2. Check permissions
-sudo usermod -a -g dialout $USER
-# Logout and login again
+2. **Enable UART**:
+   ```bash
+   sudo raspi-config
+   # Interfacing Options → Serial
+   # Enable serial port hardware
+   ```
 
-# 3. Check device exists
-ls -la /dev/serial*
-# Should show: /dev/serial0 -> ttyAMA0
+3. **Check Baud Rate**:
+   ```python
+   # Should be 115200
+   api = GCodeAPI(baudrate=115200)
+   ```
 
-# 4. Test with minicom
-sudo apt install minicom
-sudo minicom -D /dev/serial0 -b 115200
+4. **Test Connection**:
+   ```bash
+   python3 pi_zero/test_uart.py
+   ```
+
+#### 2. Firmware Issues
+
+**Problem**: Pico firmware not responding
+```
+❌ PING failed: None
+❌ VERSION failed
 ```
 
-#### Debug Commands:
-```bash
-# Check UART status
-sudo dmesg | grep -i uart
+**Solutions**:
+1. **Reflash Firmware**:
+   ```bash
+   cd pico_firmware
+   mkdir build && cd build
+   cmake ..
+   make -j4
+   # Flash to Pico
+   ```
 
-# Check permissions
-ls -la /dev/serial0
+2. **Check Power Supply**:
+   - Ensure stable 5V supply
+   - Check current capacity
 
-# Test communication
-echo "PING" > /dev/serial0
-cat /dev/serial0
+3. **Reset Pico**:
+   - Press and hold BOOTSEL button
+   - Power on Pico
+   - Release BOOTSEL
+
+#### 3. Motor Control Issues
+
+**Problem**: Motors not moving
+```
+❌ M3 S500 failed
+❌ G1 Y50 F1000 failed
 ```
 
-### 2. Pico Firmware Issues
+**Solutions**:
+1. **Check Enable Pins**:
+   ```python
+   # Enable steppers
+   api.enable_steppers(True)
+   ```
 
-#### Issue: "Pico not responding"
-```bash
-# Error: No response from Pico
+2. **Check Motor Connections**:
+   ```
+   Spindle: PWM=GPIO24, Enable=GPIO21
+   Traverse: Step=GPIO6, Dir=GPIO5, Enable=GPIO7
+   ```
+
+3. **Check Power Supply**:
+   - Spindle: 12V/24V supply
+   - Stepper: 12V/24V supply
+
+4. **Test Individual Motors**:
+   ```python
+   # Test spindle
+   api.set_spindle_rpm(100, 'CW')
+   
+   # Test traverse
+   api.move_traverse(10.0, 100.0)
+   ```
+
+#### 4. Hall Sensor Issues
+
+**Problem**: Spindle RPM not reading correctly
+```
+❌ Hall sensor not working
+❌ RPM always 0
 ```
 
-#### Solutions:
-```bash
-# 1. Check firmware is flashed
-ls /media/your-username/RPI-RP2/
-# Should show: pico_spindle_controller.uf2
+**Solutions**:
+1. **Check Wiring**:
+   ```
+   Hall Sensor → GPIO 22
+   VCC → 3.3V
+   GND → GND
+   ```
 
-# 2. Reflash firmware
-cd pico_firmware
-mkdir build && cd build
-cmake ..
-make
-cp pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
+2. **Check Pull-up Resistors**:
+   - Add 10kΩ pull-up to 3.3V
+   - Check signal levels with oscilloscope
 
-# 3. Check Pico is in bootloader mode
-# Hold BOOTSEL button while connecting USB
-# Should appear as RPI-RP2 drive
+3. **Test Sensor**:
+   ```python
+   # Check if sensor is working
+   status = api.get_machine_status()
+   print(f"Spindle RPM: {status.get('spindle_rpm', 0)}")
+   ```
+
+#### 5. Safety System Issues
+
+**Problem**: Safety commands not working
+```
+❌ M112 (emergency stop) failed
+❌ M0 (feed hold) failed
 ```
 
-#### Debug Commands:
-```bash
-# Check Pico connection
-lsusb | grep -i pico
+**Solutions**:
+1. **Check Move Queue**:
+   ```python
+   # Ensure move queue is initialized
+   queue_status = api.get_move_queue_status()
+   ```
 
-# Check mount points
-ls /media/your-username/
+2. **Test Safety Commands**:
+   ```bash
+   python3 pi_zero/test_gcode_safety.py
+   ```
 
-# Test with picotool
-pip install picotool
-picotool info
+3. **Check Emergency Stop**:
+   ```python
+   # Test emergency stop
+   api.emergency_stop()
+   api.reset_from_emergency()
+   ```
+
+### 🔍 Diagnostic Commands
+
+#### 1. System Status Check
+```python
+from main_controller import GCodeAPI
+
+api = GCodeAPI()
+api.connect()
+
+# Check system status
+status = api.get_machine_status()
+print(f"Status: {status}")
+
+# Check move queue
+queue_status = api.get_move_queue_status()
+print(f"Queue: {queue_status}")
+
+# Check scheduler
+scheduler_status = api.get_scheduler_status()
+print(f"Scheduler: {scheduler_status}")
 ```
 
-### 3. Python Dependencies
-
-#### Issue: "ModuleNotFoundError"
-```bash
-# Error: ModuleNotFoundError: No module named 'serial'
+#### 2. Hardware Test
+```python
+# Test all GPIO pins
+for pin in [3, 4, 5, 6, 7, 21, 22, 24, 25]:
+    api.set_gpio_pin(pin, 1)
+    time.sleep(0.1)
+    api.set_gpio_pin(pin, 0)
 ```
 
-#### Solutions:
-```bash
-# 1. Install missing packages
-pip install pyserial pytest
+#### 3. Communication Test
+```python
+# Test all G-code commands
+commands = [
+    "PING", "VERSION", "STATUS",
+    "M3 S100", "M5", "G28", "M17", "M18"
+]
 
-# 2. Install all requirements
-cd pi_zero
-pip install -r requirements.txt
-
-# 3. Use virtual environment
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+for cmd in commands:
+    response = api.uart_api.send_command(cmd)
+    print(f"{cmd}: {response}")
 ```
 
-#### Debug Commands:
-```bash
-# Check installed packages
-pip list | grep serial
+### 📊 Performance Monitoring
 
-# Check Python path
-python -c "import sys; print(sys.path)"
+#### 1. System Metrics
+```python
+# Monitor system performance
+import time
 
-# Test imports
-python -c "import serial; print('pyserial OK')"
+start_time = time.time()
+for i in range(100):
+    status = api.get_machine_status()
+    time.sleep(0.1)
+
+elapsed = time.time() - start_time
+print(f"Average response time: {elapsed/100:.3f}s per command")
 ```
 
-### 4. Build Issues
-
-#### Issue: "CMake failed"
+#### 2. Memory Usage
 ```bash
-# Error: CMake Error: Could not find PICO_SDK_PATH
+# Check Pi Zero memory usage
+free -h
+
+# Check Python memory usage
+ps aux | grep python
 ```
 
-#### Solutions:
+#### 3. CPU Usage
 ```bash
-# 1. Set PICO_SDK_PATH
-export PICO_SDK_PATH=/path/to/pico-sdk
-echo 'export PICO_SDK_PATH=/path/to/pico-sdk' >> ~/.bashrc
-
-# 2. Install dependencies
-sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
-
-# 3. Clean build
-rm -rf build
-mkdir build && cd build
-cmake ..
-make
+# Monitor CPU usage
+top -p $(pgrep -f python)
 ```
 
-#### Debug Commands:
+### 🆘 Emergency Procedures
+
+#### 1. Complete System Reset
 ```bash
-# Check environment
-echo $PICO_SDK_PATH
+# Stop all processes
+sudo pkill -f python
 
-# Check CMake version
-cmake --version
+# Reset GPIO pins
+sudo gpio reset
 
-# Check toolchain
-arm-none-eabi-gcc --version
+# Restart system
+sudo reboot
 ```
 
-### 5. GitHub Actions Failures
-
-#### Issue: "Workflow failed"
+#### 2. Firmware Recovery
 ```bash
-# Error: Job failed in GitHub Actions
+# Enter bootloader mode
+# Hold BOOTSEL button while powering on
+
+# Flash firmware
+sudo picotool load pico_firmware/build/pico_spindle_controller.uf2
 ```
 
-#### Solutions:
+#### 3. Configuration Reset
 ```bash
-# 1. Check workflow logs
-# Go to: GitHub → Actions → Failed workflow
-# Click on failed job to see details
+# Backup current config
+cp pi_zero/machine.cfg pi_zero/machine.cfg.backup
 
-# 2. Test locally
-cd pi_zero
-python test_github_integration.py
-
-# 3. Check dependencies
-pip install -r requirements.txt
-
-# 4. Use simple CI
-# Rename: .github/workflows/simple-ci.yml → ci.yml
+# Reset to defaults
+git checkout pi_zero/machine.cfg
 ```
 
-#### Debug Commands:
-```bash
-# Test Python syntax
-python -m py_compile *.py
+### 📞 Getting Help
 
-# Test imports
-python -c "import sys; sys.path.append('.'); import test_github_integration"
-
-# Check file permissions
-ls -la *.py
-```
-
-## 🔍 Diagnostic Tools
-
-### 1. System Information
-```bash
-# Check Pi Zero specs
-cat /proc/cpuinfo
-cat /proc/meminfo
-
-# Check Python version
-python --version
-pip --version
-
-# Check installed packages
-pip list
-```
-
-### 2. Hardware Status
-```bash
-# Check GPIO
-gpio readall
-
-# Check UART
-sudo dmesg | grep -i uart
-
-# Check USB devices
-lsusb
-```
-
-### 3. Network Status
-```bash
-# Check WiFi
-iwconfig
-
-# Check IP address
-ip addr show
-
-# Check GitHub connection
-ping github.com
-```
-
-### 4. Log Analysis
+#### 1. Check Logs
 ```bash
 # System logs
 sudo journalctl -f
 
-# Application logs
-tail -f logs/winder.log
-
-# Error logs
-grep -i error logs/winder.log
+# Python logs
+tail -f /var/log/python.log
 ```
 
-## 🛠️ Advanced Troubleshooting
+#### 2. GitHub Issues
+- **Report Issues**: [GitHub Issues](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/issues)
+- **Check Existing**: Search for similar issues
+- **Provide Details**: Include logs, configuration, hardware setup
 
-### 1. Performance Issues
-```bash
-# Check CPU usage
-top
-
-# Check memory usage
-free -h
-
-# Check disk usage
-df -h
-
-# Check temperature
-vcgencmd measure_temp
-```
-
-### 2. Communication Debugging
-```bash
-# Monitor UART traffic
-sudo cat /dev/serial0 | hexdump -C
-
-# Test with different baud rates
-stty -F /dev/serial0 9600
-stty -F /dev/serial0 115200
-```
-
-### 3. Firmware Debugging
-```bash
-# Check firmware version
-picotool info
-
-# Read firmware
-picotool read -o firmware.uf2
-
-# Verify firmware
-picotool verify firmware.uf2
-```
-
-## 📞 Getting Help
-
-### 1. GitHub Issues
-- Use issue templates
-- Include system information
-- Provide error logs
-- Describe steps to reproduce
-
-### 2. Community Support
-- GitHub Discussions
-- Stack Overflow
-- Raspberry Pi forums
-- Pico SDK documentation
-
-### 3. Professional Support
-- Contact maintainers
-- Hire consultants
-- Training courses
-- Custom development
-
-## 🔄 Prevention
-
-### 1. Regular Maintenance
-```bash
-# Update system
-sudo apt update && sudo apt upgrade
-
-# Update Python packages
-pip install --upgrade pip
-pip install --upgrade -r requirements.txt
-
-# Clean build files
-rm -rf build/
-```
-
-### 2. Backup Strategy
-```bash
-# Backup configuration
-cp -r pi_zero/config/ backup/
-
-# Backup firmware
-cp pico_firmware/build/*.uf2 backup/
-
-# Backup code
-git push origin main
-```
-
-### 3. Monitoring
-```bash
-# Set up log rotation
-sudo logrotate -f /etc/logrotate.conf
-
-# Monitor disk space
-df -h | grep -E "(Filesystem|/dev/root)"
-
-# Monitor system health
-vcgencmd get_throttled
-```
+#### 3. Community Support
+- **GitHub Discussions**: [Discussions](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/discussions)
+- **Documentation**: [Project Docs](https://baztardo.github.io/Pi-Zero-SKR-Pico-PUWinder/)
 
 ---
-
-*This troubleshooting guide is automatically generated and updated by AI to ensure accuracy and completeness.*
+*This documentation is automatically generated by AI and updated on every push.*
 """
-        
-        with open(self.docs_dir / "troubleshooting_guide.md", 'w') as f:
-            f.write(troubleshooting)
-            
-    def generate_readme(self):
-        """Generate README using AI"""
-        print("📝 Generating README...")
-        
-        readme = f"""# 🤖 Pi Zero SKR Pico PUWinder
+    return content
 
-[![CI](https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/workflows/CI/badge.svg)](https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/actions)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![C++17](https://img.shields.io/badge/C++-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
+def generate_python_api():
+    """Generate Python API documentation"""
+    content = """# Python API Reference
 
-## 🎯 AI-Powered Precision Winding Machine Controller
+## 🐍 Pi Zero SKR Pico PUWinder Python API
 
-A sophisticated winding machine controller that combines Raspberry Pi Zero and SKR Pico with AI-powered development tools for precision coil winding applications.
+**AI-Generated Documentation** - Last Updated: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """
 
-## ✨ Features
+### 📋 Overview
 
-### 🧠 AI-Powered Development
-- **GitHub Copilot** integration for intelligent code completion
-- **Automated documentation** generation and maintenance
-- **Smart testing** with AI-generated test cases
-- **Cloud development** with GitHub Codespaces
+The Python API provides a high-level interface for controlling the winding machine from the Pi Zero. It handles G-code generation, UART communication, and safety features.
 
-### 🔧 Hardware Control
-- **BLDC motor control** for precision spindle operation
-- **Stepper motor control** for synchronized traverse movement
-- **Real-time feedback** using Hall sensors and encoders
-- **G-code compatibility** for easy programming
+### 🔧 Core Classes
 
-### 🚀 Advanced Features
-- **UART communication** between Pi Zero and Pico
-- **Real-time synchronization** of spindle and traverse
-- **Precision control** with 16-bit PWM resolution
-- **Modular architecture** for easy maintenance
+#### GCodeAPI
+Main API class for G-code communication with the Pico.
 
-## 🏗️ Architecture
+```python
+from main_controller import GCodeAPI
 
-```
-┌─────────────────┐    UART     ┌─────────────────┐
-│   Pi Zero W     │◄──────────►│   SKR Pico      │
-│   (Brain)       │  115200     │   (Hardware)    │
-│                 │             │                 │
-│ • Python 3.11  │             │ • C++ Firmware │
-│ • G-code Proc. │             │ • Real-time     │
-│ • Web Interface │             │ • Motor Control │
-│ • AI Tools      │             │ • Sensor I/O   │
-└─────────────────┘             └─────────────────┘
+# Create API instance
+api = GCodeAPI(port='/dev/serial0', baudrate=115200)
+
+# Connect to Pico
+if api.connect():
+    print("Connected successfully")
 ```
 
-## 🚀 Quick Start
+#### WindingController
+High-level winding process controller.
 
-### 1. Clone Repository
-```bash
-git clone https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder.git
-cd Pi-Zero-SKR-Pico-PUWinder
+```python
+from main_controller import WindingController, WindingParameters
+
+# Create winding parameters
+params = WindingParameters(
+    target_turns=1000,
+    spindle_rpm=300,
+    wire_diameter_mm=0.064,
+    winding_width_mm=50.0
+)
+
+# Create controller
+controller = WindingController(api)
+controller.set_parameters(params)
 ```
 
-### 2. Pi Zero Setup
-```bash
-cd pi_zero
-pip install -r requirements.txt
-python test_uart.py
+### 🎯 G-code Commands
+
+#### Basic Movement
+```python
+# Rapid positioning
+api.send_gcode("G0 Y50")
+
+# Linear interpolation
+api.send_gcode("G1 Y100 F1000")
+
+# Home all axes
+api.home_all_axes()
 ```
 
-### 3. Pico Firmware
-```bash
-cd pico_firmware
-mkdir build && cd build
-cmake .. && make
-# Flash to Pico: cp pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
+#### Spindle Control
+```python
+# Start spindle clockwise
+api.set_spindle_rpm(500, 'CW')
+
+# Start spindle counter-clockwise
+api.set_spindle_rpm(1000, 'CCW')
+
+# Stop spindle
+api.stop_spindle()
+
+# Set spindle speed
+api.send_gcode("S1500")
 ```
 
-### 4. Test System
-```bash
-python test_spindle.py
-python test_gcode_interface.py
+#### Safety Commands
+```python
+# Feed hold
+api.feed_hold()
+
+# Resume from hold
+api.resume_from_hold()
+
+# Emergency stop
+api.emergency_stop()
+
+# Quick stop
+api.quick_stop()
+
+# Reset from emergency
+api.reset_from_emergency()
 ```
 
-## 📚 Documentation
+### 🛡️ Safety Features
 
-### 🤖 AI-Generated Docs
-- **[Project Overview](docs/project_overview.md)** - Complete system overview
-- **[Setup Guide](docs/setup_guide.md)** - Step-by-step installation
-- **[API Documentation](docs/python_api.md)** - Python API reference
-- **[C++ API](docs/cpp_api.md)** - Firmware API reference
-- **[Troubleshooting](docs/troubleshooting_guide.md)** - Common issues and solutions
+#### FluidNC-style Safety Commands
+```python
+# M0 - Feed hold
+api.feed_hold()
 
-### 📖 Manual Documentation
-- **[Development Guide](DEVELOPMENT.md)** - Development workflow
-- **[GitHub Features](GITHUB_ADVANCED_FEATURES.md)** - Advanced GitHub usage
-- **[Wiring Guide](docs/WIRING.md)** - Hardware connections
+# M1 - Resume from hold
+api.resume_from_hold()
 
-## 🔧 Hardware Requirements
+# M112 - Emergency stop
+api.emergency_stop()
 
-### Pi Zero Components
-- **Raspberry Pi Zero W** (or Pi Zero 2 W)
-- **MicroSD Card** 32GB Class 10
-- **Power Supply** 5V 3A
-- **USB Cable** for programming
+# M410 - Quick stop
+api.quick_stop()
 
-### SKR Pico Components
-- **SKR Pico v1.0** (or compatible)
-- **BLDC Motor** with Hall sensors
-- **Stepper Motor** for traverse
-- **Power Supply** 24V 5A
+# M999 - Reset from emergency stop
+api.reset_from_emergency()
 
-### Optional Components
-- **LCD Display** for local monitoring
-- **Emergency Stop** button
-- **Limit Switches** for safety
-- **Tension Sensor** for wire tension
-
-## 💻 Software Requirements
-
-### Pi Zero
-- **Raspberry Pi OS** (latest)
-- **Python 3.11+**
-- **Git** for version control
-- **GitHub CLI** for automation
-
-### Development
-- **Cursor IDE** with Copilot
-- **Pico SDK** for firmware
-- **CMake** for building
-- **Git** for version control
-
-## 🧪 Testing
-
-### Automated Testing
-```bash
-# Run all tests
-python -m pytest test_*.py -v
-
-# Run specific tests
-python test_uart.py
-python test_spindle.py
-python test_gcode_interface.py
+# G4 - Dwell with planner sync
+api.dwell_with_sync(1000.0)  # 1 second
+api.dwell_with_sync(0.0)     # Sync planner
 ```
 
-### Hardware Testing
-```bash
+#### Winding Machine M-codes
+```python
+# M6 - Tool change (wire change)
+api.set_wire_diameter(0.064)
+
+# M7/M8 - Coolant control
+api.enable_cooling(True)
+api.enable_cooling(False)
+
+# M10/M11 - Traverse brake
+api.enable_traverse_brake(True)
+api.enable_traverse_brake(False)
+
+# M12/M13 - Spindle brake
+api.send_gcode("M12")  # Enable brake
+api.send_gcode("M13")  # Disable brake
+
+# M14/M15 - Wire tension
+api.enable_wire_tension(True)
+api.enable_wire_tension(False)
+
+# M16 - Home all axes
+api.home_all_axes()
+
+# M17/M18 - Stepper control
+api.enable_steppers(True)
+api.enable_steppers(False)
+
+# M19 - Spindle orientation
+api.send_gcode("M19")
+```
+
+### 📊 Status and Monitoring
+
+#### Machine Status
+```python
+# Get comprehensive machine status
+status = api.get_machine_status()
+print(f"Spindle RPM: {status.get('spindle_rpm', 0)}")
+print(f"Spindle Running: {status.get('spindle_running', False)}")
+print(f"Traverse Position: {status.get('traverse_position', 0)} mm")
+```
+
+#### Move Queue Status
+```python
+# Get move queue information
+queue_status = api.get_move_queue_status()
+print(f"Spindle Queue Depth: {queue_status['spindle_queue_depth']}")
+print(f"Traverse Queue Depth: {queue_status['traverse_queue_depth']}")
+print(f"Spindle Active: {queue_status['spindle_active']}")
+print(f"Traverse Active: {queue_status['traverse_active']}")
+```
+
+#### Scheduler Status
+```python
+# Get scheduler information
+scheduler_status = api.get_scheduler_status()
+print(f"Scheduler Running: {scheduler_status['is_running']}")
+print(f"Tick Count: {scheduler_status['tick_count']}")
+print(f"Interval: {scheduler_status['interval_us']} μs")
+```
+
+### 🔧 GPIO Control
+
+#### Pin Control
+```python
+# Set GPIO pin state
+api.set_gpio_pin(25, 1)  # Set GPIO 25 high
+api.set_gpio_pin(25, 0)  # Set GPIO 25 low
+
+# Set pin value
+api.send_gcode("M42 P25 S1")  # Set GPIO 25 high
+api.send_gcode("M47 P25 S0")  # Set GPIO 25 low
+```
+
+### 🧪 Testing and Validation
+
+#### Basic Connectivity Test
+```python
 # Test UART communication
-python test_uart.py
-
-# Test spindle control
-python test_spindle.py
-
-# Test G-code interface
-python test_gcode_interface.py
+if api.connect():
+    print("✅ Connected to Pico")
+    
+    # Test PING
+    response = api.uart_api.send_command("PING")
+    if response == "PONG":
+        print("✅ PING/PONG working")
+    
+    # Test VERSION
+    response = api.uart_api.send_command("VERSION")
+    print(f"✅ Version: {response}")
 ```
 
-## 🔄 Development Workflow
-
-### 1. AI-Assisted Development
-- Use **Cursor** with **GitHub Copilot**
-- Write code with **type hints** for better AI suggestions
-- Use **meaningful comments** for context
-
-### 2. Automated Testing
-- **Local testing** with simulation mode
-- **GitHub Actions** for automated CI/CD
-- **Hardware testing** with actual devices
-
-### 3. Documentation
-- **AI-generated** API documentation
-- **Automated updates** on code changes
-- **Interactive examples** and tutorials
-
-## 📊 Performance Specifications
-
-### Spindle Control
-- **Speed Range**: 0-3000 RPM
-- **Resolution**: 16-bit PWM (65535 levels)
-- **Response Time**: < 100ms
-- **Accuracy**: ±1 RPM
-
-### Traverse Control
-- **Speed Range**: 0-1000 mm/min
-- **Resolution**: 0.1 mm
-- **Synchronization**: Real-time with spindle
-- **Accuracy**: ±0.05 mm
-
-### Communication
-- **Protocol**: UART
-- **Baud Rate**: 115200
-- **Latency**: < 10ms
-- **Reliability**: 99.9%
-
-## 🤝 Contributing
-
-### 1. Fork and Clone
-```bash
-git clone https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder.git
-cd Pi-Zero-SKR-Pico-PUWinder
+#### Comprehensive Feature Test
+```python
+# Run comprehensive test
+import test_comprehensive_features
+test_comprehensive_features.test_comprehensive_features()
 ```
 
-### 2. Create Feature Branch
-```bash
-git checkout -b feature/your-feature
+### 📈 Advanced Features
+
+#### Enhanced Spindle Control
+```python
+# Set spindle ramp rate (placeholder)
+api.set_spindle_ramp_rate(10.0)  # 10% per second
+
+# Set spindle limits (placeholder)
+api.set_spindle_max_rpm(3000.0)
+api.set_spindle_min_rpm(10.0)
+
+# Get ramp status (placeholder)
+ramp_status = api.get_spindle_ramp_status()
+print(f"Ramping: {ramp_status['is_ramping']}")
+print(f"Progress: {ramp_status['progress']:.1%}")
 ```
 
-### 3. Develop with AI
-- Use **Cursor** with **Copilot**
-- Write tests for new features
-- Update documentation
-
-### 4. Submit Pull Request
-```bash
-git push origin feature/your-feature
-# Create PR on GitHub
+#### Step Counting
+```python
+# Get step counts (placeholder)
+step_counts = api.get_step_counts()
+print(f"Spindle Steps: {step_counts['spindle_steps']}")
+print(f"Traverse Steps: {step_counts['traverse_steps']}")
 ```
 
-## 📄 License
+### 🔄 Error Handling
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+#### Connection Management
+```python
+# Safe connection handling
+try:
+    if api.connect():
+        # Perform operations
+        api.set_spindle_rpm(500, 'CW')
+        time.sleep(5)
+        api.stop_spindle()
+    else:
+        print("Failed to connect to Pico")
+except Exception as e:
+    print(f"Error: {e}")
+finally:
+    api.disconnect()
+```
 
-## 🙏 Acknowledgments
+#### Command Validation
+```python
+# Validate commands before sending
+def safe_spindle_control(api, rpm, direction):
+    if not api.connected:
+        print("Not connected")
+        return False
+    
+    if rpm < 0 or rpm > 3000:
+        print("RPM out of range (0-3000)")
+        return False
+    
+    return api.set_spindle_rpm(rpm, direction)
+```
 
-- **Raspberry Pi Foundation** for the Pi Zero
-- **BIGTREETECH** for the SKR Pico
-- **GitHub** for Copilot and Codespaces
-- **Open source community** for inspiration
+### 📚 Examples
 
-## 🔗 Links
+#### Complete Winding Process
+```python
+from main_controller import GCodeAPI, WindingController, WindingParameters
 
-- **[GitHub Repository](https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder)**
-- **[Documentation](https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/wiki)**
-- **[Issues](https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/issues)**
-- **[Discussions](https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder/discussions)**
+# Setup
+api = GCodeAPI()
+if not api.connect():
+    print("Failed to connect")
+    exit(1)
+
+# Create winding parameters
+params = WindingParameters(
+    target_turns=1000,
+    spindle_rpm=300,
+    wire_diameter_mm=0.064,
+    winding_width_mm=50.0
+)
+
+# Create controller
+controller = WindingController(api)
+controller.set_parameters(params)
+
+# Start winding process
+if controller.start():
+    print("Winding process started")
+    
+    # Monitor progress
+    while controller.running:
+        status = controller.get_status()
+        print(f"Layer: {status['current_layer']}, Turns: {status['turns_completed']}")
+        time.sleep(1)
+    
+    # Stop process
+    controller.stop()
+    print("Winding process completed")
+
+# Disconnect
+api.disconnect()
+```
 
 ---
-
-*This README is automatically generated and updated by AI to ensure accuracy and completeness.*
+*This documentation is automatically generated by AI and updated on every push.*
 """
-        
-        with open(self.project_root / "README.md", 'w') as f:
-            f.write(readme)
-            
-    def _analyze_python_file(self, tree: ast.AST, filename: str) -> Dict[str, Any]:
-        """Analyze Python file and extract documentation"""
-        functions = []
-        classes = []
-        
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
-                functions.append({
-                    'name': node.name,
-                    'args': [arg.arg for arg in node.args.args],
-                    'docstring': ast.get_docstring(node),
-                    'line_number': node.lineno
-                })
-            elif isinstance(node, ast.ClassDef):
-                classes.append({
-                    'name': node.name,
-                    'docstring': ast.get_docstring(node),
-                    'line_number': node.lineno
-                })
-                
-        return {
-            'filename': filename,
-            'functions': functions,
-            'classes': classes
-        }
-        
-    def _analyze_cpp_file(self, content: str, filename: str) -> Dict[str, Any]:
-        """Analyze C++ file and extract documentation"""
-        functions = []
-        classes = []
-        
-        # Simple regex-based extraction
-        function_pattern = r'(?:^|\n)\s*(?:static\s+)?(?:inline\s+)?(?:virtual\s+)?(?:\w+\s+)*(\w+)\s*\([^)]*\)\s*(?:const\s*)?(?:\{|;)'
-        class_pattern = r'(?:^|\n)\s*class\s+(\w+)'
-        
-        for match in re.finditer(function_pattern, content, re.MULTILINE):
-            functions.append({
-                'name': match.group(1),
-                'line_number': content[:match.start()].count('\n') + 1
-            })
-            
-        for match in re.finditer(class_pattern, content, re.MULTILINE):
-            classes.append({
-                'name': match.group(1),
-                'line_number': content[:match.start()].count('\n') + 1
-            })
-            
-        return {
-            'filename': filename,
-            'functions': functions,
-            'classes': classes
-        }
-        
-    def _write_api_docs(self, api_docs: List[Dict[str, Any]], filename: str):
-        """Write API documentation to file"""
-        with open(self.docs_dir / filename, 'w') as f:
-            f.write(f"# API Documentation - {filename.replace('_', ' ').title()}\n\n")
-            f.write("*This documentation is automatically generated by AI.*\n\n")
-            
-            for file_docs in api_docs:
-                f.write(f"## {file_docs['filename']}\n\n")
-                
-                if file_docs['classes']:
-                    f.write("### Classes\n\n")
-                    for cls in file_docs['classes']:
-                        f.write(f"- **{cls['name']}** (line {cls['line_number']})\n")
-                        if cls.get('docstring'):
-                            f.write(f"  - {cls['docstring']}\n")
-                    f.write("\n")
-                
-                if file_docs['functions']:
-                    f.write("### Functions\n\n")
-                    for func in file_docs['functions']:
-                        f.write(f"- **{func['name']}** (line {func['line_number']})\n")
-                        if func.get('args'):
-                            f.write(f"  - Arguments: {', '.join(func['args'])}\n")
-                        if func.get('docstring'):
-                            f.write(f"  - {func['docstring']}\n")
-                    f.write("\n")
-                
-                f.write("---\n\n")
+    return content
+
+def generate_cpp_api():
+    """Generate C++ API documentation"""
+    content = """# C++ API Reference
+
+## ⚡ Pi Zero SKR Pico PUWinder C++ Firmware API
+
+**AI-Generated Documentation** - Last Updated: """ + datetime.now().strftime('%Y-%m-%d %H:%M:%S') + """
+
+### 📋 Overview
+
+The C++ firmware runs on the SKR Pico and provides real-time control of the winding machine hardware. It includes ISR-driven step generation, G-code parsing, and safety features.
+
+### 🏗️ Architecture
+
+#### Main Components
+- **main.cpp**: Application entry point and initialization
+- **gcode_interface.cpp**: G-code command parser and executor
+- **spindle.cpp**: BLDC motor control with Hall sensor feedback
+- **traverse_controller.cpp**: Stepper motor control
+- **move_queue.cpp**: Move queue with ISR-driven execution
+- **scheduler.cpp**: Hardware timer ISR scheduler
+
+### 🔧 Core Classes
+
+#### BLDC_MOTOR
+Controls the spindle BLDC motor with Hall sensor feedback.
+
+```cpp
+#include "spindle.h"
+
+// Create spindle controller
+BLDC_MOTOR* spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
+spindle_controller->init();
+
+// Get RPM
+float rpm = spindle_controller->get_rpm();
+
+// Set direction
+spindle_controller->set_direction(DIRECTION_CW);
+
+// Set brake
+spindle_controller->set_brake(true);
+```
+
+#### TraverseController
+Controls the traverse stepper motor.
+
+```cpp
+#include "traverse_controller.h"
+
+// Create traverse controller
+TraverseController* traverse_controller = new TraverseController();
+traverse_controller->init();
+
+// Move to position
+traverse_controller->move_to_position(50.0f);
+
+// Home axis
+traverse_controller->home();
+
+// Get current position
+float position = traverse_controller->get_current_position();
+```
+
+#### GCodeInterface
+Parses and executes G-code commands from the Pi Zero.
+
+```cpp
+#include "gcode_interface.h"
+
+// Create G-code interface
+GCodeInterface* gcode_interface = new GCodeInterface();
+
+// Parse command
+if (gcode_interface->parse_command("M3 S500")) {
+    // Execute command
+    gcode_interface->execute_command();
+}
+```
+
+#### MoveQueue
+Manages move chunks with ISR-driven execution.
+
+```cpp
+#include "move_queue.h"
+
+// Create move queue
+MoveQueue* move_queue = new MoveQueue();
+move_queue->init();
+
+// Push move chunk
+StepChunk chunk;
+// ... populate chunk ...
+move_queue->push_chunk(AXIS_TRAVERSE, chunk);
+
+// Check if axis is active
+bool active = move_queue->is_active(AXIS_TRAVERSE);
+```
+
+#### Scheduler
+Hardware timer ISR scheduler for real-time control.
+
+```cpp
+#include "scheduler.h"
+
+// Create scheduler
+Scheduler* scheduler = new Scheduler(move_queue);
+
+// Start scheduler
+scheduler->start(HEARTBEAT_US);
+
+// Check if running
+bool running = scheduler->is_running();
+```
+
+### 🎯 G-code Commands
+
+#### Movement Commands
+```cpp
+// G0/G1 - Linear interpolation
+gcode_interface->parse_command("G1 Y50 F1000");
+
+// G28 - Home all axes
+gcode_interface->parse_command("G28");
+
+// G4 - Dwell with planner sync
+gcode_interface->parse_command("G4 P1000");
+```
+
+#### Spindle Commands
+```cpp
+// M3 - Spindle clockwise
+gcode_interface->parse_command("M3 S500");
+
+// M4 - Spindle counter-clockwise
+gcode_interface->parse_command("M4 S1000");
+
+// M5 - Stop spindle
+gcode_interface->parse_command("M5");
+
+// S - Set spindle speed
+gcode_interface->parse_command("S1500");
+```
+
+#### Safety Commands
+```cpp
+// M0 - Feed hold
+gcode_interface->parse_command("M0");
+
+// M1 - Resume from hold
+gcode_interface->parse_command("M1");
+
+// M112 - Emergency stop
+gcode_interface->parse_command("M112");
+
+// M410 - Quick stop
+gcode_interface->parse_command("M410");
+
+// M999 - Reset from emergency stop
+gcode_interface->parse_command("M999");
+```
+
+### 🛡️ Safety Features
+
+#### Move Queue Safety
+```cpp
+// Pause feeding
+move_queue->pause_feeding();
+
+// Resume feeding
+move_queue->resume_feeding();
+
+// Check if feeding is paused
+bool paused = move_queue->is_feeding_paused();
+
+// Emergency stop
+move_queue->emergency_stop();
+
+// Check if emergency stop is active
+bool emergency = move_queue->is_emergency_stopped();
+```
+
+#### Spindle Safety
+```cpp
+// Set spindle brake
+spindle_controller->set_brake(true);
+
+// Check brake status
+bool brake = spindle_controller->get_brake();
+
+// Set direction
+spindle_controller->set_direction(DIRECTION_CW);
+```
+
+### ⚡ ISR and Real-time Control
+
+#### Hardware Timer ISR
+```cpp
+// Scheduler ISR handler
+void scheduler_isr() {
+    // Process move queues
+    if (move_queue) {
+        move_queue->handle_isr_tick();
+    }
+    
+    // Update encoder
+    if (spindle_controller) {
+        spindle_controller->handle_pulse();
+    }
+}
+```
+
+#### Step Generation
+```cpp
+// Traverse step ISR
+void traverse_step_isr() {
+    if (traverse_controller) {
+        traverse_controller->stepper_step();
+    }
+}
+```
+
+### 📊 Status and Monitoring
+
+#### Machine Status
+```cpp
+// Get spindle status
+float rpm = spindle_controller->get_rpm();
+bool running = !spindle_controller->get_brake();
+
+// Get traverse status
+float position = traverse_controller->get_current_position();
+bool homed = traverse_controller->is_homed();
+
+// Get move queue status
+uint32_t depth = move_queue->get_queue_depth(AXIS_TRAVERSE);
+bool active = move_queue->is_active(AXIS_TRAVERSE);
+```
+
+#### Scheduler Status
+```cpp
+// Get scheduler information
+bool running = scheduler->is_running();
+uint32_t ticks = scheduler->get_tick_count();
+```
+
+### 🔧 Hardware Configuration
+
+#### Pin Definitions
+```cpp
+// From config.h
+#define SPINDLE_PWM_PIN 24
+#define SPINDLE_ENABLE_PIN 21
+#define SPINDLE_HALL_PIN 22
+#define SPINDLE_DIR_PIN 4
+#define SPINDLE_BRAKE_PIN 3
+
+#define TRAVERSE_STEP_PIN 6
+#define TRAVERSE_DIR_PIN 5
+#define TRAVERSE_ENA_PIN 7
+#define TRAVERSE_HOME_PIN 16
+```
+
+#### PWM Configuration
+```cpp
+// Initialize PWM
+gpio_set_function(SPINDLE_PWM_PIN, GPIO_FUNC_PWM);
+uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
+uint chan = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
+pwm_set_wrap(slice_num, 65535);
+pwm_set_chan_level(slice_num, chan, 0);
+pwm_set_enabled(slice_num, true);
+```
+
+### 🧪 Testing and Validation
+
+#### Unit Testing
+```cpp
+// Test spindle control
+void test_spindle() {
+    BLDC_MOTOR* spindle = new BLDC_MOTOR(SPINDLE_HALL_PIN);
+    spindle->init();
+    
+    // Test direction
+    spindle->set_direction(DIRECTION_CW);
+    assert(spindle->get_direction() == DIRECTION_CW);
+    
+    // Test brake
+    spindle->set_brake(true);
+    assert(spindle->get_brake() == true);
+}
+```
+
+#### Integration Testing
+```cpp
+// Test G-code interface
+void test_gcode() {
+    GCodeInterface* gcode = new GCodeInterface();
+    
+    // Test parsing
+    assert(gcode->parse_command("M3 S500"));
+    assert(gcode->get_current_command() == TOKEN_M3);
+    
+    // Test execution
+    assert(gcode->execute_command());
+}
+```
+
+### 📈 Performance Optimization
+
+#### ISR Optimization
+```cpp
+// Minimize ISR execution time
+void scheduler_isr() {
+    // Only essential operations in ISR
+    move_queue->handle_isr_tick();
+    
+    // Defer non-critical operations
+    if (user_callback) {
+        user_callback(user_callback_data);
+    }
+}
+```
+
+#### Memory Management
+```cpp
+// Efficient move queue
+class MoveQueue {
+private:
+    StepChunk queues[2][128];  // Fixed-size arrays
+    volatile uint16_t head[2];
+    volatile uint16_t tail[2];
+};
+```
+
+### 🔄 Error Handling
+
+#### Command Validation
+```cpp
+// Validate G-code parameters
+bool GCodeInterface::validate_parameters() {
+    if (params.has_S && (params.S < 0 || params.S > 3000)) {
+        set_error("RPM out of range (0-3000)");
+        return false;
+    }
+    return true;
+}
+```
+
+#### Hardware Error Handling
+```cpp
+// Check hardware status
+bool check_hardware() {
+    if (!spindle_controller) {
+        printf("ERROR: Spindle controller not initialized\n");
+        return false;
+    }
+    return true;
+}
+```
+
+### 📚 Examples
+
+#### Complete Initialization
+```cpp
+int main() {{
+    stdio_init_all();
+    
+    // Initialize UART
+    uart_init(PI_UART_ID, PI_UART_BAUD);
+    gpio_set_function(PI_UART_TX, GPIO_FUNC_UART);
+    gpio_set_function(PI_UART_RX, GPIO_FUNC_UART);
+    
+    // Initialize spindle
+    spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
+    spindle_controller->init();
+    
+    // Initialize traverse
+    traverse_controller = new TraverseController();
+    traverse_controller->init();
+    
+    // Initialize move queue
+    move_queue = new MoveQueue();
+    move_queue->init();
+    
+    // Initialize scheduler
+    scheduler = new Scheduler(move_queue);
+    scheduler->start(HEARTBEAT_US);
+    
+    // Initialize G-code interface
+    gcode_interface = new GCodeInterface();
+    
+    printf("Pico Spindle Controller Ready\\n");
+    
+    // Main loop
+    while (true) {{
+        // Process UART commands
+        if (uart_is_readable(PI_UART_ID)) {{
+            char buffer[256];
+            uart_read_blocking(PI_UART_ID, buffer, 1);
+            // ... process command ...
+        }}
+    }}
+}}
+```
+
+---
+*This documentation is automatically generated by AI and updated on every push.*
+"""
+    return content
 
 def main():
-    parser = argparse.ArgumentParser(description='AI Documentation Generator')
-    parser.add_argument('--project-root', default='.', help='Project root directory')
-    parser.add_argument('--output-dir', default='docs', help='Output directory for documentation')
+    """Generate all documentation"""
+    print("🤖 Generating AI Documentation...")
     
-    args = parser.parse_args()
+    # Create docs directory if it doesn't exist
+    os.makedirs('docs', exist_ok=True)
     
-    generator = AIDocsGenerator(args.project_root)
-    generator.generate_all_docs()
+    # Generate documentation files
+    docs = {
+        'project_overview.md': generate_project_overview(),
+        'setup_guide.md': generate_setup_guide(),
+        'troubleshooting_guide.md': generate_troubleshooting_guide(),
+        'python_api.md': generate_python_api(),
+        'cpp_api.md': generate_cpp_api()
+    }
     
-    print(f"\n📚 Documentation generated in: {generator.docs_dir}")
-    print("Files created:")
-    for file in generator.docs_dir.glob("*.md"):
-        print(f"  - {file.name}")
+    # Write documentation files
+    for filename, content in docs.items():
+        filepath = os.path.join('docs', filename)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"✅ Generated {filepath}")
+    
+    print(f"🎉 Generated {len(docs)} documentation files")
+    print("📚 Documentation available in docs/ directory")
 
 if __name__ == "__main__":
     main()

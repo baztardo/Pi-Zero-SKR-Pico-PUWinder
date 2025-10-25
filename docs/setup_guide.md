@@ -1,42 +1,76 @@
-# 🚀 Setup Guide - Pi Zero SKR Pico PUWinder
+# Setup Guide
 
-## 🤖 AI-Generated Setup Instructions
+## 🛠️ Pi Zero SKR Pico PUWinder Setup
 
-This guide is automatically generated to ensure it matches your current codebase.
+**AI-Generated Documentation** - Last Updated: 2025-10-25 03:51:01
 
-## 📋 Prerequisites
+### 📋 Prerequisites
 
-### Hardware Requirements
-- **Raspberry Pi Zero W** (or Pi Zero 2 W)
-- **SKR Pico v1.0** (or compatible)
-- **BLDC Motor** with Hall sensors
-- **Stepper Motor** for traverse
-- **Power Supply** 5V 3A minimum
-- **SD Card** 32GB Class 10 minimum
+#### Hardware Requirements
+- Raspberry Pi Zero (or Zero W)
+- SKR Pico v1.0 microcontroller
+- BLDC motor with Hall sensor
+- Stepper motor with TMC2209 driver
+- UART connection between Pi Zero and Pico
 
-### Software Requirements
-- **Python 3.11+** on Pi Zero
-- **Pico SDK** for firmware development
-- **Git** for version control
-- **GitHub account** for CI/CD
+#### Software Requirements
+- Raspberry Pi OS (latest)
+- Python 3.11+
+- Pico SDK (for firmware compilation)
+- CMake (for building firmware)
 
-## 🔧 Hardware Setup
+### 🔧 Hardware Setup
 
-### 1. Pi Zero Configuration
+#### 1. Pi Zero Configuration
 ```bash
 # Enable UART
 sudo raspi-config
 # Navigate to: Interfacing Options → Serial
-# Select: Yes (login shell disabled, serial enabled)
+# Enable: Would you like a login shell to be accessible over serial? → No
+# Enable: Would you like the serial port hardware to be enabled? → Yes
+```
 
+#### 2. UART Connection
+```
+Pi Zero          SKR Pico
+GPIO 14 (TXD) →  GPIO 1 (RX)
+GPIO 15 (RXD) ←  GPIO 0 (TX)
+GND           →  GND
+```
+
+#### 3. Motor Connections
+```
+Spindle (BLDC):
+- PWM: GPIO 24
+- Enable: GPIO 21
+- Direction: GPIO 4
+- Brake: GPIO 3
+- Hall Sensor: GPIO 22
+
+Traverse (Stepper):
+- Step: GPIO 6
+- Direction: GPIO 5
+- Enable: GPIO 7
+- Home Switch: GPIO 16
+```
+
+### 💻 Software Installation
+
+#### 1. Pi Zero Setup
+```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install dependencies
-sudo apt install -y python3-pip git cmake
+# Install Python dependencies
+sudo apt install python3-serial python3-pip -y
+pip3 install pyserial pytest
+
+# Clone repository
+git clone https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder.git
+cd Pi-Zero-SKR-Pico-PUWinder
 ```
 
-### 2. SKR Pico Configuration
+#### 2. Pico Firmware Setup
 ```bash
 # Install Pico SDK
 git clone https://github.com/raspberrypi/pico-sdk.git
@@ -44,219 +78,135 @@ cd pico-sdk
 git submodule update --init
 
 # Set environment variable
-echo 'export PICO_SDK_PATH=$PWD' >> ~/.bashrc
-source ~/.bashrc
-```
+export PICO_SDK_PATH=/path/to/pico-sdk
 
-### 3. Wiring Connections
-```
-Pi Zero          SKR Pico
-GPIO 14 (TXD) →  GPIO 0 (RX)
-GPIO 15 (RXD) →  GPIO 1 (TX)
-GND           →  GND
-5V            →  VIN
-```
-
-## 💻 Software Setup
-
-### 1. Clone Repository
-```bash
-git clone https://github.com/your-username/Pi-Zero-SKR-Pico-PUWinder.git
-cd Pi-Zero-SKR-Pico-PUWinder
-```
-
-### 2. Pi Zero Setup
-```bash
-cd pi_zero
-pip install -r requirements.txt
-
-# Test UART communication
-python test_uart.py
-
-# Test spindle control
-python test_spindle.py
-```
-
-### 3. Pico Firmware Setup
-```bash
+# Build firmware
 cd pico_firmware
 mkdir build && cd build
 cmake ..
-make
-
-# Flash firmware to Pico
-cp pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
+make -j4
 ```
 
-## 🧪 Testing Setup
+### ⚙️ Configuration
 
-### 1. Basic Communication Test
+#### 1. Machine Configuration
+Edit `pi_zero/machine.cfg` to match your hardware:
+
+```ini
+# Spindle Configuration
+[spindle]
+pin: gpio24          # PWM output
+enable_pin: gpio21   # Enable pin
+direction_pin: gpio4 # Direction control
+brake_pin: gpio3     # Brake control
+hall_pin: gpio22     # Hall sensor
+
+# Traverse Configuration
+[stepper_y]
+step_pin: gpio6      # Step pin
+dir_pin: gpio5       # Direction pin
+enable_pin: !gpio7   # Enable pin
+position_endstop: gpio16  # Home switch
+```
+
+#### 2. Test Configuration
 ```bash
-# On Pi Zero
-cd pi_zero
-python test_uart.py
+# Test UART communication
+python3 pi_zero/test_uart.py
 
-# Expected output:
-# ✅ Opened /dev/serial0 @ 115200 baud
-# 📤 Sending: PING
-# 📥 Waiting for response...
-# ✅ Received: 'PONG'
-# 🎉 SUCCESS! UART communication working!
+# Test G-code commands
+python3 pi_zero/test_gcode_safety.py
+
+# Test comprehensive features
+python3 pi_zero/test_comprehensive_features.py
 ```
 
-### 2. Spindle Control Test
+### 🧪 Testing
+
+#### 1. Basic Connectivity Test
 ```bash
-# Test spindle commands
-python test_spindle.py
-
-# Expected output:
-# ✅ Spindle control test passed
-# ✅ RPM control working
-# ✅ Direction control working
+python3 pi_zero/test_uart.py
 ```
 
-### 3. G-code Interface Test
+Expected output:
+```
+✅ Opened /dev/serial0 @ 115200 baud
+✅ Received: 'PONG'
+✅ Received: Pico_Spindle_v1.0
+```
+
+#### 2. G-code Safety Test
 ```bash
-# Test G-code processing
-python test_gcode_interface.py
-
-# Expected output:
-# ✅ G-code parsing working
-# ✅ Command execution working
-# ✅ Error handling working
+python3 pi_zero/test_gcode_safety.py
 ```
 
-## 🔄 Development Setup
+Expected output:
+```
+✅ M0 (feed hold) - OK
+✅ M1 (resume from hold) - OK
+✅ M112 (emergency stop) - OK
+✅ M999 (reset from emergency stop) - OK
+```
 
-### 1. GitHub Integration
+#### 3. Comprehensive Feature Test
 ```bash
-# Configure Git
-git config --global user.name "Your Name"
-git config --global user.email "your.email@example.com"
-
-# Set up GitHub CLI
-gh auth login
+python3 pi_zero/test_comprehensive_features.py
 ```
 
-### 2. Cursor IDE Setup
+### 🚀 Running the System
+
+#### 1. Start the Main Controller
 ```bash
-# Install Cursor
-# Download from: https://cursor.sh
-
-# Open project
-cursor .
-
-# Install extensions:
-# - Python
-# - C/C++
-# - GitHub Copilot
-# - GitHub Copilot Chat
+python3 pi_zero/main_controller.py
 ```
 
-### 3. GitHub Codespaces (Alternative)
-```bash
-# Go to GitHub repository
-# Click "Code" → "Codespaces"
-# Click "Create codespace on main"
-# Wait for environment setup
+#### 2. Basic G-code Commands
+```python
+from main_controller import GCodeAPI
+
+# Connect to Pico
+api = GCodeAPI()
+api.connect()
+
+# Start spindle
+api.set_spindle_rpm(500, 'CW')
+
+# Move traverse
+api.move_traverse(50.0, 1000.0)
+
+# Stop spindle
+api.stop_spindle()
 ```
 
-## 🚀 Quick Start
+### 🔧 Troubleshooting
 
-### 1. Start the System
-```bash
-# On Pi Zero
-cd pi_zero
-python main_controller.py
-```
+#### Common Issues
 
-### 2. Send Test Commands
-```bash
-# In another terminal
-python test_uart.py
+1. **UART Communication Failed**
+   - Check wiring connections
+   - Verify UART is enabled in raspi-config
+   - Check baud rate (115200)
 
-# Send G-code commands
-echo "M3 S1000" | python uart_api.py
-echo "G1 Y10 F1000" | python uart_api.py
-echo "M5" | python uart_api.py
-```
+2. **Firmware Not Responding**
+   - Reflash Pico firmware
+   - Check power supply
+   - Verify UART pins
 
-### 3. Monitor Performance
-```bash
-# Check system status
-python test_github_integration.py
+3. **Motor Not Moving**
+   - Check motor connections
+   - Verify enable pins
+   - Check power supply
 
-# Monitor logs
-tail -f logs/winder.log
-```
+4. **Hall Sensor Not Working**
+   - Check sensor wiring
+   - Verify pull-up resistors
+   - Check signal levels
 
-## 🔧 Troubleshooting
+### 📞 Support
 
-### Common Issues
-
-#### UART Communication Fails
-```bash
-# Check UART is enabled
-sudo raspi-config
-# Interfacing Options → Serial → Yes
-
-# Check permissions
-sudo usermod -a -G dialout $USER
-# Logout and login again
-```
-
-#### Pico Not Responding
-```bash
-# Check firmware is flashed
-ls /media/your-username/RPI-RP2/
-
-# Reflash firmware
-cp pico_firmware/build/pico_spindle_controller.uf2 /media/your-username/RPI-RP2/
-```
-
-#### Python Dependencies Missing
-```bash
-# Install missing packages
-pip install pyserial pytest
-
-# Or install all requirements
-pip install -r requirements.txt
-```
-
-### Getting Help
-
-#### Check Logs
-```bash
-# System logs
-sudo journalctl -u your-service
-
-# Application logs
-tail -f logs/winder.log
-```
-
-#### GitHub Issues
-- Use the issue templates in the repository
-- Include hardware configuration
-- Provide error logs
-- Describe steps to reproduce
-
-## 📚 Next Steps
-
-### 1. Explore Examples
-- Check `examples/` directory
-- Run sample programs
-- Modify parameters
-
-### 2. Read Documentation
-- API documentation in `docs/`
-- Configuration guide
-- Troubleshooting tips
-
-### 3. Join Community
-- GitHub Discussions
-- Issue tracker
-- Pull requests
+- **GitHub Issues**: [Report Issues](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/issues)
+- **Documentation**: [Project Docs](https://baztardo.github.io/Pi-Zero-SKR-Pico-PUWinder/)
+- **CI/CD Status**: [GitHub Actions](https://github.com/baztardo/Pi-Zero-SKR-Pico-PUWinder/actions)
 
 ---
-
-*This setup guide is automatically generated and updated by AI to ensure accuracy.*
+*This documentation is automatically generated by AI and updated on every push.*
