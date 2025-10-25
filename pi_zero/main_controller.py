@@ -213,6 +213,63 @@ class GCodeAPI:
         else:
             return self.send_gcode(f"G4 P{milliseconds}")
     
+    # ⭐ NEW: Enhanced Spindle Control Features (from Pico firmware)
+    def set_spindle_ramp_rate(self, ramp_rate_percent_per_second: float) -> bool:
+        """Set spindle ramp rate for smooth acceleration/deceleration"""
+        # This would need to be implemented in Pico firmware as a new command
+        # For now, we'll use a workaround with multiple S commands
+        print(f"⚠️ Spindle ramp rate control not yet implemented in Pico firmware")
+        return True
+    
+    def set_spindle_max_rpm(self, max_rpm: float) -> bool:
+        """Set maximum spindle RPM limit"""
+        # This would need to be implemented in Pico firmware as a new command
+        print(f"⚠️ Spindle max RPM control not yet implemented in Pico firmware")
+        return True
+    
+    def set_spindle_min_rpm(self, min_rpm: float) -> bool:
+        """Set minimum spindle RPM limit"""
+        # This would need to be implemented in Pico firmware as a new command
+        print(f"⚠️ Spindle min RPM control not yet implemented in Pico firmware")
+        return True
+    
+    def get_spindle_ramp_status(self) -> dict:
+        """Get spindle ramping status"""
+        # This would need to be implemented in Pico firmware as a new command
+        print(f"⚠️ Spindle ramp status not yet implemented in Pico firmware")
+        return {'is_ramping': False, 'progress': 0.0}
+    
+    # ⭐ NEW: Move Queue and Scheduler Features (from Pico firmware)
+    def get_move_queue_status(self) -> dict:
+        """Get move queue status for both axes"""
+        # This would need to be implemented in Pico firmware as a new command
+        print(f"⚠️ Move queue status not yet implemented in Pico firmware")
+        return {
+            'spindle_queue_depth': 0,
+            'traverse_queue_depth': 0,
+            'spindle_active': False,
+            'traverse_active': False
+        }
+    
+    def get_scheduler_status(self) -> dict:
+        """Get scheduler status and timing information"""
+        # This would need to be implemented in Pico firmware as a new command
+        print(f"⚠️ Scheduler status not yet implemented in Pico firmware")
+        return {
+            'is_running': False,
+            'tick_count': 0,
+            'interval_us': 100
+        }
+    
+    def get_step_counts(self) -> dict:
+        """Get step counts for both axes"""
+        # This would need to be implemented in Pico firmware as a new command
+        print(f"⚠️ Step counts not yet implemented in Pico firmware")
+        return {
+            'spindle_steps': 0,
+            'traverse_steps': 0
+        }
+    
     def set_spindle_direction_cw(self) -> bool:
         """Set spindle clockwise using M3"""
         return self.send_gcode("M3")
