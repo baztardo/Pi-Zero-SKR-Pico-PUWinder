@@ -130,8 +130,7 @@ int main() {
     char buffer[256];  // Increased buffer size (from Code-snippets)
     int buffer_pos = 0;
     
-    // Status update timing (from Code-snippets)
-    uint32_t last_status_time = 0;
+    // Status updates disabled to prevent UART flooding
     
     printf("Pi Zero SKR Pico PUWinder - Main Control Loop\n");
     printf("Ready for commands...\n");
@@ -153,23 +152,8 @@ int main() {
             }
         }
         
-        // Update status (from Code-snippets improvement)
-        uint32_t current_time = time_us_32();
-        if (current_time - last_status_time > 1000000) {  // Every 1 second
-            float spindle_rpm = 0.0f;
-            float traverse_pos = 0.0f;
-            
-            if (spindle_controller) {
-                spindle_rpm = spindle_controller->get_rpm();
-            }
-            if (traverse_controller) {
-                traverse_pos = traverse_controller->get_current_position();
-            }
-            
-            printf("Status - Spindle: %.1f RPM, Position: %.2f mm\n", 
-                   spindle_rpm, traverse_pos);
-            last_status_time = current_time;
-        }
+        // Status updates disabled to prevent UART flooding
+        // Status can be requested via STATUS command instead
         
         // Klipper-style: Scheduler handles all stepping via ISR
         // No manual step generation needed - ISR handles everything

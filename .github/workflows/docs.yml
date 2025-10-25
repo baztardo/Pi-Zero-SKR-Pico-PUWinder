@@ -4,19 +4,19 @@ on:
   push:
     branches: [main, develop]
     paths:
-      - 'pi_zero/**'
-      - 'pico_firmware/**'
-      - 'scripts/**'
+      - "pi_zero/**"
+      - "pico_firmware/**"
+      - "scripts/**"
   pull_request:
     branches: [main]
     paths:
-      - 'pi_zero/**'
-      - 'pico_firmware/**'
-      - 'scripts/**'
+      - "pi_zero/**"
+      - "pico_firmware/**"
+      - "scripts/**"
   workflow_dispatch:
   schedule:
     # Run daily at 2 AM UTC
-    - cron: '0 2 * * *'
+    - cron: "0 2 * * *"
 
 jobs:
   # =============================================================================
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch full history for better analysis
+          fetch-depth: 0 # Fetch full history for better analysis
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -176,13 +176,13 @@ jobs:
         run: |
           # Check for broken links
           find docs -name "*.md" -exec markdown-link-check {} \; || echo "Link check completed"
-          
+
           # Check markdown syntax
           find docs -name "*.md" -exec markdownlint {} \; || echo "Markdown lint completed"
-          
+
           # Check file sizes
           find docs -name "*.md" -exec wc -l {} \; | sort -n
-          
+
           echo "Documentation quality check completed"
 
       - name: Generate documentation statistics
@@ -191,7 +191,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| File | Lines | Size |" >> $GITHUB_STEP_SUMMARY
           echo "|------|-------|------|" >> $GITHUB_STEP_SUMMARY
-          
+
           for file in docs/*.md; do
             if [ -f "$file" ]; then
               lines=$(wc -l < "$file")

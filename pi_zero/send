@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+"""
+Simple Command Wrapper
+Usage: ./send "M3 S500"
+"""
+
+import sys
+import os
+
+# Add current directory to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from pico_controller import PicoController
+
+def main():
+    if len(sys.argv) != 2:
+        print("Usage: ./send \"COMMAND\"")
+        print("Examples:")
+        print("  ./send \"PING\"")
+        print("  ./send \"M3 S500\"")
+        print("  ./send \"G1 Y50 F1000\"")
+        print("  ./send \"M5\"")
+        sys.exit(1)
+    
+    command = sys.argv[1]
+    controller = PicoController()
+    
+    if controller.connect():
+        controller.send_command(command)
+        controller.disconnect()
+    else:
+        print("❌ Could not connect to Pico")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
