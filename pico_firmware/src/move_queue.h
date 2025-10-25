@@ -101,6 +101,37 @@ public:
      * @return Number of chunks in queue
      */ 
     uint32_t get_queue_depth(uint8_t axis) const;
+    
+    // =========================================================================
+    // ⭐ NEW: FluidNC-style Safety and Feed Control Methods
+    // =========================================================================
+    
+    /**
+     * @brief Pause accepting new moves (feed hold)
+     */
+    void pause_feeding();
+    
+    /**
+     * @brief Resume accepting new moves
+     */
+    void resume_feeding();
+    
+    /**
+     * @brief Check if feeding is paused
+     * @return true if paused
+     */
+    bool is_feeding_paused() const { return feeding_paused; }
+    
+    /**
+     * @brief Emergency stop all movement
+     */
+    void emergency_stop();
+    
+    /**
+     * @brief Check if emergency stop is active
+     * @return true if emergency stop is active
+     */
+    bool is_emergency_stopped() const { return emergency_stop_active; }
 
 private:
     StepChunk queues[2][128];  // NUM_AXES x MOVE_CHUNKS_CAPACITY
@@ -111,6 +142,10 @@ private:
     bool active_running[2];
     uint32_t last_step_time[2];
     int32_t step_count[2];
+    
+    // ⭐ NEW: FluidNC-style safety and feed control
+    bool feeding_paused;
+    bool emergency_stop_active;
     
     /**
      * @brief Execute a step pulse on given pin

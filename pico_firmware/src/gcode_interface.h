@@ -96,6 +96,12 @@ private:
     GCodeTokenType parse_token(const char* command);
     bool parse_parameters_tokenized(const char* cmd);
     bool validate_parameters();
+    
+    // ⭐ NEW: FluidNC-style enhanced validation
+    bool validate_coordinate_ranges();
+    bool validate_feed_rate();
+    bool validate_spindle_speed();
+    bool validate_pin_number();
     float parse_float(const char* str);
     
     // Command execution

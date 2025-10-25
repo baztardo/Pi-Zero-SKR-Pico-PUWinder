@@ -827,3 +827,48 @@ bool GCodeInterface::validate_parameters() {
     
     return true;
 }
+
+// =============================================================================
+// ⭐ NEW: FluidNC-style Enhanced Validation Methods
+// =============================================================================
+
+bool GCodeInterface::validate_coordinate_ranges() {
+    // Validate coordinate ranges based on machine limits
+    if (params.has_X && (params.X < -1000.0f || params.X > 1000.0f)) {
+        set_error("X coordinate out of range (-1000 to 1000)");
+        return false;
+    }
+    if (params.has_Y && (params.Y < -1000.0f || params.Y > 1000.0f)) {
+        set_error("Y coordinate out of range (-1000 to 1000)");
+        return false;
+    }
+    if (params.has_Z && (params.Z < -1000.0f || params.Z > 1000.0f)) {
+        set_error("Z coordinate out of range (-1000 to 1000)");
+        return false;
+    }
+    return true;
+}
+
+bool GCodeInterface::validate_feed_rate() {
+    if (params.has_F && (params.F < 0.1f || params.F > 10000.0f)) {
+        set_error("Feed rate out of range (0.1 to 10000 mm/min)");
+        return false;
+    }
+    return true;
+}
+
+bool GCodeInterface::validate_spindle_speed() {
+    if (params.has_S && (params.S < 0.0f || params.S > 10000.0f)) {
+        set_error("Spindle speed out of range (0 to 10000 RPM)");
+        return false;
+    }
+    return true;
+}
+
+bool GCodeInterface::validate_pin_number() {
+    if (params.has_P && (params.P < 0.0f || params.P > 40.0f)) {
+        set_error("Pin number out of range (0 to 40)");
+        return false;
+    }
+    return true;
+}

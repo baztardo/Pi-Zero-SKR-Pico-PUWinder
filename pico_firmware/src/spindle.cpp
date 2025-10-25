@@ -25,7 +25,14 @@ BLDC_MOTOR::BLDC_MOTOR(uint pulse_pin)
     , pulses_per_revolution(BLDC_DEFAULT_PPR)  // From config.h
     , direction(DIRECTION_CW)
     , brake(false)
-
+    // ⭐ NEW: Initialize FluidNC-style enhanced spindle control
+    , target_rpm(0.0f)
+    , current_rpm(0.0f)
+    , ramp_rate_percent_per_second(10.0f)  // Default 10% per second
+    , max_rpm(3000.0f)
+    , min_rpm(0.0f)
+    , is_ramping_to_target(false)
+    , ramp_start_time(0)
 {
     g_speed_pulse_instance = this;
 }
@@ -176,6 +183,40 @@ void BLDC_MOTOR::set_pwm_duty(float duty_percent) {
     
     pwm_set_chan_level(slice_num, channel, pwm_level);
     printf("Set spindle PWM to %.1f%% (level: %d)\n", duty_percent, pwm_level);
+}
+
+// =============================================================================
+// ⭐ NEW: FluidNC-style Enhanced Spindle Control Methods
+// =============================================================================
+
+void BLDC_MOTOR::set_ramp_rate(float ramp_rate_percent_per_second) {
+    this->ramp_rate_percent_per_second = ramp_rate_percent_per_second;
+    printf("Spindle ramp rate set to %.1f%%/sec\n", ramp_rate_percent_per_second);
+}
+
+void BLDC_MOTOR::set_max_rpm(float max_rpm) {
+    this->max_rpm = max_rpm;
+    printf("Spindle max RPM set to %.1f\n", max_rpm);
+}
+
+void BLDC_MOTOR::set_min_rpm(float min_rpm) {
+    this->min_rpm = min_rpm;
+    printf("Spindle min RPM set to %.1f\n", min_rpm);
+}
+
+bool BLDC_MOTOR::is_ramping() const {
+    return is_ramping_to_target;
+}
+
+float BLDC_MOTOR::get_ramp_progress() const {
+    if (!is_ramping_to_target) return 1.0f;
+    
+    uint32_t current_time = time_us_32();
+    uint32_t ramp_duration = current_time - ramp_start_time;
+    
+    // Calculate progress based on ramp rate
+    float progress = (ramp_duration / 1000000.0f) * ramp_rate_percent_per_second / 100.0f;
+    return fminf(1.0f, fmaxf(0.0f, progress));
 }
 
 void BLDC_MOTOR::set_rpm_pwm(float rpm) {

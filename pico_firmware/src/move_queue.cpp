@@ -8,12 +8,17 @@
 #include "pico/stdlib.h"
 #include <algorithm>
 #include <cstring>
+#include <cstdio>
 
 MoveQueue::MoveQueue() {
     memset((void*)head, 0, sizeof(head));
     memset((void*)tail, 0, sizeof(tail));
     memset(active_running, 0, sizeof(active_running));
     memset(step_count, 0, sizeof(step_count));
+    
+    // ⭐ NEW: Initialize FluidNC-style safety and feed control
+    feeding_paused = false;
+    emergency_stop_active = false;
 }
 
 void MoveQueue::init() {
@@ -172,4 +177,32 @@ void MoveQueue::handle_isr_tick() {
     axis_isr_handler(second);
 
     last_axis = second;
+}
+
+// =============================================================================
+// ⭐ NEW: FluidNC-style Safety and Feed Control Methods
+// =============================================================================
+
+void MoveQueue::pause_feeding() {
+    feeding_paused = true;
+    printf("[MoveQueue] Feed hold activated\n");
+}
+
+void MoveQueue::resume_feeding() {
+    feeding_paused = false;
+    printf("[MoveQueue] Feed hold released\n");
+}
+
+void MoveQueue::emergency_stop() {
+    emergency_stop_active = true;
+    feeding_paused = true;
+    
+    // Stop all active movements
+    for (uint8_t axis = 0; axis < NUM_AXES; axis++) {
+        active_running[axis] = false;
+        clear_queue(axis);
+        set_enable(axis, false);  // Disable motors
+    }
+    
+    printf("[MoveQueue] EMERGENCY STOP ACTIVATED\n");
 }

@@ -45,6 +45,13 @@ public:
     void set_pwm_duty(float duty_percent);
     void set_rpm_pwm(float rpm);
     
+    // ⭐ NEW: FluidNC-style enhanced spindle control
+    void set_ramp_rate(float ramp_rate_percent_per_second);
+    void set_max_rpm(float max_rpm);
+    void set_min_rpm(float min_rpm);
+    bool is_ramping() const;
+    float get_ramp_progress() const;
+    
     
 private:
     uint pulse_pin;
@@ -56,6 +63,15 @@ private:
     uint pulses_per_revolution;
     MotorDirection direction = DIRECTION_CW;  // Default
     bool brake = false;
+    
+    // ⭐ NEW: FluidNC-style enhanced spindle control
+    float target_rpm;
+    float current_rpm;
+    float ramp_rate_percent_per_second;
+    float max_rpm;
+    float min_rpm;
+    bool is_ramping_to_target;
+    uint32_t ramp_start_time;
     
     static void isr_wrapper(uint gpio, uint32_t events);
     void handle_pulse();
