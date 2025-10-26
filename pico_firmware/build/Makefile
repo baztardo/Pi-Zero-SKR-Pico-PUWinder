@@ -1986,6 +1986,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/BLDCRPMSensor.o: src/BLDCRPMSensor.cpp.o
+.PHONY : src/BLDCRPMSensor.o
+
+# target to build an object file
+src/BLDCRPMSensor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/BLDCRPMSensor.cpp.o
+.PHONY : src/BLDCRPMSensor.cpp.o
+
+src/BLDCRPMSensor.i: src/BLDCRPMSensor.cpp.i
+.PHONY : src/BLDCRPMSensor.i
+
+# target to preprocess a source file
+src/BLDCRPMSensor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/BLDCRPMSensor.cpp.i
+.PHONY : src/BLDCRPMSensor.cpp.i
+
+src/BLDCRPMSensor.s: src/BLDCRPMSensor.cpp.s
+.PHONY : src/BLDCRPMSensor.s
+
+# target to generate assembly for a file
+src/BLDCRPMSensor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/BLDCRPMSensor.cpp.s
+.PHONY : src/BLDCRPMSensor.cpp.s
+
 src/gcode_interface.o: src/gcode_interface.cpp.o
 .PHONY : src/gcode_interface.o
 
@@ -2416,6 +2440,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... src/BLDCRPMSensor.o"
+	@echo "... src/BLDCRPMSensor.i"
+	@echo "... src/BLDCRPMSensor.s"
 	@echo "... src/gcode_interface.o"
 	@echo "... src/gcode_interface.i"
 	@echo "... src/gcode_interface.s"

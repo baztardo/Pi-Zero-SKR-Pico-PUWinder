@@ -17,15 +17,17 @@ static BLDC_MOTOR* g_speed_pulse_instance = nullptr;
 // =============================================================================
 BLDC_MOTOR::BLDC_MOTOR(uint pulse_pin)
     : pulse_pin(pulse_pin)
-    , edge_count(0)
+    , pulse_index(0)
     , last_edge_time(0)
+    , edge_count(0)
     , measured_rpm(0.0f)
-    , pulse_frequency(0.0f)
-    , last_rpm_calculation_time(0)
+    , filtered_rpm(0.0f)
+    , last_rpm_update(0)
+    , instantaneous_rpm(0.0f)
+    , last_pulse_period(0)
     , pulses_per_revolution(BLDC_DEFAULT_PPR)  // From config.h
     , direction(DIRECTION_CW)
     , brake(false)
-    // ⭐ NEW: Initialize FluidNC-style enhanced spindle control
     , target_rpm(0.0f)
     , current_rpm(0.0f)
     , ramp_rate_percent_per_second(10.0f)  // Default 10% per second
@@ -35,45 +37,49 @@ BLDC_MOTOR::BLDC_MOTOR(uint pulse_pin)
     , ramp_start_time(0)
 {
     g_speed_pulse_instance = this;
+    
+    // Initialize pulse history arrays
+    for (int i = 0; i < HISTORY_SIZE; i++) {
+        pulse_times[i] = 0;
+        pulse_timestamps[i] = 0;
+    }
 }
 
 // =============================================================================
 // Initialize GPIO and ISR
 // =============================================================================
 void BLDC_MOTOR::init() {
+    // Initialize variables
+    pulse_index = 0;
+    edge_count = 0;
+    last_edge_time = 0;
+    measured_rpm = 0.0f;
+    filtered_rpm = 0.0f;
+    last_rpm_update = 0;
+    
     // Configure GPIO
     gpio_init(pulse_pin);
     gpio_set_dir(pulse_pin, GPIO_IN);
     gpio_pull_up(pulse_pin);
     
-    gpio_init(SPINDLE_DIR_PIN);
-    gpio_set_dir(SPINDLE_DIR_PIN, GPIO_OUT);
-    gpio_put(SPINDLE_DIR_PIN, 1);  // Start forward
-
-    gpio_init(SPINDLE_BRAKE_PIN);
-    gpio_set_dir(SPINDLE_BRAKE_PIN, GPIO_OUT);
-    gpio_put(SPINDLE_BRAKE_PIN, 0);  // Start brake OFF
-
     // Enable interrupt on rising edge
     gpio_set_irq_enabled_with_callback(
         pulse_pin,
-        GPIO_IRQ_EDGE_RISE,  // Trigger on rising edge
+        GPIO_IRQ_EDGE_RISE,
         true,
         &BLDC_MOTOR::isr_wrapper
     );
     
-    // Initialize PWM for spindle control (from Code-snippets improvement)
+    // Initialize PWM for spindle control
     gpio_set_function(SPINDLE_PWM_PIN, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
     uint channel = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
     
-    // Set PWM frequency to 1kHz
-    pwm_set_clkdiv(slice_num, 125.0f / 1000.0f);
-    pwm_set_wrap(slice_num, 65535);
+    // Set PWM frequency to 10kHz
+    pwm_set_clkdiv(slice_num, 1.0f);
+    pwm_set_wrap(slice_num, 12500);
     pwm_set_chan_level(slice_num, channel, 0);
     pwm_set_enabled(slice_num, true);
-    
-    printf("PWM initialized on pin %d\n", SPINDLE_PWM_PIN);
     
     printf("[BLDC_MOTOR] Initialized on GPIO %u\n", pulse_pin);
     printf("[BLDC_MOTOR] Pulses per revolution: %u\n", pulses_per_revolution);
@@ -95,32 +101,75 @@ void BLDC_MOTOR::handle_pulse() {
     uint32_t now = time_us_32();
     uint32_t dt_us = now - last_edge_time;
     
-    // Debounce: ignore edges faster than configured debounce time
-    if (dt_us < BLDC_MIN_PULSE_DT_US) {
+    // Filter: Ignore pulses faster than 2500 μs
+    if (dt_us < 2500) {
         return;
     }
     
-    last_edge_time = now;
+    // Store this pulse
+    pulse_times[pulse_index] = dt_us;
+    pulse_timestamps[pulse_index] = now;
+    pulse_index = (pulse_index + 1) % HISTORY_SIZE;
     edge_count++;
+    last_edge_time = now;
+    last_pulse_period = dt_us;
     
-    // Calculate RPM every N pulses (e.g., every full revolution)
-    // This reduces jitter in RPM reading
-    if (edge_count % pulses_per_revolution == 0) {
-        // Time for one full revolution (pulses_per_revolution edges)
-        float time_per_rev_sec = (dt_us * pulses_per_revolution) / 1e6f;
+    // Calculate instantaneous RPM (for quick response)
+    float pulses_per_second = 1000000.0f / dt_us;
+    instantaneous_rpm = (pulses_per_second * 60.0f) / 18.0f;
+    
+    // Calculate averaged RPM (for stability)
+    if (edge_count >= 10) {
+        calculate_rpm();
+    }
+    
+    // Debug output
+    if (edge_count <= 10) {
+        printf("[PULSE] #%lu, dt=%lu us\n", edge_count, dt_us);
+    }
+    
+    if (edge_count % 100 == 0) {
+        printf("[PULSE] #%lu, dt=%lu us, RPM: %.1f\n", edge_count, dt_us, filtered_rpm);
+    }
+}
+
+void BLDC_MOTOR::calculate_rpm() {
+    // METHOD 1: Simple Moving Average (good for steady speed)
+    uint32_t sum = 0;
+    int count = (edge_count < HISTORY_SIZE) ? edge_count : HISTORY_SIZE;
+    
+    for (int i = 0; i < count; i++) {
+        sum += pulse_times[i];
+    }
+    
+    uint32_t avg_period = sum / count;
+    float pulses_per_second = 1000000.0f / avg_period;
+    float rpm_avg = (pulses_per_second * 60.0f) / 18.0f;
+    
+    // METHOD 2: Linear Regression (best for accuracy during acceleration)
+    // Calculate RPM from first to last pulse in history
+    int oldest_index = (pulse_index + HISTORY_SIZE - count) % HISTORY_SIZE;
+    uint32_t time_span = pulse_timestamps[pulse_index] - pulse_timestamps[oldest_index];
+    
+    if (time_span > 0) {
+        // pulses / time = frequency
+        float freq = (count * 1000000.0f) / time_span;
+        float rpm_regression = (freq * 60.0f) / 18.0f;
         
-        if (time_per_rev_sec > 0.0f) {
-            // RPM = (60 seconds/minute) / (time_per_rev_seconds)
-            measured_rpm = 60.0f / time_per_rev_sec;
-            
-            // Clamp RPM to reasonable range (from Code-snippets improvement)
-            if (measured_rpm > 10000.0f) {
-                measured_rpm = 0.0f;  // Likely noise
-            }
-            
-            // Also calculate pulse frequency (Hz)
-            pulse_frequency = 1.0f / (dt_us / 1e6f);
-        }
+        // Blend both methods: 70% regression, 30% average
+        // Regression is better during speed changes
+        measured_rpm = (rpm_regression * 0.7f) + (rpm_avg * 0.3f);
+    } else {
+        measured_rpm = rpm_avg;
+    }
+    
+    // Apply exponential smoothing filter
+    // Alpha = 0.3 (adjust: lower = smoother but slower response)
+    const float ALPHA = 0.3f;
+    if (filtered_rpm == 0.0f) {
+        filtered_rpm = measured_rpm;
+    } else {
+        filtered_rpm = (ALPHA * measured_rpm) + ((1.0f - ALPHA) * filtered_rpm);
     }
 }
 
@@ -144,14 +193,44 @@ MotorDirection BLDC_MOTOR::get_direction() const {
 // Get current RPM
 // =============================================================================
 float BLDC_MOTOR::get_rpm() const {
-    return measured_rpm;
+    return filtered_rpm;  // Return stable, filtered RPM
+}
+
+// ⭐ NEW: Advanced RPM methods
+float BLDC_MOTOR::get_instantaneous_rpm() const {
+    return instantaneous_rpm;
+}
+
+uint32_t BLDC_MOTOR::get_time_since_pulse() const {
+    return time_us_32() - last_edge_time;
+}
+
+bool BLDC_MOTOR::is_running() const {
+    return (get_time_since_pulse() < 100000);  // 100ms timeout
+}
+
+float BLDC_MOTOR::get_angular_velocity() const {
+    // RPM to rad/s: RPM * 2π / 60
+    return filtered_rpm * 0.10472f;  // 2π/60 = 0.10472
+}
+
+uint32_t BLDC_MOTOR::get_predicted_next_pulse() const {
+    if (last_pulse_period == 0) return 0;
+    uint32_t elapsed = time_us_32() - last_edge_time;
+    if (elapsed >= last_pulse_period) return 0;
+    return last_pulse_period - elapsed;
+}
+
+int BLDC_MOTOR::get_pulse_position() const {
+    return edge_count % 18;
 }
 
 // =============================================================================
 // Get pulse frequency (Hz)
 // =============================================================================
 float BLDC_MOTOR::get_frequency() const {
-    return pulse_frequency;
+    if (last_pulse_period == 0) return 0.0f;
+    return 1000000.0f / last_pulse_period;  // Convert period to frequency
 }
 
 // =============================================================================
@@ -176,13 +255,14 @@ void BLDC_MOTOR::set_pwm_duty(float duty_percent) {
     // Clamp duty cycle to 0-100%
     duty_percent = fmaxf(0.0f, fminf(100.0f, duty_percent));
     
-    // Convert to PWM level
+    // Convert to PWM level (using 12500 wrap value for 10kHz frequency)
     uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
     uint channel = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
-    uint16_t pwm_level = (uint16_t)((duty_percent / 100.0f) * 65535);
+    uint16_t pwm_level = (uint16_t)((duty_percent / 100.0f) * 12500);
     
     pwm_set_chan_level(slice_num, channel, pwm_level);
-    printf("Set spindle PWM to %.1f%% (level: %d)\n", duty_percent, pwm_level);
+    printf("Set spindle PWM to %.1f%% (level: %d, slice: %d, channel: %d)\n", 
+           duty_percent, pwm_level, slice_num, channel);
 }
 
 // =============================================================================
@@ -225,7 +305,19 @@ void BLDC_MOTOR::set_rpm_pwm(float rpm) {
     
     if (rpm > 0) {
         // Calculate PWM duty cycle based on RPM
-        float duty_percent = (rpm / 3000.0f) * 100.0f;
+        // For BLDC motors, we need a minimum PWM to start (usually 20-30%)
+        float min_duty = 20.0f;  // Minimum 20% to start motor
+        float max_duty = 100.0f; // Maximum 100%
+        
+        // Calibrated mapping: 500 RPM -> 24.8% duty -> 1050 RPM actual
+        // So we need to scale down the duty cycle to get correct RPM
+        float scale_factor = 500.0f / 1050.0f;  // ~0.48
+        float calibrated_rpm = rpm * scale_factor;
+        
+        // Linear mapping from 0-3000 RPM to 20-100% duty
+        float duty_percent = min_duty + ((calibrated_rpm / 3000.0f) * (max_duty - min_duty));
+        
+        printf("RPM: %.1f -> Duty: %.1f%%\n", rpm, duty_percent);
         set_pwm_duty(duty_percent);
     } else {
         // Stop PWM
@@ -249,8 +341,18 @@ void BLDC_MOTOR::set_pulses_per_revolution(uint ppr) {
 void BLDC_MOTOR::reset() {
     edge_count = 0;
     measured_rpm = 0.0f;
-    pulse_frequency = 0.0f;
+    filtered_rpm = 0.0f;
+    instantaneous_rpm = 0.0f;
+    last_pulse_period = 0;
+    pulse_index = 0;
     last_edge_time = time_us_32();
+    
+    // Clear pulse history
+    for (int i = 0; i < HISTORY_SIZE; i++) {
+        pulse_times[i] = 0;
+        pulse_timestamps[i] = 0;
+    }
+    
     printf("[BLDC-PULSE] Counters reset\n");
 }
 
@@ -283,7 +385,7 @@ void BLDC_MOTOR::debug_status() const {
     printf("║ Total Pulses:       %lu                ║\n", (unsigned long)edge_count);
     printf("║ Revolutions:        %.2f               ║\n", get_revolutions());
     printf("║ RPM:                %.1f               ║\n", measured_rpm);
-    printf("║ Frequency:          %.1f Hz             ║\n", pulse_frequency);
+    printf("║ Frequency:          %.1f Hz             ║\n", get_frequency());
     printf("║ Pulses/Rev:         %u                ║\n", pulses_per_revolution);
     printf("╚════════════════════════════════════════╝\n");
 }

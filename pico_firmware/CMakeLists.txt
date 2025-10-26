@@ -34,6 +34,7 @@ pico_sdk_init()
 add_executable(pico_spindle_controller
     main.cpp
     src/spindle.cpp
+    src/BLDCRPMSensor.cpp
     src/move_queue.cpp
     src/scheduler.cpp
     src/stepcompress.cpp

@@ -55,21 +55,39 @@ int main() {
     gpio_set_function(PI_UART_TX, GPIO_FUNC_UART);
     gpio_set_function(PI_UART_RX, GPIO_FUNC_UART);
     
-    // Initialize spindle PWM
+    // Initialize spindle PWM with proper frequency for BLDC motor
     gpio_set_function(SPINDLE_PWM_PIN, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
     uint chan = pwm_gpio_to_channel(SPINDLE_PWM_PIN);
-    pwm_set_wrap(slice_num, 65535);  // 16-bit resolution
+    
+    // Set PWM frequency to 10 kHz (125MHz / 12500 = 10kHz)
+    pwm_set_wrap(slice_num, 12500);  // 10 kHz frequency
     pwm_set_chan_level(slice_num, chan, 0);  // Start at 0% duty cycle
     pwm_set_enabled(slice_num, true);
+    
+    // Debug: PWM configuration
+    printf("PWM slice %d configured for 10kHz\n", slice_num);
+    
+    printf("PWM initialized: slice=%d, channel=%d, wrap=12500, freq=10kHz\n", slice_num, chan);
     
     // Initialize spindle enable pin
     gpio_init(SPINDLE_ENABLE_PIN);
     gpio_set_dir(SPINDLE_ENABLE_PIN, GPIO_OUT);
     gpio_put(SPINDLE_ENABLE_PIN, 1);  // Enable spindle
     
+    // Initialize spindle direction pin
+    gpio_init(SPINDLE_DIR_PIN);
+    gpio_set_dir(SPINDLE_DIR_PIN, GPIO_OUT);
+    gpio_put(SPINDLE_DIR_PIN, 0);  // Set direction (0 = one direction, 1 = other)
+    
+    // Initialize spindle brake pin
+    gpio_init(SPINDLE_BRAKE_PIN);
+    gpio_set_dir(SPINDLE_BRAKE_PIN, GPIO_OUT);
+    gpio_put(SPINDLE_BRAKE_PIN, 0);  // Release brake (0 = no brake, 1 = brake)
+    printf("Brake pin (GPIO %d) set to 0 (brake OFF)\n", SPINDLE_BRAKE_PIN);
+    
     // Initialize spindle speed pulse reader
-    spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
+    spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_A_PIN);
     if (!spindle_controller) {
         printf("ERROR: Failed to create spindle controller\n");
         return -1;
@@ -107,13 +125,13 @@ int main() {
     }
     printf("Scheduler started\n");
     
-    // Initialize G-code interface first
-    gcode_interface = new GCodeInterface();
+    // Initialize G-code interface with controller references
+    gcode_interface = new GCodeInterface(spindle_controller, traverse_controller, move_queue, winding_controller);
     if (!gcode_interface) {
         printf("ERROR: Failed to create G-code interface\n");
         return -1;
     }
-    printf("G-code interface initialized\n");
+    printf("G-code interface initialized with controller references\n");
     
     // Initialize winding controller (Klipper-style)
     winding_controller = new WindingController(move_queue);

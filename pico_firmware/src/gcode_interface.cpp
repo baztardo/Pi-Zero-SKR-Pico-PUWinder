@@ -12,20 +12,25 @@
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/pwm.h"
+#include "hardware/gpio.h"
 #include <cstdio>
 #include <cstdlib>
 
 // =============================================================================
 // Constructor
 // =============================================================================
-GCodeInterface::GCodeInterface()
-    : current_command(TOKEN_UNKNOWN)
+GCodeInterface::GCodeInterface(BLDC_MOTOR* spindle, TraverseController* traverse, MoveQueue* queue, WindingController* winding)
+    : spindle_controller(spindle)
+    , traverse_controller(traverse)
+    , move_queue(queue)
+    , winding_controller(winding)
+    , current_command(TOKEN_UNKNOWN)
     , busy(false)
     , error_state(false)
 {
     command_buffer[0] = '\0';
     last_error[0] = '\0';
-    printf("[GCodeInterface] Created\n");
+    printf("[GCodeInterface] Created with controller references\n");
 }
 
 // =============================================================================
@@ -83,6 +88,14 @@ bool GCodeInterface::parse_command(const char* command) {
     }
     else if (strcmp(command, "STATUS") == 0) {
         current_command = TOKEN_STATUS;
+        return true;
+    }
+    else if (strcmp(command, "GET_HALL_RPM") == 0) {
+        current_command = TOKEN_GET_HALL_RPM;
+        return true;
+    }
+    else if (strcmp(command, "CHECK_HALL") == 0) {
+        current_command = TOKEN_CHECK_HALL;
         return true;
     }
     else if (command[0] == 'S') {
@@ -248,6 +261,12 @@ bool GCodeInterface::execute_command() {
         case TOKEN_STATUS:
             result = execute_status();
             break;
+        case TOKEN_GET_HALL_RPM:
+            result = execute_get_hall_rpm();
+            break;
+        case TOKEN_CHECK_HALL:
+            result = execute_check_hall();
+            break;
         // ⭐ NEW: FluidNC-style Safety Commands
         case TOKEN_M0:
             result = execute_m0();
@@ -341,17 +360,6 @@ void GCodeInterface::clear_error() {
     error_state = false;
 }
 
-// =============================================================================
-// Old parse_g_command removed - using token-based parsing instead
-// =============================================================================
-
-// =============================================================================
-// Old parse_m_command removed - using token-based parsing instead
-// =============================================================================
-
-// =============================================================================
-// Old parse_parameters removed - using token-based parsing instead
-// =============================================================================
 
 // =============================================================================
 // Parse float value
@@ -405,8 +413,6 @@ bool GCodeInterface::execute_g28() {
 // Execute M3/M4 (spindle CW/CCW)
 // =============================================================================
 bool GCodeInterface::execute_m3_m4() {
-    extern BLDC_MOTOR* spindle_controller;
-    
     if (!spindle_controller) {
         set_error("Spindle controller not initialized");
         return false;
@@ -416,8 +422,12 @@ bool GCodeInterface::execute_m3_m4() {
         // Set spindle speed and direction
         if (current_command == TOKEN_M3) {
             spindle_controller->set_direction(DIRECTION_CW);
+            gpio_put(SPINDLE_DIR_PIN, 0);  // Set direction pin for CW
+            printf("M3: Direction pin set to 0 (CW)\n");
         } else {
             spindle_controller->set_direction(DIRECTION_CCW);
+            gpio_put(SPINDLE_DIR_PIN, 1);  // Set direction pin for CCW
+            printf("M4: Direction pin set to 1 (CCW)\n");
         }
         
         // Convert RPM to PWM duty cycle
@@ -430,9 +440,25 @@ bool GCodeInterface::execute_m3_m4() {
         float duty_cycle = (rpm / 3000.0f) * 100.0f;
         if (duty_cycle > 100.0f) duty_cycle = 100.0f;
         
-        // Set PWM duty cycle
-        uint32_t pwm_value = (uint32_t)(duty_cycle * 65535.0f / 100.0f);
-        pwm_set_gpio_level(SPINDLE_PWM_PIN, pwm_value);
+        // Test GPIO control - try toggling brake pin
+        printf("Testing brake pin control...\n");
+        gpio_put(SPINDLE_BRAKE_PIN, 0);
+        printf("Set brake pin to 0, reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
+        sleep_ms(100);
+        gpio_put(SPINDLE_BRAKE_PIN, 1);
+        printf("Set brake pin to 1, reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
+        sleep_ms(100);
+        gpio_put(SPINDLE_BRAKE_PIN, 0);
+        printf("Set brake pin to 0 again, reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
+        
+        // Set spindle speed using the BLDC controller
+        spindle_controller->set_rpm_pwm(rpm);
+        
+        // Debug: Show pin states
+        printf("Final pin states:\n");
+        printf("Enable pin (GPIO %d): %d\n", SPINDLE_ENABLE_PIN, gpio_get(SPINDLE_ENABLE_PIN));
+        printf("Direction pin (GPIO %d): %d\n", SPINDLE_DIR_PIN, gpio_get(SPINDLE_DIR_PIN));
+        printf("Brake pin (GPIO %d): %d\n", SPINDLE_BRAKE_PIN, gpio_get(SPINDLE_BRAKE_PIN));
         
         send_response("OK");
         return true;
@@ -446,17 +472,13 @@ bool GCodeInterface::execute_m3_m4() {
 // Execute M5 (spindle stop)
 // =============================================================================
 bool GCodeInterface::execute_m5() {
-    extern BLDC_MOTOR* spindle_controller;
-    
     if (!spindle_controller) {
         set_error("Spindle controller not initialized");
         return false;
     }
     
-    // Stop spindle PWM
-    pwm_set_gpio_level(SPINDLE_PWM_PIN, 0);
-    
-    // Stop spindle
+    // Stop spindle using the BLDC controller
+    spindle_controller->set_rpm_pwm(0.0f);
     spindle_controller->set_brake(true);
     send_response("STOPPED");
     return true;
@@ -466,22 +488,20 @@ bool GCodeInterface::execute_m5() {
 // Execute S (set spindle speed)
 // =============================================================================
 bool GCodeInterface::execute_s() {
+    if (!spindle_controller) {
+        set_error("Spindle controller not initialized");
+        return false;
+    }
+    
     if (params.has_S) {
-        // Set spindle speed via PWM
+        // Set spindle speed using the BLDC controller
         float rpm = params.S;
         if (rpm < 0 || rpm > 3000) {
             set_error("RPM out of range (0-3000)");
             return false;
         }
         
-        // Convert RPM to PWM duty cycle
-        float duty_cycle = (rpm / 3000.0f) * 100.0f;
-        if (duty_cycle > 100.0f) duty_cycle = 100.0f;
-        
-        // Set PWM duty cycle
-        uint32_t pwm_value = (uint32_t)(duty_cycle * 65535.0f / 100.0f);
-        pwm_set_gpio_level(SPINDLE_PWM_PIN, pwm_value);
-        
+        spindle_controller->set_rpm_pwm(rpm);
         send_response("OK");
         return true;
     }
@@ -663,6 +683,48 @@ bool GCodeInterface::execute_status() {
              traverse_pos);
     
     send_response(status_buffer);
+    return true;
+}
+
+// =============================================================================
+// Get Hall Sensor RPM
+// =============================================================================
+bool GCodeInterface::execute_get_hall_rpm() {
+    if (!spindle_controller) {
+        send_response("ERROR: Spindle controller not available");
+        return false;
+    }
+    
+    float hall_rpm = spindle_controller->get_rpm();
+    char rpm_buffer[64];
+    snprintf(rpm_buffer, sizeof(rpm_buffer), "HALL_RPM: %.1f", hall_rpm);
+    
+    send_response(rpm_buffer);
+    return true;
+}
+
+// =============================================================================
+// Check Hall Sensor Pin State
+// =============================================================================
+bool GCodeInterface::execute_check_hall() {
+    if (!spindle_controller) {
+        send_response("ERROR: Spindle controller not available");
+        return false;
+    }
+    
+    // Check hall sensor pin state and edge count
+    int hall_pin = SPINDLE_HALL_A_PIN;
+    int pin_state = gpio_get(hall_pin);
+    
+    // Get edge count from spindle controller
+    uint32_t edge_count = spindle_controller->get_pulse_count();
+    float current_rpm = spindle_controller->get_rpm();
+    
+    char hall_buffer[128];
+    snprintf(hall_buffer, sizeof(hall_buffer), "HALL_PIN_%d: %d, EDGES: %lu, RPM: %.1f", 
+             hall_pin, pin_state, edge_count, current_rpm);
+    
+    send_response(hall_buffer);
     return true;
 }
 

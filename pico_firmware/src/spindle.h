@@ -52,14 +52,35 @@ public:
     bool is_ramping() const;
     float get_ramp_progress() const;
     
+    // ⭐ NEW: Advanced RPM methods
+    float get_instantaneous_rpm() const;
+    uint32_t get_time_since_pulse() const;
+    bool is_running() const;
+    float get_angular_velocity() const;
+    uint32_t get_predicted_next_pulse() const;
+    int get_pulse_position() const;
+    
     
 private:
+    // Pulse tracking
+    static const int HISTORY_SIZE = 20;
+    uint32_t pulse_times[HISTORY_SIZE];
+    uint32_t pulse_timestamps[HISTORY_SIZE];
+    int pulse_index;
+    uint32_t last_edge_time;
+    uint32_t edge_count;
+    
+    // RPM calculation
+    float measured_rpm;
+    float filtered_rpm;
+    uint32_t last_rpm_update;
+    
+    // For synchronization
+    float instantaneous_rpm;
+    uint32_t last_pulse_period;
+    
+    // Motor control
     uint pulse_pin;
-    volatile uint32_t edge_count;
-    volatile uint32_t last_edge_time;
-    volatile float measured_rpm;
-    volatile float pulse_frequency;
-    uint32_t last_rpm_calculation_time;
     uint pulses_per_revolution;
     MotorDirection direction = DIRECTION_CW;  // Default
     bool brake = false;
@@ -75,4 +96,5 @@ private:
     
     static void isr_wrapper(uint gpio, uint32_t events);
     void handle_pulse();
+    void calculate_rpm();
 };

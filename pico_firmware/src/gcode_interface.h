@@ -46,6 +46,8 @@ enum GCodeTokenType {
     TOKEN_M410 = 29,   // Quick stop
     TOKEN_M999 = 30,   // Reset from emergency stop
     TOKEN_G4 = 31,     // Dwell with planner sync
+    TOKEN_GET_HALL_RPM = 32,  // Get hall sensor RPM
+    TOKEN_CHECK_HALL = 33,    // Check hall sensor pin state
     TOKEN_UNKNOWN = 255
 };
 
@@ -67,9 +69,15 @@ struct GCodeParams {
 // =============================================================================
 // G-code Interface Class
 // =============================================================================
+// Forward declarations
+class BLDC_MOTOR;
+class TraverseController;
+class MoveQueue;
+class WindingController;
+
 class GCodeInterface {
 public:
-    GCodeInterface();
+    GCodeInterface(BLDC_MOTOR* spindle, TraverseController* traverse, MoveQueue* queue, WindingController* winding);
     ~GCodeInterface();
     
     // Command processing
@@ -89,6 +97,12 @@ public:
     void clear_error();
     
 private:
+    // Controller references
+    BLDC_MOTOR* spindle_controller;
+    TraverseController* traverse_controller;
+    MoveQueue* move_queue;
+    WindingController* winding_controller;
+    
     // Current command state
     GCodeTokenType current_command;
     GCodeParams params;
@@ -130,6 +144,8 @@ private:
     bool execute_ping();
     bool execute_version();
     bool execute_status();
+    bool execute_get_hall_rpm();
+    bool execute_check_hall();
     
     // ⭐ NEW: FluidNC-style Safety Commands
     bool execute_m0();     // Feed hold

@@ -1,4 +1,4 @@
-# Klipper-Style Architecture Implementation
+# Architecture Implementation
 
 ## Overview
 This document describes the proper Klipper-style architecture implementation for the Pi Zero + Pico winding machine system.

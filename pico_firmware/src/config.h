@@ -15,14 +15,16 @@
 
 // UART config (Pi communication)
 #define PI_UART_ID uart0
-#define PI_UART_TX 0
-#define PI_UART_RX 1
+#define PI_UART_TX 1
+#define PI_UART_RX 0
 #define PI_UART_BAUD 115200
 
 // BLDC PWM config
 #define SPINDLE_PWM_PIN 24
 #define SPINDLE_ENABLE_PIN 21    // Enable/disable power to the spindle
-#define SPINDLE_HALL_PIN 22      // Pulse from the spindle HAL output
+#define SPINDLE_HALL_A_PIN 22    // Hall sensor A (3-phase BLDC)
+#define SPINDLE_HALL_B_PIN 23    // Hall sensor B (3-phase BLDC)
+#define SPINDLE_HALL_C_PIN 25    // Hall sensor C (3-phase BLDC)
 #define SPINDLE_DIR_PIN       3  // Set LOW to change direction
 #define SPINDLE_BRAKE_PIN     4  // Set HIGH to brake
 
@@ -33,6 +35,10 @@
 #define TRAVERSE_HOME_PIN   16
 #define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
 #define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
+// Traverse Lead Screw
+#define TRAVERSE_PITCH_MM      5.0f    // Lead screw pitch (mm per revolution)n
+#define MIN_TRAVERSE_POS_MM     0.0f    // Minimum traverse position
+#define HOMING_SPEED_MM_PER_SEC 5.0f    // Homing speed
 
 // Traverse parameters
 #define Y_STEPS_PER_MM          80.0
@@ -129,7 +135,7 @@
 #define BLDC_DIRECTION_CCW     0       // Counter-clockwise direction
 
 // BLDC Motor Default Settings
-#define BLDC_DEFAULT_PPR       360     // Default pulses per revolution
+#define BLDC_DEFAULT_PPR       36      // Default pulses per revolution (3-phase BLDC: 6 states × 3 phases × 2 edges = 36 edges per electrical revolution)
 #define BLDC_DEBOUNCE_US       100     // Debounce time in microseconds
 #define BLDC_SMOOTH_ALPHA      0.1f    // Default smoothing factor (0.1 = 10% new, 90% old)
 
@@ -143,37 +149,3 @@
 #define BLDC_STATUS_STOPPED    2
 #define BLDC_STATUS_ERROR      3
 
-// =============================================================================
-// SPINDLE STEPPER CONFIGURATION
-// =============================================================================
-
-// Spindle Stepper Settings
-#define SPINDLE_MICROSTEPS     4       // Spindle microstepping (4x)
-#define SPINDLE_GEAR_RATIO     0.5f    // Gear ratio (spindle:stepper)
-#define SPINDLE_DIR_INVERT     0       // Direction inversion (0=normal, 1=inverted)
-#define MAX_SPINDLE_SPS        2000.0f // Maximum steps per second
-
-// Motor Configuration
-#define MOTOR_MICROSTEPS       16      // Default microstepping
-
-// =============================================================================
-// ENCODER CONFIGURATION
-// =============================================================================
-
-// Encoder Settings
-#define ENCODER_CPR            360     // Counts per revolution
-#define ENCODER_INVERT         0       // Encoder direction inversion
-
-// =============================================================================
-// TRAVERSE CONFIGURATION
-// =============================================================================
-
-// Traverse Lead Screw
-#define TRAVERSE_PITCH_MM      5.0f    // Lead screw pitch (mm per revolution)
-
-// =============================================================================
-// SAFETY LIMITS
-// =============================================================================
-#define MAX_TRAVERSE_POS_MM     200.0f  // Maximum traverse position
-#define MIN_TRAVERSE_POS_MM     0.0f    // Minimum traverse position
-#define HOMING_SPEED_MM_PER_SEC 5.0f    // Homing speed
