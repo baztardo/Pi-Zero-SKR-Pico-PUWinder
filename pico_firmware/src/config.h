@@ -19,14 +19,11 @@
 #define PI_UART_RX 0
 #define PI_UART_BAUD 115200
 
-// BLDC PWM config
-#define SPINDLE_PWM_PIN 24
-#define SPINDLE_ENABLE_PIN 21    // Enable/disable power to the spindle
-#define SPINDLE_HALL_A_PIN 22    // Hall sensor A (3-phase BLDC)
-#define SPINDLE_HALL_B_PIN 23    // Hall sensor B (3-phase BLDC)
-#define SPINDLE_HALL_C_PIN 25    // Hall sensor C (3-phase BLDC)
-#define SPINDLE_DIR_PIN       3  // Set LOW to change direction
-#define SPINDLE_BRAKE_PIN     4  // Set HIGH to brake
+// BLDC PWM config - CORRECTED for ZS-X11H motor driver
+#define SPINDLE_PWM_PIN       24    // PWM speed control → P pin
+#define SPINDLE_BRAKE_PIN     3     // Brake → BRAKE pin (HIGH=brake on, LOW=brake off)
+#define SPINDLE_DIR_PIN       4     // Direction → DIR pin (HIGH=default, LOW=change direction)
+#define SPINDLE_HALL_A_PIN    22    // Speed feedback ← SC pin (just this one)
 
 // Traverse Stepper Motor
 #define TRAVERSE_STEP_PIN   6

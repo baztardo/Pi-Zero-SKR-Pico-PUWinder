@@ -70,21 +70,19 @@ int main() {
     
     printf("PWM initialized: slice=%d, channel=%d, wrap=12500, freq=10kHz\n", slice_num, chan);
     
-    // Initialize spindle enable pin
-    gpio_init(SPINDLE_ENABLE_PIN);
-    gpio_set_dir(SPINDLE_ENABLE_PIN, GPIO_OUT);
-    gpio_put(SPINDLE_ENABLE_PIN, 1);  // Enable spindle
-    
     // Initialize spindle direction pin
     gpio_init(SPINDLE_DIR_PIN);
     gpio_set_dir(SPINDLE_DIR_PIN, GPIO_OUT);
-    gpio_put(SPINDLE_DIR_PIN, 0);  // Set direction (0 = one direction, 1 = other)
-    
+    gpio_put(SPINDLE_DIR_PIN, 1);  // Set direction HIGH (default direction) by default
+
     // Initialize spindle brake pin
     gpio_init(SPINDLE_BRAKE_PIN);
     gpio_set_dir(SPINDLE_BRAKE_PIN, GPIO_OUT);
+    gpio_pull_down(SPINDLE_BRAKE_PIN);  // Disable pull-up, enable pull-down
     gpio_put(SPINDLE_BRAKE_PIN, 0);  // Release brake (0 = no brake, 1 = brake)
-    printf("Brake pin (GPIO %d) set to 0 (brake OFF)\n", SPINDLE_BRAKE_PIN);
+    sleep_ms(10);  // Wait a bit
+    gpio_put(SPINDLE_BRAKE_PIN, 0);  // Force it again
+    printf("Brake pin (GPIO %d) set to 0 (brake OFF), pull-up disabled, reading: %d\n", SPINDLE_BRAKE_PIN, gpio_get(SPINDLE_BRAKE_PIN));
     
     // Initialize spindle speed pulse reader
     spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_A_PIN);

@@ -422,12 +422,12 @@ bool GCodeInterface::execute_m3_m4() {
         // Set spindle speed and direction
         if (current_command == TOKEN_M3) {
             spindle_controller->set_direction(DIRECTION_CW);
-            gpio_put(SPINDLE_DIR_PIN, 0);  // Set direction pin for CW
-            printf("M3: Direction pin set to 0 (CW)\n");
+            gpio_put(SPINDLE_DIR_PIN, 1);  // HIGH for default direction (CW)
+            printf("M3: Direction pin set to 1 (CW - default direction)\n");
         } else {
             spindle_controller->set_direction(DIRECTION_CCW);
-            gpio_put(SPINDLE_DIR_PIN, 1);  // Set direction pin for CCW
-            printf("M4: Direction pin set to 1 (CCW)\n");
+            gpio_put(SPINDLE_DIR_PIN, 0);  // LOW to change direction (CCW)
+            printf("M4: Direction pin set to 0 (CCW - change direction)\n");
         }
         
         // Convert RPM to PWM duty cycle
@@ -437,28 +437,39 @@ bool GCodeInterface::execute_m3_m4() {
             return false;
         }
         
+        // Handle S=0 (stop motor)
+        if (rpm == 0.0f) {
+            spindle_controller->set_rpm_pwm(0.0f);
+            spindle_controller->set_brake(true);
+            gpio_put(SPINDLE_BRAKE_PIN, 1);  // HIGH = brake ON (motor disabled)
+            printf("Motor STOPPED - S=0, brake pin set to 1 (brake ON)\n");
+            printf("Final pin states after STOP:\n");
+            printf("Direction pin (GPIO %d): %d\n", SPINDLE_DIR_PIN, gpio_get(SPINDLE_DIR_PIN));
+            printf("Brake pin (GPIO %d): %d\n", SPINDLE_BRAKE_PIN, gpio_get(SPINDLE_BRAKE_PIN));
+            send_response("OK");
+            return true;
+        }
+        
         float duty_cycle = (rpm / 3000.0f) * 100.0f;
         if (duty_cycle > 100.0f) duty_cycle = 100.0f;
         
-        // Test GPIO control - try toggling brake pin
-        printf("Testing brake pin control...\n");
+        // Ensure brake pin is LOW to disable brake
         gpio_put(SPINDLE_BRAKE_PIN, 0);
-        printf("Set brake pin to 0, reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
-        sleep_ms(100);
-        gpio_put(SPINDLE_BRAKE_PIN, 1);
-        printf("Set brake pin to 1, reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
-        sleep_ms(100);
-        gpio_put(SPINDLE_BRAKE_PIN, 0);
-        printf("Set brake pin to 0 again, reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
+        printf("Set brake pin to 0 (brake OFF), reading: %d\n", gpio_get(SPINDLE_BRAKE_PIN));
+        
+        // Also set brake to false in the controller
+        spindle_controller->set_brake(false);
+        printf("Controller brake set to false\n");
         
         // Set spindle speed using the BLDC controller
         spindle_controller->set_rpm_pwm(rpm);
         
         // Debug: Show pin states
         printf("Final pin states:\n");
-        printf("Enable pin (GPIO %d): %d\n", SPINDLE_ENABLE_PIN, gpio_get(SPINDLE_ENABLE_PIN));
         printf("Direction pin (GPIO %d): %d\n", SPINDLE_DIR_PIN, gpio_get(SPINDLE_DIR_PIN));
         printf("Brake pin (GPIO %d): %d\n", SPINDLE_BRAKE_PIN, gpio_get(SPINDLE_BRAKE_PIN));
+        printf("PWM pin (GPIO %d): active\n", SPINDLE_PWM_PIN);
+        printf("RPM requested: %.1f, Duty cycle: %.1f%%\n", rpm, duty_cycle);
         
         send_response("OK");
         return true;
@@ -480,6 +491,11 @@ bool GCodeInterface::execute_m5() {
     // Stop spindle using the BLDC controller
     spindle_controller->set_rpm_pwm(0.0f);
     spindle_controller->set_brake(true);
+    
+    // Enable brake by setting brake pin HIGH
+    gpio_put(SPINDLE_BRAKE_PIN, 1);  // HIGH = brake ON (motor disabled)
+    printf("Motor STOPPED - brake pin set to 1 (brake ON)\n");
+    
     send_response("STOPPED");
     return true;
 }
