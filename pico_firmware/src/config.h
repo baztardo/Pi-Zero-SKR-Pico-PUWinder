@@ -36,7 +36,7 @@
 #define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
 #define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
 // Traverse Lead Screw
-#define TRAVERSE_PITCH_MM      5.0f    // Lead screw pitch (mm per revolution)n
+#define TRAVERSE_PITCH_MM      6.0f    // YOUR ACTUAL 6mm leadscrew
 #define MIN_TRAVERSE_POS_MM     0.0f    // Minimum traverse position
 #define HOMING_SPEED_MM_PER_SEC 5.0f    // Homing speed
 
@@ -80,12 +80,13 @@
 // =============================================================================
 // WINDING PARAMETERS (Easy configuration!)
 // =============================================================================
-#define WINDING_TARGET_TURNS    1000    // Total turns to wind
-#define WINDING_SPINDLE_RPM     120.0f  // **SPINDLE** speed (RPM) - Start conservative!
-#define WINDING_WIRE_DIA_MM     0.064f  // Wire diameter (mm) - 43 AWG
-#define WINDING_WIDTH_MM        50.0f   // Winding width (mm)
+#define WINDING_TARGET_TURNS    5000    // Your actual target
+#define WINDING_SPINDLE_RPM     1115.0f  // Based on your test results
+#define WINDING_WIRE_DIA_MM     0.056f  // 43 AWG actual diameter
+#define WIRE_TENSION_FACTOR     0.95f   // 5% compression for tight winding
+#define WINDING_WIDTH_MM        12.0f   // Your actual 12mm bobbin
 #define WINDING_OFFSET_MM       0.0f    // Offset from center of winding (mm)
-#define WINDING_START_POS_MM    20.0f   // Start position from home (mm)
+#define WINDING_START_POS_MM    0.5f    // Start 0.5mm from edge (margin)
 #define WINDING_RAMP_TIME_SEC   10.0f   // Ramp up/down time (was 5s - too fast!)
 
 // =============================================================================

@@ -42,16 +42,18 @@
      bool hasNewPulse();
      uint64_t getPulsePeriod() const;
      
-     // Configuration
-     void setPulsesPerRev(float pulses);
-     void setTimeout(uint32_t timeoutUs);
-     void setUpdateInterval(uint32_t intervalMs);
+    // Configuration
+    void setPulsesPerRev(float pulses);
+    void setTimeout(uint32_t timeoutUs);
+    void setUpdateInterval(uint32_t intervalMs);
+    void setMinPulsePeriod(uint32_t minPeriodUs);
      
  private:
-     // Configuration
-     float pulsesPerRevolution;
-     uint32_t timeoutMicros;
-     uint32_t updateIntervalMs;
+    // Configuration
+    float pulsesPerRevolution;
+    uint32_t timeoutMicros;
+    uint32_t updateIntervalMs;
+    uint32_t minPulsePeriodUs;
      
      // Pulse timing
      volatile uint64_t lastPulseTime;

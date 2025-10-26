@@ -12,6 +12,7 @@
      : pulsesPerRevolution(pulsesPerRev)
      , timeoutMicros(timeoutUs)
      , updateIntervalMs(100)
+     , minPulsePeriodUs(500)  // NEW: Default 500us filter
      , lastPulseTime(0)
      , pulsePeriod(0)
      , pulseCount(0)
@@ -23,10 +24,20 @@
  }
  
  // ============================================================================
- // INTERRUPT HANDLER
+ // INTERRUPT HANDLER - WITH PWM CARRIER FILTER
  // ============================================================================
  void BLDCRPMSensor::onPulseReceived(uint64_t currentTimeMicros) {
-     pulsePeriod = currentTimeMicros - lastPulseTime;
+     uint64_t timeSinceLastPulse = currentTimeMicros - lastPulseTime;
+     
+     // **FIX: Filter out PWM carrier noise**
+     // Ignore pulses that are too fast (< 500us by default)
+     // This filters the 49MHz PWM carrier and only counts actual speed pulses
+     if (timeSinceLastPulse < minPulsePeriodUs) {
+         return;  // Ignore this pulse - it's PWM carrier noise
+     }
+     
+     // Valid pulse - record it
+     pulsePeriod = timeSinceLastPulse;
      lastPulseTime = currentTimeMicros;
      pulseCount++;
      newPulseFlag = true;
@@ -118,4 +129,8 @@
  
  void BLDCRPMSensor::setUpdateInterval(uint32_t intervalMs) {
      updateIntervalMs = intervalMs;
+ }
+ 
+ void BLDCRPMSensor::setMinPulsePeriod(uint32_t minPeriodUs) {
+     minPulsePeriodUs = minPeriodUs;
  }

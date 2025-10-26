@@ -86,6 +86,10 @@ public:
     
     // Public homing methods
     void home_all_axes();
+    
+    // NEW: Advanced winding functions
+    void adjust_traverse_speed();
+    void print_winding_metrics();
 
 private:
     MoveQueue* move_queue;

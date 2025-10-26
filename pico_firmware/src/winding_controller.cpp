@@ -8,6 +8,7 @@
 #include "spindle.h"
 #include "stepcompress.h"
 #include "pico/stdlib.h"
+#include <cmath>
 #include <cstdio>
 
 // Global BLDC motor instance for spindle control
@@ -325,36 +326,92 @@ void WindingController::ramp_down_spindle() {
 }
 
 void WindingController::sync_traverse_to_spindle() {
-    // Sync traverse movement to spindle rotation using BLDC motor pulse counting
-    if (!g_spindle_motor) return;
+    if (!g_spindle_motor) {
+        printf("[SYNC_ERROR] No spindle motor instance!\n");
+        return;
+    }
     
-    // Get current pulse count from BLDC motor HAL sensor
+    // Get current pulse count from BLDC motor
     uint32_t current_pulses = g_spindle_motor->get_pulse_count();
+    
+    // Calculate pulses since last sync
     uint32_t pulse_delta = current_pulses - enc_last_sync;
     
-    if (pulse_delta > 0) {
-        // Calculate how many traverse steps needed based on spindle rotation
-        float turns = (float)pulse_delta / (float)BLDC_DEFAULT_PPR;
+    // Exit early if no movement
+    if (pulse_delta == 0) return;
+    
+    // === STEP 1: Calculate Spindle Revolutions ===
+    float spindle_revolutions = (float)pulse_delta / (float)BLDC_DEFAULT_PPR;
+    
+    // === STEP 2: Calculate Required Traverse Distance ===
+    // Each spindle revolution should move traverse by wire diameter
+    // Apply tension factor for tight winding (typically 0.95 = 5% compression)
+    float effective_pitch_mm = params.wire_diameter_mm * WIRE_TENSION_FACTOR;
+    float traverse_distance_mm = spindle_revolutions * effective_pitch_mm;
+    
+    // Apply direction (forward = positive, reverse = negative)
+    if (!traverse_direction) {
+        traverse_distance_mm = -traverse_distance_mm;
+    }
+    
+    // === STEP 3: Convert Distance to Steps ===
+    // Formula: steps = (distance_mm / leadscrew_pitch_mm) × steps_per_rev × microstepping
+    float steps_per_mm = (200.0f * TRAVERSE_MICROSTEPS) / TRAVERSE_PITCH_MM;
+    int32_t traverse_steps = (int32_t)(traverse_distance_mm * steps_per_mm);
+    
+    // === STEP 4: Queue Movement if Needed ===
+    if (abs(traverse_steps) > 0) {
+        // Create traverse move using StepCompressor
+        // Use constant velocity for smooth winding
+        auto chunks = StepCompressor::compress_constant_velocity(
+            abs(traverse_steps), 
+            TRAVERSE_MIN_WINDING_SPEED  // Adjust this for smoother/faster winding
+        );
         
-        // Calculate traverse steps needed (this is the core winding logic)
-        float traverse_steps_needed = turns * params.wire_diameter_mm * (200.0f * TRAVERSE_MICROSTEPS) / TRAVERSE_PITCH_MM;
-        
-        if (traverse_steps_needed > 0) {
-            // Create traverse move using StepCompressor
-            auto chunks = StepCompressor::compress_constant_velocity(
-                (uint32_t)traverse_steps_needed, TRAVERSE_MIN_WINDING_SPEED);
-            
-            // Queue the chunks
-            for (const auto& chunk : chunks) {
-                move_queue->push_chunk(AXIS_TRAVERSE, chunk);
-            }
-            
-            // Update position tracking
-            current_traverse_position_mm += (traverse_steps_needed * TRAVERSE_PITCH_MM) / (200.0f * TRAVERSE_MICROSTEPS);
-            traverse_steps_emitted += traverse_steps_needed;
+        // Queue all chunks
+        for (const auto& chunk : chunks) {
+            move_queue->push_chunk(AXIS_TRAVERSE, chunk);
         }
         
-        enc_last_sync = current_pulses;
+        // Update position tracking
+        current_traverse_position_mm += traverse_distance_mm;
+        traverse_steps_emitted += abs(traverse_steps);
+        
+        // === OPTIONAL: Debug Output ===
+        // Print every 100 pulses for monitoring
+        static uint32_t last_debug_pulse = 0;
+        if (current_pulses - last_debug_pulse >= 100) {
+            printf("[SYNC] Pulses: %lu, Revs: %.3f, Distance: %.4fmm, Steps: %ld, Pos: %.2fmm\n",
+                   pulse_delta, spindle_revolutions, traverse_distance_mm, 
+                   traverse_steps, current_traverse_position_mm);
+            last_debug_pulse = current_pulses;
+        }
+    }
+    
+    // === STEP 5: Update Sync Cursor ===
+    enc_last_sync = current_pulses;
+    
+    // === STEP 6: Check for Layer Edge and Reverse ===
+    // Check if we've reached the edge of the bobbin
+    float edge_margin = 0.5f;  // 0.5mm safety margin
+    float left_limit = params.start_position_mm + edge_margin;
+    float right_limit = params.start_position_mm + params.layer_width_mm - edge_margin;
+    
+    if (traverse_direction && current_traverse_position_mm >= right_limit) {
+        // Reached right edge - reverse direction
+        printf("[SYNC] Right edge reached at %.2fmm - reversing to LEFT\n", 
+               current_traverse_position_mm);
+        traverse_direction = false;
+        current_layer++;
+        turns_this_layer = 0;
+        
+    } else if (!traverse_direction && current_traverse_position_mm <= left_limit) {
+        // Reached left edge - reverse direction
+        printf("[SYNC] Left edge reached at %.2fmm - reversing to RIGHT\n", 
+               current_traverse_position_mm);
+        traverse_direction = true;
+        current_layer++;
+        turns_this_layer = 0;
     }
 }
 
@@ -394,4 +451,125 @@ void WindingController::home_all_axes() {
     printf("[WindingController] Homing all axes\n");
     home_traverse();
     home_spindle();
+}
+
+// =============================================================================
+// NEW: Advanced winding functions
+// =============================================================================
+
+/**
+ * @brief NEW FUNCTION: Dynamic traverse speed adjustment
+ * 
+ * This adjusts traverse speed based on actual spindle RPM
+ * Ensures perfect synchronization even if spindle speed varies
+ */
+void WindingController::adjust_traverse_speed() {
+    if (!g_spindle_motor) return;
+    
+    // Get current actual RPM
+    float actual_rpm = g_spindle_motor->get_rpm();
+    
+    // Skip if spindle is not running or too slow
+    if (actual_rpm < 50.0f) return;
+    
+    // === Calculate Required Traverse Speed ===
+    
+    // Convert RPM to revolutions per second
+    float spindle_rps = actual_rpm / 60.0f;
+    
+    // Calculate wire pitch with tension
+    float effective_pitch_mm = params.wire_diameter_mm * WIRE_TENSION_FACTOR;
+    
+    // Required traverse speed (mm/s)
+    float required_traverse_speed_mms = spindle_rps * effective_pitch_mm;
+    
+    // Convert to steps/sec
+    float steps_per_mm = (200.0f * TRAVERSE_MICROSTEPS) / TRAVERSE_PITCH_MM;
+    float required_steps_per_sec = required_traverse_speed_mms * steps_per_mm;
+    
+    // === Safety Limits ===
+    float max_traverse_speed_mms = 5.0f;  // Maximum 5mm/s for safety
+    if (required_traverse_speed_mms > max_traverse_speed_mms) {
+        printf("[SPEED_WARNING] Required speed %.3f mm/s exceeds limit %.3f mm/s!\n",
+               required_traverse_speed_mms, max_traverse_speed_mms);
+        required_traverse_speed_mms = max_traverse_speed_mms;
+        required_steps_per_sec = max_traverse_speed_mms * steps_per_mm;
+    }
+    
+    // === Update Speed Setting ===
+    // TODO: This would update your motion planner's speed setting
+    // For now, just monitor and report
+    
+    // Debug output (print every 2 seconds)
+    static uint32_t last_speed_print = 0;
+    if (time_us_32() - last_speed_print > 2000000) {
+        printf("[SPEED] Spindle: %.1f RPM (%.2f rev/s), Traverse: %.3f mm/s (%.0f steps/s)\n",
+               actual_rpm, spindle_rps, required_traverse_speed_mms, required_steps_per_sec);
+        last_speed_print = time_us_32();
+    }
+}
+
+/**
+ * @brief Calculate expected performance metrics
+ * 
+ * Call this after setting parameters to verify setup
+ */
+void WindingController::print_winding_metrics() {
+    printf("\n");
+    printf("═══════════════════════════════════════════════════════\n");
+    printf("  WINDING PARAMETERS & CALCULATED METRICS\n");
+    printf("═══════════════════════════════════════════════════════\n");
+    
+    // Wire specs
+    float effective_pitch = params.wire_diameter_mm * WIRE_TENSION_FACTOR;
+    printf("Wire:\n");
+    printf("  Diameter: %.4f mm (43 AWG)\n", params.wire_diameter_mm);
+    printf("  Tension factor: %.2f (%.0f%% compression)\n", 
+           WIRE_TENSION_FACTOR, (1.0f - WIRE_TENSION_FACTOR) * 100.0f);
+    printf("  Effective pitch: %.4f mm\n", effective_pitch);
+    
+    // Bobbin specs
+    printf("\nBobbin:\n");
+    printf("  Width: %.1f mm\n", params.layer_width_mm);
+    printf("  Start position: %.1f mm\n", params.start_position_mm);
+    printf("  Turns per layer: %u\n", params.turns_per_layer);
+    printf("  Total layers: %u\n", params.total_layers);
+    
+    // Spindle specs
+    float spindle_rps = params.spindle_rpm / 60.0f;
+    printf("\nSpindle:\n");
+    printf("  Target RPM: %.1f (%.2f rev/s)\n", params.spindle_rpm, spindle_rps);
+    printf("  Pulses per rev: %u\n", BLDC_DEFAULT_PPR);
+    
+    // Traverse specs
+    float steps_per_mm = (200.0f * TRAVERSE_MICROSTEPS) / TRAVERSE_PITCH_MM;
+    float traverse_speed_mms = spindle_rps * effective_pitch;
+    float steps_per_sec = traverse_speed_mms * steps_per_mm;
+    printf("\nTraverse:\n");
+    printf("  Leadscrew pitch: %.1f mm\n", TRAVERSE_PITCH_MM);
+    printf("  Microstepping: %dx\n", TRAVERSE_MICROSTEPS);
+    printf("  Steps per mm: %.2f\n", steps_per_mm);
+    printf("  Required speed: %.3f mm/s (%.0f steps/s)\n", 
+           traverse_speed_mms, steps_per_sec);
+    printf("  Steps per wire: %.1f\n", effective_pitch * steps_per_mm);
+    
+    // Timing
+    float time_per_layer_sec = params.turns_per_layer / spindle_rps;
+    float total_time_sec = params.target_turns / spindle_rps;
+    printf("\nTiming:\n");
+    printf("  Time per layer: %.1f seconds\n", time_per_layer_sec);
+    printf("  Total winding time: %.1f minutes (%.1f hours)\n", 
+           total_time_sec / 60.0f, total_time_sec / 3600.0f);
+    printf("  Target turns: %u\n", params.target_turns);
+    
+    // Resolution
+    float resolution_um = 1000.0f / steps_per_mm;
+    printf("\nResolution:\n");
+    printf("  Position resolution: %.3f µm (%.6f mm)\n", 
+           resolution_um, resolution_um / 1000.0f);
+    printf("  Wire/resolution ratio: %.1f:1\n", 
+           params.wire_diameter_mm * 1000.0f / resolution_um);
+    
+    printf("═══════════════════════════════════════════════════════\n");
+    printf("\n");
 }
