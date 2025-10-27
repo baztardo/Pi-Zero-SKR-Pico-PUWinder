@@ -38,8 +38,12 @@ pip install -r requirements.txt
 echo "🔐 Setting permissions..."
 chmod +x *.py
 
+# Go back to project root
+cd ..
+
 # Create desktop shortcut
 echo "🖥️ Creating desktop shortcut..."
+mkdir -p ~/Desktop
 cat > ~/Desktop/winding-controller.desktop << EOF
 [Desktop Entry]
 Version=1.0
@@ -56,6 +60,7 @@ chmod +x ~/Desktop/winding-controller.desktop
 
 # Create systemd service for auto-start
 echo "🚀 Creating systemd service..."
+PROJECT_DIR=$(pwd)
 sudo tee /etc/systemd/system/winding-controller.service > /dev/null << EOF
 [Unit]
 Description=Pi CM4 Winding Controller
@@ -64,10 +69,10 @@ After=graphical.target
 [Service]
 Type=simple
 User=pi
-WorkingDirectory=/home/pi/Pi-Zero-SKR-Pico-PUWinder/pi_zero
-Environment=PATH=/home/pi/Pi-Zero-SKR-Pico-PUWinder/pi_zero/venv/bin
+WorkingDirectory=${PROJECT_DIR}/pi_zero
+Environment=PATH=${PROJECT_DIR}/pi_zero/venv/bin
 Environment=DISPLAY=:0
-ExecStart=/home/pi/Pi-Zero-SKR-Pico-PUWinder/pi_zero/venv/bin/python web_interface.py
+ExecStart=${PROJECT_DIR}/pi_zero/venv/bin/python web_interface.py
 Restart=always
 RestartSec=10
 
