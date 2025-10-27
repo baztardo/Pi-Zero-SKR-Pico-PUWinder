@@ -1,8 +1,16 @@
 #!/bin/bash
-# Minimal Pi CM4 Setup Script
+# Working Pi CM4 Setup Script
 
-echo "🔄 Pi CM4 Minimal Setup"
+echo "🔄 Pi CM4 Working Setup"
 echo "======================="
+
+# Check if we're in the right directory
+if [ ! -d "pi_zero" ]; then
+    echo "❌ pi_zero directory not found!"
+    echo "   Make sure you're in the project root directory"
+    echo "   Current directory: $(pwd)"
+    exit 1
+fi
 
 # Update system
 echo "📦 Updating system packages..."
@@ -10,7 +18,18 @@ sudo apt update && sudo apt upgrade -y
 
 # Install required packages
 echo "🐍 Installing Python dependencies..."
-sudo apt install -y python3-pip python3-venv git chromium-browser
+sudo apt install -y python3-pip python3-venv git
+
+# Try to install a browser (use what's available)
+echo "🌐 Installing browser..."
+if apt list --installed | grep -q chromium-browser; then
+    echo "   Chromium already installed"
+elif apt list --installed | grep -q firefox; then
+    echo "   Firefox already installed"
+else
+    echo "   Installing Firefox..."
+    sudo apt install -y firefox-esr || sudo apt install -y firefox || echo "   No browser installed - you can use any web browser"
+fi
 
 # Enable UART
 echo "🔌 Enabling UART..."
@@ -28,16 +47,16 @@ source venv/bin/activate
 
 # Install Python packages
 echo "📚 Installing Python packages..."
-if [ -f "requirements.txt" ]; then
-    pip install -r requirements.txt
-else
-    echo "⚠️  requirements.txt not found, installing basic packages..."
-    pip install flask pyserial
-fi
+pip install flask pyserial
 
-# Set permissions
+# Set permissions for Python files
 echo "🔐 Setting permissions..."
-chmod +x *.py
+for file in *.py; do
+    if [ -f "$file" ]; then
+        chmod +x "$file"
+        echo "   ✅ Made $file executable"
+    fi
+done
 
 echo "✅ Setup complete!"
 echo ""
