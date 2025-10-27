@@ -137,5 +137,6 @@ def api_reset():
 
 if __name__ == '__main__':
     print("🌐 Starting Pi Zero Winding Controller Web Interface")
-    print("📱 Open your browser to: http://pi-zero-ip:5000")
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    print("📱 Open your browser to: http://localhost:8080")
+    print("📱 Or try: http://192.168.45.156:8080")
+    app.run(host='0.0.0.0', port=8080, debug=True)

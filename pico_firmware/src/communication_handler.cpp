@@ -90,8 +90,12 @@ void CommunicationHandler::process_command(const char* command) {
 void CommunicationHandler::send_response(const char* response) {
     if (!initialized) return;
     
-    uart_puts(PI_UART_ID, response);
-    uart_puts(PI_UART_ID, "\n");
+    printf("RESPONSE: %s\n", response);
+    // Send response over UART
+    for (int i = 0; response[i] != '\0'; i++) {
+        uart_putc(PI_UART_ID, response[i]);
+    }
+    uart_putc(PI_UART_ID, '\n');
 }
 
 // =============================================================================
@@ -100,6 +104,10 @@ void CommunicationHandler::send_response(const char* response) {
 void CommunicationHandler::send_error(const char* error) {
     if (!initialized) return;
     
-    uart_puts(PI_UART_ID, error);
-    uart_puts(PI_UART_ID, "\n");
+    printf("ERROR: %s\n", error);
+    // Send error over UART
+    for (int i = 0; error[i] != '\0'; i++) {
+        uart_putc(PI_UART_ID, error[i]);
+    }
+    uart_putc(PI_UART_ID, '\n');
 }

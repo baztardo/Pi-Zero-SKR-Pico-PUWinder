@@ -5,11 +5,16 @@ This directory contains everything needed to set up a Raspberry Pi CM4 for testi
 ## Quick Start
 
 1. **Flash Raspberry Pi OS Desktop** (see `IMAGE_SETUP.md`)
-2. **Run the setup script:**
+2. **Clone the project:**
    ```bash
-   ./setup.sh
+   git clone <your-repo-url>
+   cd Pi-Zero-SKR-Pico-PUWinder
    ```
-3. **Test the connection:**
+3. **Run the setup script:**
+   ```bash
+   ./pi_cm4_setup/setup.sh
+   ```
+4. **Test the connection:**
    ```bash
    cd pi_zero
    source venv/bin/activate

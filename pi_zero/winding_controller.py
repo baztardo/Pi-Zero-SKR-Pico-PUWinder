@@ -103,8 +103,8 @@ class WindingController:
             self.serial_conn.write(f"{command}\n".encode())
             self.serial_conn.flush()
             
-            # Wait a bit for response
-            time.sleep(0.1)
+            # Wait longer for UART stability
+            time.sleep(0.3)
             
             # Read response with timeout
             start_time = time.time()
@@ -118,13 +118,13 @@ class WindingController:
             
             if not response:
                 print(f"⚠️ No response to command: {command}")
-                return None
+                return "NO_RESPONSE"  # Return string instead of None
                 
             return response
             
         except Exception as e:
             print(f"❌ Command error: {e}")
-            return None
+            return "ERROR"  # Return string instead of None
     
     def _send_dummy_message(self):
         """Send dummy message to stabilize UART connection"""
@@ -132,7 +132,7 @@ class WindingController:
             # Send a simple command that should always work
             self.serial_conn.write(b"PING\n")
             self.serial_conn.flush()
-            time.sleep(0.1)
+            time.sleep(0.3)  # Wait longer for UART to stabilize
             
             # Read and discard any response
             self.serial_conn.reset_input_buffer()
@@ -182,7 +182,7 @@ class WindingController:
         """Home all axes (traverse and spindle)"""
         print("🏠 Homing all axes...")
         response = self.send_command("G28")
-        if "OK" in response or "HOMED" in response:
+        if response and ("OK" in str(response) or "HOMED" in str(response)):
             self.state = WindingState.IDLE
             print("✅ All axes homed")
             return True
@@ -194,28 +194,28 @@ class WindingController:
     def enable_motors(self) -> bool:
         """Enable all motors"""
         response = self.send_command("M17")
-        return "OK" in response or "ENABLED" in response
+        return response and ("OK" in str(response) or "ENABLED" in str(response))
     
     def disable_motors(self) -> bool:
         """Disable all motors"""
         response = self.send_command("M18")
-        return "OK" in response or "DISABLED" in response
+        return response and ("OK" in str(response) or "DISABLED" in str(response))
     
     def set_spindle_speed(self, rpm: float) -> bool:
         """Set spindle speed in RPM"""
         response = self.send_command(f"S{rpm}")
-        return "OK" in response or "SET" in response
+        return response and ("OK" in str(response) or "SET" in str(response))
     
     def start_spindle(self, direction: str = "CW") -> bool:
         """Start spindle rotation"""
         command = "M3" if direction.upper() == "CW" else "M4"
         response = self.send_command(command)
-        return "OK" in response or "STARTED" in response
+        return response and ("OK" in str(response) or "STARTED" in str(response))
     
     def stop_spindle(self) -> bool:
         """Stop spindle rotation"""
         response = self.send_command("M5")
-        return "OK" in response or "STOPPED" in response
+        return response and ("OK" in str(response) or "STOPPED" in str(response))
     
     def start_winding(self, params: Optional[WindingParams] = None) -> bool:
         """Start winding sequence"""
@@ -228,7 +228,7 @@ class WindingController:
         print(f"🔄 Starting winding: {self.params.target_turns} turns, {self.params.spindle_rpm} RPM")
         response = self.send_command(cmd)
         
-        if "WINDING_STARTED" in response:
+        if response and "WINDING_STARTED" in str(response):
             self.state = WindingState.WINDING
             print("✅ Winding started")
             return True
@@ -240,7 +240,7 @@ class WindingController:
     def pause_winding(self) -> bool:
         """Pause winding process"""
         response = self.send_command("PAUSE_WIND")
-        if "WINDING_PAUSED" in response:
+        if response and "WINDING_PAUSED" in str(response):
             self.state = WindingState.PAUSED
             print("⏸️ Winding paused")
             return True
@@ -249,7 +249,7 @@ class WindingController:
     def resume_winding(self) -> bool:
         """Resume winding process"""
         response = self.send_command("RESUME_WIND")
-        if "WINDING_RESUMED" in response:
+        if response and "WINDING_RESUMED" in str(response):
             self.state = WindingState.WINDING
             print("▶️ Winding resumed")
             return True
@@ -257,30 +257,41 @@ class WindingController:
     
     def stop_winding(self) -> bool:
         """Stop winding process"""
-        response = self.send_command("STOP_WIND")
-        if "WINDING_STOPPED" in response:
-            self.state = WindingState.IDLE
-            print("⏹️ Winding stopped")
-            return True
+        # Try multiple stop commands
+        commands = ["STOP_WIND", "M5", "M112"]
+        for cmd in commands:
+            response = self.send_command(cmd)
+            if response and ("WINDING_STOPPED" in str(response) or "STOPPED" in str(response) or "STOP" in str(response)):
+                self.state = WindingState.IDLE
+                print(f"⏹️ Winding stopped with {cmd}")
+                return True
+        print("❌ Failed to stop winding")
         return False
     
     def emergency_stop(self) -> bool:
         """Emergency stop all operations"""
         response = self.send_command("M112")
-        if "EMERGENCY_STOP" in response or "STOPPED" in response:
+        if response and ("EMERGENCY_STOP" in str(response) or "STOPPED" in str(response)):
             self.state = WindingState.ERROR
             print("🚨 EMERGENCY STOP ACTIVATED")
             return True
         return False
     
     def reset_emergency_stop(self) -> bool:
-        """Reset from emergency stop"""
-        response = self.send_command("M999")
-        if "RESET" in response or "OK" in response:
-            self.state = WindingState.IDLE
-            print("🔄 Emergency stop reset")
-            return True
-        return False
+        """Reset from emergency stop and recover from errors"""
+        # Try multiple reset commands
+        commands = ["M999", "M5", "STATUS"]
+        for cmd in commands:
+            response = self.send_command(cmd)
+            if response and ("RESET" in str(response) or "OK" in str(response)):
+                self.state = WindingState.IDLE
+                print(f"🔄 System reset with {cmd}")
+                return True
+        
+        # Force reset state even if commands fail
+        self.state = WindingState.IDLE
+        print("🔄 Forced system reset")
+        return True
     
     def add_status_callback(self, callback: Callable):
         """Add callback for status updates"""

@@ -15,30 +15,33 @@ echo "📁 Project root: $PROJECT_ROOT"
 if [ ! -d "$PROJECT_ROOT/pi_zero" ]; then
     echo "❌ pi_zero directory not found!"
     echo "   Expected at: $PROJECT_ROOT/pi_zero"
+    echo "   Current structure:"
+    ls -la "$PROJECT_ROOT" | grep -E "(pi_zero|git)"
     exit 1
 fi
 
 # Change to project root
 cd "$PROJECT_ROOT"
 echo "📁 Working from: $(pwd)"
+echo "📁 pi_zero path: $(pwd)/pi_zero"
 
 # Update system
 echo "📦 Updating system packages..."
-sudo apt update && sudo apt upgrade -y
+sudo apt-get update && sudo apt-get upgrade -y
 
 # Install required packages
 echo "🐍 Installing Python dependencies..."
-sudo apt install -y python3-pip python3-venv git
+sudo apt-get install -y python3-pip python3-venv git
 
 # Try to install a browser (use what's available)
 echo "🌐 Installing browser..."
-if apt list --installed | grep -q chromium-browser; then
+if dpkg -l | grep -q chromium-browser; then
     echo "   Chromium already installed"
-elif apt list --installed | grep -q firefox; then
+elif dpkg -l | grep -q firefox; then
     echo "   Firefox already installed"
 else
     echo "   Installing Firefox..."
-    sudo apt install -y firefox-esr || sudo apt install -y firefox || echo "   No browser installed - you can use any web browser"
+    sudo apt-get install -y firefox-esr || sudo apt-get install -y firefox || echo "   No browser installed - you can use any web browser"
 fi
 
 # Enable UART
