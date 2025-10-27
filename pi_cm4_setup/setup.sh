@@ -4,13 +4,23 @@
 echo "🔄 Pi CM4 Working Setup"
 echo "======================="
 
-# Check if we're in the right directory
-if [ ! -d "pi_zero" ]; then
+# Find the project root directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+echo "📁 Script location: $SCRIPT_DIR"
+echo "📁 Project root: $PROJECT_ROOT"
+
+# Check if pi_zero directory exists
+if [ ! -d "$PROJECT_ROOT/pi_zero" ]; then
     echo "❌ pi_zero directory not found!"
-    echo "   Make sure you're in the project root directory"
-    echo "   Current directory: $(pwd)"
+    echo "   Expected at: $PROJECT_ROOT/pi_zero"
     exit 1
 fi
+
+# Change to project root
+cd "$PROJECT_ROOT"
+echo "📁 Working from: $(pwd)"
 
 # Update system
 echo "📦 Updating system packages..."
