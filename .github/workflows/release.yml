@@ -18,7 +18,7 @@ jobs:
     build-release:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
             - name: Setup Pico SDK
               run: |
@@ -61,7 +61,7 @@ jobs:
         needs: build-release
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v5
 
             - name: Download artifacts
               uses: actions/download-artifact@v5
