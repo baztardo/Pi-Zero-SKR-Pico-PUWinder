@@ -11,11 +11,9 @@
 #include <cmath>
 #include <cstdio>
 
-// Global BLDC motor instance for spindle control
-static BLDC_MOTOR* g_spindle_motor = nullptr;
-
-WindingController::WindingController(MoveQueue* mq)
+WindingController::WindingController(MoveQueue* mq, BLDC_MOTOR* spindle_motor)
     : move_queue(mq)
+    , spindle_motor(spindle_motor)
     , state(WindingState::IDLE)
     , current_layer(0)
     , turns_completed(0)
@@ -32,21 +30,17 @@ WindingController::WindingController(MoveQueue* mq)
     , enc_last_sync(0)
     , enc_last_rpm(0)
 {
-    printf("[WindingController] Created\n");
+    printf("[WindingController] Created with spindle motor\n");
 }
 
 void WindingController::init() {
     printf("WindingController::init() called\n");
     
-    // Use the global spindle controller from main.cpp
-    extern BLDC_MOTOR* spindle_controller;
-    g_spindle_motor = spindle_controller;
-    
-    if (g_spindle_motor) {
-        g_spindle_motor->set_pulses_per_revolution(BLDC_DEFAULT_PPR);
-        printf("WindingController initialized with existing BLDC motor\n");
+    if (spindle_motor) {
+        spindle_motor->set_pulses_per_revolution(BLDC_DEFAULT_PPR);
+        printf("WindingController initialized with BLDC motor\n");
     } else {
-        printf("ERROR: Spindle controller not initialized in main.cpp\n");
+        printf("ERROR: Spindle motor not provided to constructor\n");
     }
 }
 
@@ -83,8 +77,8 @@ bool WindingController::start() {
 void WindingController::stop() {
     printf("Stopping winding process\n");
     state = WindingState::IDLE;
-    if (g_spindle_motor) {
-        g_spindle_motor->set_brake(true);  // Apply brake to stop motor
+    if (spindle_motor) {
+        spindle_motor->set_brake(true);  // Apply brake to stop motor
     }
 }
 
@@ -126,35 +120,56 @@ void WindingController::update() {
 void WindingController::emergency_stop() {
     printf("EMERGENCY STOP!\n");
     state = WindingState::IDLE;
-    if (g_spindle_motor) {
-        g_spindle_motor->set_brake(true);  // Emergency brake
+    if (spindle_motor) {
+        spindle_motor->set_brake(true);  // Emergency brake
     }
 }
 
 void WindingController::home_spindle() {
     printf("Homing spindle...\n");
     
-    if (!g_spindle_motor) {
+    if (!spindle_motor) {
         printf("ERROR: BLDC motor not initialized!\n");
         state = WindingState::ERROR;
         return;
     }
     
     // Start spindle at slow speed for homing
-    // The BLDC motor will use PWM control, not step pulses
-    // This is handled by the main.cpp UART commands
+    spindle_motor->set_rpm_pwm(50.0f);  // Very slow for homing
+    spindle_motor->set_brake(false);    // Release brake
     
-    // For now, simulate homing completion after delay
-    // In real implementation, this would wait for Z-index pulse from HAL sensor
-    static uint32_t homing_start = 0;
-    if (homing_start == 0) {
-        homing_start = time_us_32();
+    // Wait for Z-index pulse from HAL sensor
+    // The BLDC_MOTOR class handles Z-index detection internally
+    static bool homing_started = false;
+    static uint32_t homing_start_time = 0;
+    static uint32_t last_pulse_count = 0;
+    
+    if (!homing_started) {
+        homing_started = true;
+        homing_start_time = time_us_32();
+        last_pulse_count = spindle_motor->get_pulse_count();
+        printf("Waiting for Z-index pulse...\n");
     }
     
-    if (time_us_32() - homing_start > 2000000) {  // 2 seconds
-        printf("Spindle homed\n");
-        state = WindingState::HOMING_TRAVERSE;
-        homing_start = 0;
+    // Check for Z-index pulse (every 18 pulses = 1 revolution)
+    uint32_t current_pulse_count = spindle_motor->get_pulse_count();
+    if (current_pulse_count > last_pulse_count) {
+        // Check if we've completed a full revolution (18 pulses)
+        uint32_t pulses_since_start = current_pulse_count - last_pulse_count;
+        if (pulses_since_start >= 18) {
+            printf("Z-index detected! Spindle homed\n");
+            spindle_motor->reset();  // Reset pulse counter to 0
+            state = WindingState::HOMING_TRAVERSE;
+            homing_started = false;
+            return;
+        }
+    }
+    
+    // Timeout after 10 seconds
+    if (time_us_32() - homing_start_time > 10000000) {
+        printf("ERROR: Spindle homing timeout!\n");
+        state = WindingState::ERROR;
+        homing_started = false;
     }
 }
 
@@ -168,7 +183,7 @@ void WindingController::home_traverse() {
     
     // Queue the chunks
     for (const auto& chunk : chunks) {
-        move_queue->push_chunk(AXIS_TRAVERSE, chunk);
+        move_queue->push_chunk(chunk);
     }
     
     // Wait for homing to complete
@@ -196,7 +211,7 @@ void WindingController::move_to_start() {
     
     // Queue the chunks
     for (const auto& chunk : chunks) {
-        move_queue->push_chunk(AXIS_TRAVERSE, chunk);
+        move_queue->push_chunk(chunk);
     }
     
     current_traverse_position_mm = params.start_position_mm;
@@ -257,7 +272,7 @@ void WindingController::execute_winding() {
             
             // Queue the chunks
             for (const auto& chunk : chunks) {
-                move_queue->push_chunk(AXIS_TRAVERSE, chunk);
+                move_queue->push_chunk(chunk);
             }
             
             current_traverse_position_mm = layer_position;
@@ -271,9 +286,9 @@ void WindingController::execute_winding() {
     sync_traverse_to_spindle();
     
     // Update winding progress using BLDC motor turn counting
-    if (g_spindle_motor) {
+    if (spindle_motor) {
         // Get total revolutions from BLDC motor
-        float total_revolutions = g_spindle_motor->get_revolutions();
+        float total_revolutions = spindle_motor->get_revolutions();
         
         // Update turns completed based on actual motor revolutions
         uint32_t new_turns_completed = (uint32_t)total_revolutions;
@@ -316,8 +331,8 @@ void WindingController::ramp_down_spindle() {
         // BLDC motor speed control is handled by main.cpp UART commands
         printf("Ramping down to %.1f RPM\n", target_rpm);
     } else {
-        if (g_spindle_motor) {
-            g_spindle_motor->set_brake(true);  // Stop motor
+        if (spindle_motor) {
+            spindle_motor->set_brake(true);  // Stop motor
         }
         printf("Spindle stopped\n");
         state = WindingState::COMPLETE;
@@ -326,13 +341,13 @@ void WindingController::ramp_down_spindle() {
 }
 
 void WindingController::sync_traverse_to_spindle() {
-    if (!g_spindle_motor) {
+    if (!spindle_motor) {
         printf("[SYNC_ERROR] No spindle motor instance!\n");
         return;
     }
     
     // Get current pulse count from BLDC motor
-    uint32_t current_pulses = g_spindle_motor->get_pulse_count();
+    uint32_t current_pulses = spindle_motor->get_pulse_count();
     
     // Calculate pulses since last sync
     uint32_t pulse_delta = current_pulses - enc_last_sync;
@@ -370,7 +385,7 @@ void WindingController::sync_traverse_to_spindle() {
         
         // Queue all chunks
         for (const auto& chunk : chunks) {
-            move_queue->push_chunk(AXIS_TRAVERSE, chunk);
+            move_queue->push_chunk(chunk);
         }
         
         // Update position tracking
@@ -417,8 +432,8 @@ void WindingController::sync_traverse_to_spindle() {
 
 void WindingController::update_rpm() {
     // Get RPM from BLDC motor HAL sensor
-    if (g_spindle_motor) {
-        current_rpm = g_spindle_motor->get_rpm();
+    if (spindle_motor) {
+        current_rpm = spindle_motor->get_rpm();
         
         // Update last RPM calculation time
         last_rpm_update_time = time_us_32();
@@ -464,10 +479,10 @@ void WindingController::home_all_axes() {
  * Ensures perfect synchronization even if spindle speed varies
  */
 void WindingController::adjust_traverse_speed() {
-    if (!g_spindle_motor) return;
+    if (!spindle_motor) return;
     
     // Get current actual RPM
-    float actual_rpm = g_spindle_motor->get_rpm();
+    float actual_rpm = spindle_motor->get_rpm();
     
     // Skip if spindle is not running or too slow
     if (actual_rpm < 50.0f) return;

@@ -1,6 +1,6 @@
 // =============================================================================
 // move_queue.h - MCU Move Queue & Step Consumer
-// Purpose: Fixed-size move queue with ISR-driven step execution
+// Purpose: Fixed-size move queue with ISR-driven step execution for traverse axis
 // =============================================================================
 
 #pragma once
@@ -10,7 +10,7 @@
 #include <cstdint>
 
 // =============================================================================
-// MoveQueue Class
+// MoveQueue Class - Traverse Stepper Only
 // =============================================================================
 class MoveQueue {
 public:
@@ -20,87 +20,70 @@ public:
     MoveQueue();
     
     /**
-     * @brief Initialize GPIO pins for stepper control
+     * @brief Initialize GPIO pins for traverse stepper control
      */
     void init();
     
     /**
-     * @brief Push a step chunk to an axis queue
-     * @param axis Axis identifier (AXIS_SPINDLE or AXIS_TRAVERSE)
+     * @brief Push a step chunk to traverse queue
      * @param chunk Step chunk to queue
      * @return true if successful, false if queue full
      */
-    bool push_chunk(uint8_t axis, const StepChunk& chunk);
+    bool push_chunk(const StepChunk& chunk);
     
     /**
-     * @brief Pop a chunk from an axis queue
-     * @param axis Axis identifier
+     * @brief Pop a chunk from traverse queue
      * @param out Output chunk
      * @return true if successful, false if queue empty
      */
-    bool pop_chunk(uint8_t axis, StepChunk& out);
+    bool pop_chunk(StepChunk& out);
     
     /**
-     * @brief Check if axis has chunks in queue
-     * @param axis Axis identifier
+     * @brief Check if traverse has chunks in queue
      * @return true if queue has chunks
      */
-    bool has_chunk(uint8_t axis);
+    bool has_chunk();
     
     /**
-     * @brief Clear all chunks from an axis queue
-     * @param axis Axis identifier
+     * @brief Clear all chunks from traverse queue
      */
-    void clear_queue(uint8_t axis);
+    void clear_queue();
     
     /**
-     * @brief ISR handler for axis stepping
+     * @brief ISR handler for traverse stepping
      * Call this from ISR at high frequency (e.g., 10 kHz)
-     * @param axis Axis identifier
      */
-    void axis_isr_handler(uint8_t axis);
-    
-    /**
-     * @brief Get current queue depth
-     * @param axis Axis identifier
-     * @return Number of chunks in queue
-     */
-    void handle_isr_tick();
+    void traverse_isr_handler();
 
     /**
-     * @brief Set direction pin state
-     * @param axis Axis identifier
+     * @brief Set traverse direction pin state
      * @param forward true for forward, false for reverse
      */
-    void set_direction(uint8_t axis, bool forward);
+    void set_direction(bool forward);
     
     /**
-     * @brief Enable/disable motor
-     * @param axis Axis identifier
+     * @brief Enable/disable traverse motor
      * @param enable true to enable motor
      */
-    void set_enable(uint8_t axis, bool enable);
+    void set_enable(bool enable);
     
     /**
-     * @brief Check if axis is currently executing steps
-     * @param axis Axis identifier
+     * @brief Check if traverse is currently executing steps
      * @return true if actively stepping
      */
-    bool is_active(uint8_t axis);
+    bool is_active();
     
     /**
-     * @brief Get total steps executed on axis since init
-     * @param axis Axis identifier
+     * @brief Get total steps executed on traverse since init
      * @return Total step count
      */
-    int32_t get_step_count(uint8_t axis);
+    int32_t get_step_count();
 
     /**
      * @brief Get current queue depth
-     * @param axis Axis identifier
      * @return Number of chunks in queue
      */ 
-    uint32_t get_queue_depth(uint8_t axis) const;
+    uint32_t get_queue_depth() const;
     
     // =========================================================================
     // ⭐ NEW: FluidNC-style Safety and Feed Control Methods
@@ -134,22 +117,21 @@ public:
     bool is_emergency_stopped() const { return emergency_stop_active; }
 
 private:
-    StepChunk queues[2][128];  // NUM_AXES x MOVE_CHUNKS_CAPACITY
-    volatile uint16_t head[2];
-    volatile uint16_t tail[2];
+    StepChunk queue[128];  // MOVE_CHUNKS_CAPACITY
+    volatile uint16_t head;
+    volatile uint16_t tail;
     
-    StepChunk active[2];
-    bool active_running[2];
-    uint32_t last_step_time[2];
-    int32_t step_count[2];
+    StepChunk active;
+    bool active_running;
+    uint32_t last_step_time;
+    int32_t step_count;
     
     // ⭐ NEW: FluidNC-style safety and feed control
     bool feeding_paused;
     bool emergency_stop_active;
     
     /**
-     * @brief Execute a step pulse on given pin
-     * @param step_pin GPIO pin number
+     * @brief Execute a step pulse on traverse step pin
      */
-    void execute_step_pulse(uint32_t step_pin);
+    void execute_step_pulse();
 };

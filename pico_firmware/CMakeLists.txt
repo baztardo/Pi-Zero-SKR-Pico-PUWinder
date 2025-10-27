@@ -34,7 +34,6 @@ pico_sdk_init()
 add_executable(pico_spindle_controller
     main.cpp
     src/spindle.cpp
-    src/BLDCRPMSensor.cpp
     src/move_queue.cpp
     src/scheduler.cpp
     src/stepcompress.cpp
@@ -42,6 +41,7 @@ add_executable(pico_spindle_controller
     src/winding_controller.cpp
     src/traverse_controller.cpp
     src/gcode_interface.cpp
+    src/communication_handler.cpp
 )
 
 target_include_directories(pico_spindle_controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)

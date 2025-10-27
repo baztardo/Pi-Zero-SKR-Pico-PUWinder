@@ -7,6 +7,7 @@
 
 #include "move_queue.h"
 #include "stepcompress.h"
+#include "spindle.h"
 // Encoder and LCD removed - no longer needed
 #include <cstdint>
 
@@ -70,8 +71,9 @@ public:
     /**
      * @brief Constructor
      * @param mq Move queue instance
+     * @param spindle_motor Spindle motor controller
      */
-    WindingController(MoveQueue* mq);
+    WindingController(MoveQueue* mq, BLDC_MOTOR* spindle_motor);
 
     void init();
     void set_parameters(const WindingParams& params);
@@ -93,6 +95,7 @@ public:
 
 private:
     MoveQueue* move_queue;
+    BLDC_MOTOR* spindle_motor;
     // Encoder and LCD removed - no longer needed
     
     WindingState state;

@@ -180,7 +180,7 @@ void BLDC_MOTOR::set_direction(MotorDirection direction) {
 
 void BLDC_MOTOR::set_brake(bool brake) {
     this->brake = brake;
-    gpio_put(SPINDLE_BRAKE_PIN, brake);  // 1=HIGH(Brake), 0=LOW(Release)
+    gpio_put(SPINDLE_BRAKE_PIN, brake);  // 1=HIGH(Brake ON), 0=LOW(Brake OFF)
 }   
 bool BLDC_MOTOR::get_brake() const {
     return brake;

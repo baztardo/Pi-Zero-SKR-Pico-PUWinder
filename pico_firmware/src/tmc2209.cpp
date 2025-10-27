@@ -64,16 +64,18 @@ TMC2209_UART::TMC2209_UART(uart_inst_t* uart_port, int tx_pin, int rx_pin, uint8
       pin_mode(false), slave_addr(slave_addr)
 {
     if (uart_port) {
-        // Hardware UART mode
+        // Hardware UART mode - use UART1 for TMC2209 (UART0 used by CommunicationHandler)
         uart_init(uart_port, TMC_BAUDRATE);
         gpio_set_function(tx, GPIO_FUNC_UART);
         gpio_set_function(rx, GPIO_FUNC_UART);
+        printf("[TMC2209] Hardware UART initialized (UART1 for TMC2209)\n");
     } else {
-        // Software UART (single wire)
+        // Software UART (single wire) - fallback mode
         pin_mode = true;
         gpio_init(tx);
         gpio_set_dir(tx, GPIO_OUT);
         gpio_put(tx, 1);
+        printf("[TMC2209] Software UART mode (single wire)\n");
     }
 }
 
@@ -112,7 +114,7 @@ bool TMC2209_UART::writeRegister(uint8_t reg, uint32_t value) {
 // =============================================================================
 bool TMC2209_UART::readRegister(uint8_t reg, uint32_t &value) {
     uint8_t tx[4] = {0x05, (uint8_t)(slave_addr & 0x7F), reg, 0x00};
-    tx[3] = crc8(tx, 3);   // ✅ correct line
+    tx[3] = crc8(tx, 3);
 
     uart_write_blocking(uart_inst, tx, 4);
 

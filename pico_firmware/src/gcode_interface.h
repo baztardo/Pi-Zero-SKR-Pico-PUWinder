@@ -48,6 +48,10 @@ enum GCodeTokenType {
     TOKEN_G4 = 31,     // Dwell with planner sync
     TOKEN_GET_HALL_RPM = 32,  // Get hall sensor RPM
     TOKEN_CHECK_HALL = 33,    // Check hall sensor pin state
+    TOKEN_WIND = 34,          // Start winding sequence
+    TOKEN_PAUSE_WIND = 35,    // Pause winding
+    TOKEN_RESUME_WIND = 36,   // Resume winding
+    TOKEN_STOP_WIND = 37,     // Stop winding
     TOKEN_UNKNOWN = 255
 };
 
@@ -59,11 +63,18 @@ struct GCodeParams {
     float F;            // Feed rate
     float S;            // Spindle speed
     float P;            // Parameter P
+    // Winding parameters
+    float T;            // Target turns
+    float W;            // Wire diameter (mm)
+    float B;            // Bobbin width (mm)
+    float O;            // Offset from edge (mm)
     bool has_X, has_Y, has_Z, has_F, has_S, has_P;
+    bool has_T, has_W, has_B, has_O;
     
-    GCodeParams() : X(0), Y(0), Z(0), F(0), S(0), P(0),
+    GCodeParams() : X(0), Y(0), Z(0), F(0), S(0), P(0), T(1000), W(0.064), B(12.0), O(22.0),
                     has_X(false), has_Y(false), has_Z(false),
-                    has_F(false), has_S(false), has_P(false) {}
+                    has_F(false), has_S(false), has_P(false),
+                    has_T(false), has_W(false), has_B(false), has_O(false) {}
 };
 
 // =============================================================================
@@ -74,6 +85,7 @@ class BLDC_MOTOR;
 class TraverseController;
 class MoveQueue;
 class WindingController;
+class CommunicationHandler;
 
 class GCodeInterface {
 public:
@@ -83,6 +95,12 @@ public:
     // Command processing
     bool parse_command(const char* command);
     bool execute_command();
+    void process_command(const char* command);  // Combined parse + execute
+    
+    // Communication setup
+    void set_communication_handler(CommunicationHandler* comm_handler);
+    
+    // Response methods (now use CommunicationHandler)
     void send_response(const char* response);
     void send_error(const char* error);
     
@@ -102,6 +120,7 @@ private:
     TraverseController* traverse_controller;
     MoveQueue* move_queue;
     WindingController* winding_controller;
+    CommunicationHandler* communication_handler;
     
     // Current command state
     GCodeTokenType current_command;
@@ -154,6 +173,12 @@ private:
     bool execute_m410();    // Quick stop
     bool execute_m999();    // Reset from emergency stop
     bool execute_g4();      // Dwell with planner sync
+    
+    // Winding sequence commands
+    bool execute_wind();    // Start winding sequence
+    bool execute_pause_wind();  // Pause winding
+    bool execute_resume_wind(); // Resume winding
+    bool execute_stop_wind();   // Stop winding
     
     // Helper functions
     void log_command(const char* cmd);

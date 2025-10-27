@@ -4,6 +4,7 @@
 // =============================================================================
 
 #include "gcode_interface.h"
+#include "communication_handler.h"
 #include "config.h"
 #include "spindle.h"
 #include "traverse_controller.h"
@@ -24,6 +25,7 @@ GCodeInterface::GCodeInterface(BLDC_MOTOR* spindle, TraverseController* traverse
     , traverse_controller(traverse)
     , move_queue(queue)
     , winding_controller(winding)
+    , communication_handler(nullptr)
     , current_command(TOKEN_UNKNOWN)
     , busy(false)
     , error_state(false)
@@ -96,6 +98,22 @@ bool GCodeInterface::parse_command(const char* command) {
     }
     else if (strcmp(command, "CHECK_HALL") == 0) {
         current_command = TOKEN_CHECK_HALL;
+        return true;
+    }
+    else if (strcmp(command, "WIND") == 0) {
+        current_command = TOKEN_WIND;
+        return true;
+    }
+    else if (strcmp(command, "PAUSE_WIND") == 0) {
+        current_command = TOKEN_PAUSE_WIND;
+        return true;
+    }
+    else if (strcmp(command, "RESUME_WIND") == 0) {
+        current_command = TOKEN_RESUME_WIND;
+        return true;
+    }
+    else if (strcmp(command, "STOP_WIND") == 0) {
+        current_command = TOKEN_STOP_WIND;
         return true;
     }
     else if (command[0] == 'S') {
@@ -267,6 +285,18 @@ bool GCodeInterface::execute_command() {
         case TOKEN_CHECK_HALL:
             result = execute_check_hall();
             break;
+        case TOKEN_WIND:
+            result = execute_wind();
+            break;
+        case TOKEN_PAUSE_WIND:
+            result = execute_pause_wind();
+            break;
+        case TOKEN_RESUME_WIND:
+            result = execute_resume_wind();
+            break;
+        case TOKEN_STOP_WIND:
+            result = execute_stop_wind();
+            break;
         // ⭐ NEW: FluidNC-style Safety Commands
         case TOKEN_M0:
             result = execute_m0();
@@ -293,26 +323,6 @@ bool GCodeInterface::execute_command() {
     return result;
 }
 
-// =============================================================================
-// Send response
-// =============================================================================
-void GCodeInterface::send_response(const char* response) {
-    printf("RESPONSE: %s\n", response);
-    // Send via UART
-    uart_puts(PI_UART_ID, response);
-    uart_puts(PI_UART_ID, "\n");
-}
-
-// =============================================================================
-// Send error
-// =============================================================================
-void GCodeInterface::send_error(const char* error) {
-    printf("ERROR: %s\n", error);
-    // Send via UART
-    uart_puts(PI_UART_ID, "ERROR_");
-    uart_puts(PI_UART_ID, error);
-    uart_puts(PI_UART_ID, "\n");
-}
 
 // =============================================================================
 // Check if busy
@@ -422,12 +432,12 @@ bool GCodeInterface::execute_m3_m4() {
         // Set spindle speed and direction
         if (current_command == TOKEN_M3) {
             spindle_controller->set_direction(DIRECTION_CW);
-            gpio_put(SPINDLE_DIR_PIN, 1);  // HIGH for default direction (CW)
-            printf("M3: Direction pin set to 1 (CW - default direction)\n");
+            gpio_put(SPINDLE_DIR_PIN, 1);  // HIGH for CW direction
+            printf("M3: Direction pin set to 1 (CW)\n");
         } else {
             spindle_controller->set_direction(DIRECTION_CCW);
-            gpio_put(SPINDLE_DIR_PIN, 0);  // LOW to change direction (CCW)
-            printf("M4: Direction pin set to 0 (CCW - change direction)\n");
+            gpio_put(SPINDLE_DIR_PIN, 0);  // LOW for CCW direction
+            printf("M4: Direction pin set to 0 (CCW)\n");
         }
         
         // Convert RPM to PWM duty cycle
@@ -555,7 +565,7 @@ bool GCodeInterface::execute_m10_m11() {
     
     bool enable = (current_command == TOKEN_M10);
     // Use Klipper-style move queue for brake control
-    move_queue->set_enable(AXIS_TRAVERSE, !enable); // Brake = disable motor
+    move_queue->set_enable(!enable); // Brake = disable motor
     send_response(enable ? "Traverse brake engaged" : "Traverse brake released");
     return true;
 }
@@ -606,13 +616,11 @@ bool GCodeInterface::execute_m17_m18() {
     
     if (current_command == TOKEN_M17) {
         // Enable both axes
-        move_queue->set_enable(AXIS_SPINDLE, true);
-        move_queue->set_enable(AXIS_TRAVERSE, true);
+        move_queue->set_enable(true);
         send_response("Steppers enabled");
     } else {
         // Disable both axes
-        move_queue->set_enable(AXIS_SPINDLE, false);
-        move_queue->set_enable(AXIS_TRAVERSE, false);
+        move_queue->set_enable(false);
         send_response("Steppers disabled");
     }
     
@@ -1045,15 +1053,13 @@ bool GCodeInterface::execute_m410() {
     
     // Wait for current moves to finish
     uint32_t start_time = time_us_32();
-    while ((move_queue->is_active(AXIS_SPINDLE) || 
-            move_queue->is_active(AXIS_TRAVERSE)) &&
+    while (move_queue->is_active() &&
            (time_us_32() - start_time) < 5000000) {  // 5 second timeout
         sleep_ms(10);
     }
     
     // Clear any remaining queued moves
-    move_queue->clear_queue(AXIS_SPINDLE);
-    move_queue->clear_queue(AXIS_TRAVERSE);
+    move_queue->clear_queue();
     
     send_response("STOPPED");
     return true;
@@ -1066,8 +1072,7 @@ bool GCodeInterface::execute_m999() {
     
     if (move_queue) {
         // Re-enable motors
-        move_queue->set_enable(AXIS_TRAVERSE, true);
-        move_queue->set_enable(AXIS_SPINDLE, true);
+        move_queue->set_enable(true);
         move_queue->resume_feeding();
     }
     
@@ -1091,10 +1096,8 @@ bool GCodeInterface::execute_g4() {
             uint32_t start_time = time_us_32();
             
             // Wait for all queued and active moves to complete
-            while (move_queue->has_chunk(AXIS_SPINDLE) || 
-                   move_queue->has_chunk(AXIS_TRAVERSE) ||
-                   move_queue->is_active(AXIS_SPINDLE) ||
-                   move_queue->is_active(AXIS_TRAVERSE)) {
+            while (move_queue->has_chunk() ||
+                   move_queue->is_active()) {
                 
                 sleep_ms(10);
                 
@@ -1117,5 +1120,132 @@ bool GCodeInterface::execute_g4() {
     sleep_ms((uint32_t)params.P);
     
     send_response("OK");
+    return true;
+}
+
+// =============================================================================
+// Process command (combined parse + execute)
+// =============================================================================
+void GCodeInterface::process_command(const char* command) {
+    printf("CMD: %s (len=%d)\n", command, strlen(command));
+    
+    // Parse command
+    if (!parse_command(command)) {
+        send_error("ERROR_PARSE_FAILED");
+        return;
+    }
+    
+    // Execute command (handles all responses)
+    execute_command();
+}
+
+// =============================================================================
+// Set communication handler
+// =============================================================================
+void GCodeInterface::set_communication_handler(CommunicationHandler* comm_handler) {
+    communication_handler = comm_handler;
+    printf("[GCodeInterface] Communication handler set\n");
+}
+
+// =============================================================================
+// Send response (uses CommunicationHandler)
+// =============================================================================
+void GCodeInterface::send_response(const char* response) {
+    if (communication_handler) {
+        communication_handler->send_response(response);
+    } else {
+        // Fallback to direct UART if no communication handler
+        uart_puts(PI_UART_ID, response);
+        uart_puts(PI_UART_ID, "\n");
+    }
+}
+
+// =============================================================================
+// Send error (uses CommunicationHandler)
+// =============================================================================
+void GCodeInterface::send_error(const char* error) {
+    if (communication_handler) {
+        communication_handler->send_error(error);
+    } else {
+        // Fallback to direct UART if no communication handler
+        uart_puts(PI_UART_ID, error);
+        uart_puts(PI_UART_ID, "\n");
+    }
+}
+
+// =============================================================================
+// Winding Sequence Commands
+// =============================================================================
+
+bool GCodeInterface::execute_wind() {
+    if (!winding_controller) {
+        set_error("Winding controller not available");
+        return false;
+    }
+    
+    // Set winding parameters from G-code
+    WindingParams params;
+    if (this->params.has_T) params.target_turns = (uint32_t)this->params.T;
+    if (this->params.has_S) params.spindle_rpm = this->params.S;
+    if (this->params.has_W) params.wire_diameter_mm = this->params.W;
+    if (this->params.has_B) params.layer_width_mm = this->params.B;
+    if (this->params.has_O) params.start_position_mm = this->params.O;
+    
+    // Apply parameters
+    winding_controller->set_parameters(params);
+    
+    // Start winding sequence
+    if (winding_controller->start()) {
+        send_response("WINDING_STARTED");
+        printf("Winding started: %u turns, %.1f RPM, %.3fmm wire, %.1fmm bobbin\n",
+               params.target_turns, params.spindle_rpm, params.wire_diameter_mm, params.layer_width_mm);
+        return true;
+    } else {
+        set_error("Failed to start winding");
+        return false;
+    }
+}
+
+bool GCodeInterface::execute_pause_wind() {
+    if (!winding_controller) {
+        set_error("Winding controller not available");
+        return false;
+    }
+    
+    // Pause the winding process
+    winding_controller->stop();
+    send_response("WINDING_PAUSED");
+    printf("Winding paused\n");
+    return true;
+}
+
+bool GCodeInterface::execute_resume_wind() {
+    if (!winding_controller) {
+        set_error("Winding controller not available");
+        return false;
+    }
+    
+    // Resume winding (restart with current parameters)
+    if (winding_controller->start()) {
+        send_response("WINDING_RESUMED");
+        printf("Winding resumed\n");
+        return true;
+    } else {
+        set_error("Failed to resume winding");
+        return false;
+    }
+}
+
+bool GCodeInterface::execute_stop_wind() {
+    if (!winding_controller) {
+        set_error("Winding controller not available");
+        return false;
+    }
+    
+    // Stop winding completely
+    winding_controller->stop();
+    winding_controller->emergency_stop();
+    send_response("WINDING_STOPPED");
+    printf("Winding stopped\n");
     return true;
 }

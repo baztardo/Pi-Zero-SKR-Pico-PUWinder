@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pi Zero Winding Controller</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            font-size: 1.2em;
+        }
+
+        .status-item {
+            text-align: center;
+        }
+
+        .status-value {
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .control-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-panel h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            border: none;
+            color: white;
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+
+        .btn-warning {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+        }
+
+        .btn-info {
+            background: linear-gradient(45deg, #2196F3, #1976D2);
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 15px;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-connected {
+            background: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+        }
+
+        .status-disconnected {
+            background: #f44336;
+            box-shadow: 0 0 10px #f44336;
+        }
+
+        .status-winding {
+            background: #2196F3;
+            box-shadow: 0 0 10px #2196F3;
+            animation: pulse 1s infinite;
+        }
+
+        .status-paused {
+            background: #ff9800;
+            box-shadow: 0 0 10px #ff9800;
+        }
+
+        .status-error {
+            background: #f44336;
+            box-shadow: 0 0 10px #f44336;
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .settings-panel {
+            grid-column: 1 / -1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            margin-top: 20px;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .setting-group label {
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .setting-group input {
+            padding: 12px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        .setting-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .emergency-stop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 16px rgba(244, 67, 54, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .emergency-stop:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 24px rgba(244, 67, 54, 0.6);
+        }
+
+        .emergency-stop:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .button-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                font-size: 1.2em;
+                min-height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🔄 Pi Zero Winding Controller</h1>
+        <div class="status-bar">
+            <div class="status-item">
+                <span class="status-indicator" id="connectionStatus"></span>
+                <span id="connectionText">Disconnected</span>
+            </div>
+            <div class="status-item">
+                State: <span class="status-value" id="currentState">Idle</span>
+            </div>
+            <div class="status-item">
+                RPM: <span class="status-value" id="currentRPM">0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="control-panel">
+            <h2>🎮 Control Panel</h2>
+            <div class="button-grid">
+                <button class="btn btn-info" id="connectBtn" onclick="connect()">🔌 Connect</button>
+                <button class="btn btn-info" id="disconnectBtn" onclick="disconnect()" disabled>🔌 Disconnect</button>
+                <button class="btn btn-info" id="testBtn" onclick="testConnection()" disabled>🔍 Test</button>
+                <button class="btn btn-warning" id="homeBtn" onclick="home()" disabled>🏠 Home</button>
+                <button class="btn" id="startBtn" onclick="startWinding()" disabled>▶️ Start</button>
+                <button class="btn btn-warning" id="pauseBtn" onclick="pauseWinding()" disabled>⏸️ Pause</button>
+                <button class="btn" id="resumeBtn" onclick="resumeWinding()" disabled>▶️ Resume</button>
+                <button class="btn btn-danger" id="stopBtn" onclick="stopWinding()" disabled>⏹️ Stop</button>
+                <button class="btn btn-info" id="resetBtn" onclick="resetEmergency()" disabled>🔄 Reset</button>
+            </div>
+        </div>
+
+        <div class="progress-panel">
+            <h2>📊 Progress</h2>
+            <div class="progress-text" id="progressText">0 / 1000 turns (0%)</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div style="margin-top: 20px;">
+                <div>Layer: <span class="status-value" id="currentLayer">0</span></div>
+                <div>Position: <span class="status-value" id="traversePosition">0.0</span> mm</div>
+            </div>
+        </div>
+
+        <div class="settings-panel">
+            <h2>⚙️ Winding Settings</h2>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label for="targetTurns">Target Turns</label>
+                    <input type="number" id="targetTurns" value="1000" min="1" max="10000">
+                </div>
+                <div class="setting-group">
+                    <label for="spindleRPM">Spindle RPM</label>
+                    <input type="number" id="spindleRPM" value="300" min="50" max="2000">
+                </div>
+                <div class="setting-group">
+                    <label for="wireDiameter">Wire Diameter (mm)</label>
+                    <input type="number" id="wireDiameter" value="0.064" step="0.001" min="0.01" max="1.0">
+                </div>
+                <div class="setting-group">
+                    <label for="bobbinWidth">Bobbin Width (mm)</label>
+                    <input type="number" id="bobbinWidth" value="12.0" step="0.1" min="1" max="50">
+                </div>
+                <div class="setting-group">
+                    <label for="offset">Start Offset (mm)</label>
+                    <input type="number" id="offset" value="22.0" step="0.1" min="0" max="100">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="emergency-stop" id="emergencyBtn" onclick="emergencyStop()">
+        🚨<br>EMERGENCY<br>STOP
+    </button>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        let statusInterval;
+        let isConnected = false;
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function updateStatus() {
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    // Update connection status
+                    const connectionStatus = document.getElementById('connectionStatus');
+                    const connectionText = document.getElementById('connectionText');
+
+                    if (data.connected) {
+                        connectionStatus.className = 'status-indicator status-connected';
+                        connectionText.textContent = 'Connected';
+                        isConnected = true;
+                    } else {
+                        connectionStatus.className = 'status-indicator status-disconnected';
+                        connectionText.textContent = 'Disconnected';
+                        isConnected = false;
+                    }
+
+                    // Update state indicator
+                    const stateIndicator = document.getElementById('connectionStatus');
+                    stateIndicator.className = `status-indicator status-${data.state}`;
+
+                    // Update status values
+                    document.getElementById('currentState').textContent = data.state.toUpperCase();
+                    document.getElementById('currentRPM').textContent = data.rpm.toFixed(1);
+                    document.getElementById('currentLayer').textContent = data.layer;
+                    document.getElementById('traversePosition').textContent = data.position.toFixed(2);
+
+                    // Update progress
+                    const progressText = document.getElementById('progressText');
+                    const progressFill = document.getElementById('progressFill');
+                    progressText.textContent = `${data.turns} / ${data.target_turns} turns (${data.progress.toFixed(1)}%)`;
+                    progressFill.style.width = `${data.progress}%`;
+
+                    // Update button states
+                    updateButtonStates(data);
+                })
+                .catch(error => {
+                    console.error('Status update error:', error);
+                });
+        }
+
+        function updateButtonStates(data) {
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            const testBtn = document.getElementById('testBtn');
+            const homeBtn = document.getElementById('homeBtn');
+            const startBtn = document.getElementById('startBtn');
+            const pauseBtn = document.getElementById('pauseBtn');
+            const resumeBtn = document.getElementById('resumeBtn');
+            const stopBtn = document.getElementById('stopBtn');
+            const resetBtn = document.getElementById('resetBtn');
+
+            // Connection buttons
+            connectBtn.disabled = data.connected;
+            disconnectBtn.disabled = !data.connected;
+            testBtn.disabled = !data.connected;
+
+            // Control buttons
+            homeBtn.disabled = !data.connected;
+            startBtn.disabled = !data.connected || data.state === 'winding';
+            pauseBtn.disabled = !data.connected || data.state !== 'winding';
+            resumeBtn.disabled = !data.connected || data.state !== 'paused';
+            stopBtn.disabled = !data.connected || (data.state !== 'winding' && data.state !== 'paused');
+            resetBtn.disabled = !data.connected || data.state !== 'error';
+        }
+
+        function connect() {
+            fetch('/api/connect', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function disconnect() {
+            fetch('/api/disconnect', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function home() {
+            fetch('/api/home', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function startWinding() {
+            const params = {
+                turns: parseInt(document.getElementById('targetTurns').value),
+                rpm: parseFloat(document.getElementById('spindleRPM').value),
+                wire_diameter: parseFloat(document.getElementById('wireDiameter').value),
+                bobbin_width: parseFloat(document.getElementById('bobbinWidth').value),
+                offset: parseFloat(document.getElementById('offset').value)
+            };
+
+            fetch('/api/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(params)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function pauseWinding() {
+            fetch('/api/pause', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function resumeWinding() {
+            fetch('/api/resume', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function stopWinding() {
+            fetch('/api/stop', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function emergencyStop() {
+            if (confirm('🚨 EMERGENCY STOP - Are you sure?')) {
+                fetch('/api/emergency', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        showNotification(data.message, 'error');
+                    });
+            }
+        }
+
+        function resetEmergency() {
+            fetch('/api/reset', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    showNotification(data.message, data.success ? 'success' : 'error');
+                });
+        }
+
+        function testConnection() {
+            showNotification("🔍 Testing UART connection...", 'info');
+
+            // Test ping
+            fetch('/api/status')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.connected) {
+                        showNotification("✅ UART connection test successful", 'success');
+                    } else {
+                        showNotification("❌ UART connection test failed", 'error');
+                    }
+                })
+                .catch(error => {
+                    showNotification("❌ UART connection test error", 'error');
+                });
+        }
+
+        // Start status updates
+        statusInterval = setInterval(updateStatus, 1000);
+        updateStatus();
+
+        // Auto-connect on page load
+        window.addEventListener('load', () => {
+            setTimeout(connect, 1000);
+        });
+    </script>
+</body>
+
+</html>

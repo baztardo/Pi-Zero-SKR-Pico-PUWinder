@@ -20,9 +20,10 @@
 #define PI_UART_BAUD 115200
 
 // BLDC PWM config - CORRECTED for ZS-X11H motor driver
-#define SPINDLE_PWM_PIN       24    // PWM speed control → P pin
-#define SPINDLE_BRAKE_PIN     3     // Brake → BRAKE pin (HIGH=brake on, LOW=brake off)
-#define SPINDLE_DIR_PIN       4     // Direction → DIR pin (HIGH=default, LOW=change direction)
+#define SPINDLE_PWM_PIN       24    // PWM speed control → PWM pin
+#define SPINDLE_BRAKE_PIN     25    // Brake → BRAKE pin (HIGH=brake ON, LOW=brake OFF)
+#define SPINDLE_DIR_PIN       20    // Direction → DIR pin - HIGH=CW, LOW=CCW
+#define SPINDLE_ENABLE_PIN    21    // Enable → Power 12/24v
 #define SPINDLE_HALL_A_PIN    22    // Speed feedback ← SC pin (just this one)
 
 // Traverse Stepper Motor
@@ -102,27 +103,23 @@
 // =============================================================================
 // SYSTEM CONSTANTS
 // =============================================================================
-#define NUM_AXES                2       // Number of axes (spindle + traverse)
+#define NUM_AXES               2       // Number of axes (spindle + traverse)
 #define AXIS_SPINDLE           0       // Spindle axis index
 #define AXIS_TRAVERSE          1       // Traverse axis index
 
 // Move queue configuration
 #define MOVE_CHUNKS_CAPACITY    128     // Maximum chunks per axis
-#define STEP_PULSE_US          2       // Step pulse width (microseconds)
-
-// Spindle stepper pins (if using stepper instead of BLDC)
-#define SPINDLE_STEP_PIN       11      // Spindle step pin
-#define SPINDLE_ENA_PIN        12      // Spindle enable pin
 
 // TMC2209 configuration
 #define R_SENSE                 0.11f   // Sense resistor value (ohms)
 
-// Debug pin
-#define DEBUG_PIN              25      // Debug LED pin
-
 // Scheduler configuration
 #define HEARTBEAT_US           100     // Scheduler heartbeat interval (microseconds)
-#define SCHED_HEARTBEAT_PIN    25      // Scheduler heartbeat LED pin
+#define SCHED_HEARTBEAT_PIN    18     // Scheduler heartbeat LED pin - CHANGED from GPIO 25
+
+// Debug and step pulse configuration
+#define DEBUG_PIN              26     // Debug LED pin
+#define STEP_PULSE_US          2      // Step pulse width in microseconds
 
 // =============================================================================
 // BLDC MOTOR CONFIGURATION

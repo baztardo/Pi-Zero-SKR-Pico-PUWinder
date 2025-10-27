@@ -122,9 +122,9 @@ void Scheduler::handle_isr() {
     // Encoder now updated by Core 1 (see main.cpp core1_entry)
     // Removed: spindle_encoder->update() to reduce Core 0 ISR load
     
-    // Process move queues for both axes
+    // Process traverse move queue
     if (move_queue) {
-        move_queue->handle_isr_tick();
+        move_queue->traverse_isr_handler();
     }
     
     // Call user callback if registered
