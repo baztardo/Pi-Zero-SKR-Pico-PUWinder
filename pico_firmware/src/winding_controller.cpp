@@ -363,44 +363,65 @@ void WindingController::sync_traverse_to_spindle() {
         return;
     }
     
-    uint32_t current_pulses = spindle_motor->get_pulse_count();
-    uint32_t pulse_delta = current_pulses - enc_last_sync;
+    // REAL-TIME VELOCITY MATCHING (like Klipper/FluidNC)
+    // Calculate current traverse velocity based on current RPM
+    float current_rpm = spindle_motor->get_rpm();
     
-    if (pulse_delta == 0) return;
+    // Calculate required traverse velocity: RPM × wire_diameter
+    float required_traverse_velocity_mm_per_min = current_rpm * params.wire_diameter_mm;
+    float required_traverse_velocity_mm_per_sec = required_traverse_velocity_mm_per_min / 60.0f;
     
-    printf("[SYNC] Pulse delta: %u, Revolutions: %.3f\n", pulse_delta, (float)pulse_delta / (float)BLDC_DEFAULT_PPR);
+    // Convert to steps per second
+    float steps_per_mm = 6135.0f;  // Calibrated value
+    float required_steps_per_sec = required_traverse_velocity_mm_per_sec * steps_per_mm;
     
-    // Calculate revolutions
-    float spindle_revolutions = (float)pulse_delta / (float)BLDC_DEFAULT_PPR;
-    
-    // Calculate traverse distance
-    float effective_pitch_mm = params.wire_diameter_mm * WIRE_TENSION_FACTOR;
-    float traverse_distance_mm = spindle_revolutions * effective_pitch_mm;
-    
-    // Apply direction
-    if (!traverse_direction) {
-        traverse_distance_mm = -traverse_distance_mm;
+    // Only move if we have meaningful velocity
+    if (required_steps_per_sec < 1.0f) {
+        return;  // Too slow to matter
     }
     
-    // Convert to steps using the same calculation as traverse controller
-    // Based on original calibration: 6135 steps/mm
-    float steps_per_mm = 6135.0f;  // Use original calibrated value
-    int32_t traverse_steps = (int32_t)(traverse_distance_mm * steps_per_mm);
+    // Calculate how many steps to generate this update cycle
+    // This runs at ~100Hz, so generate steps for 10ms worth of movement
+    static uint32_t last_sync_time = 0;
+    uint32_t current_time = time_us_32();
+    uint32_t delta_time_us = current_time - last_sync_time;
     
-    if (abs(traverse_steps) > 0) {
-        printf("[SYNC] Moving traverse: %.3fmm, %d steps\n", traverse_distance_mm, traverse_steps);
+    if (delta_time_us < 10000) {  // 10ms minimum
+        return;
+    }
+    
+    float delta_time_sec = delta_time_us / 1000000.0f;
+    int32_t steps_to_generate = (int32_t)(required_steps_per_sec * delta_time_sec);
+    
+    if (steps_to_generate > 0) {
+        // Apply direction
+        if (!traverse_direction) {
+            steps_to_generate = -steps_to_generate;
+        }
+        
+        printf("[SYNC] RPM: %.1f, Velocity: %.3f mm/s, Steps: %d\n", 
+               current_rpm, required_traverse_velocity_mm_per_sec, abs(steps_to_generate));
+        
+        // CRITICAL: Enable MoveQueue and set direction for sync moves
+        move_queue->set_enable(true);
+        move_queue->set_direction(traverse_direction);
+        
+        // Generate smooth step commands
         auto chunks = StepCompressor::compress_constant_velocity(
-            abs(traverse_steps), TRAVERSE_MIN_WINDING_SPEED);
+            abs(steps_to_generate), (uint32_t)required_steps_per_sec);
         
         for (const auto& chunk : chunks) {
             move_queue->push_chunk(chunk);
         }
         
-        current_traverse_position_mm += traverse_distance_mm;
+        // Update position
+        float distance_moved_mm = (float)steps_to_generate / steps_per_mm;
+        current_traverse_position_mm += distance_moved_mm;
+        
         printf("[SYNC] New traverse position: %.3fmm\n", current_traverse_position_mm);
     }
     
-    enc_last_sync = current_pulses;  // Update cursor
+    last_sync_time = current_time;
     
     // Check for layer edges
     float edge_margin = 0.5f;

@@ -105,9 +105,22 @@ void MoveQueue::execute_step_pulse() {
     gpio_put(TRAVERSE_STEP_PIN, 1);
     busy_wait_us(STEP_PULSE_US);
     gpio_put(TRAVERSE_STEP_PIN, 0);
+    
+    // Debug: Show step execution
+    static uint32_t step_debug_count = 0;
+    if ((step_debug_count++ % 50) == 0) {  // Every 50 steps
+        printf("[MoveQueue] Step #%u executed\n", step_debug_count);
+    }
 }
 
 void MoveQueue::traverse_isr_handler() {
+    // Debug: Show ISR calls occasionally
+    static uint32_t isr_debug_count = 0;
+    if ((isr_debug_count++ % 1000) == 0) {  // Every 1000 ISR calls
+        printf("[MoveQueue] ISR called #%u, Queue depth: %u, Active: %s\n", 
+               isr_debug_count, get_queue_depth(), active_running ? "YES" : "NO");
+    }
+    
     // If not running an active chunk, try to load one
     if (!active_running) {
         if (head == tail) {
@@ -119,6 +132,12 @@ void MoveQueue::traverse_isr_handler() {
         tail = (tail + 1) % MOVE_CHUNKS_CAPACITY;
         active_running = true;
         last_step_time = time_us_32();
+        
+        // Debug: Show chunk loading
+        printf("[MoveQueue] Loaded chunk: %u steps, %u us interval\n", 
+               active.count, active.interval_us);
+        printf("[MoveQueue] Queue depth: %u, Active: %s\n", 
+               get_queue_depth(), active_running ? "YES" : "NO");
         return;
     }
     

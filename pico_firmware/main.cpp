@@ -31,6 +31,7 @@ WindingController* winding_controller = nullptr;
 int main() {
     stdio_init_all();
     
+    sleep_ms(5000);
     printf("Pico Spindle Controller %s\n", FIRMWARE_VERSION);
     printf("Build: %s\n", VERSION_DATE);
     printf("Pico_Spindle_Ready\n");
@@ -68,11 +69,12 @@ int main() {
         printf("ERROR: Failed to create scheduler\n");
         return -1;
     }
+    printf("Scheduler created, starting...\n");
     if (!scheduler->start(HEARTBEAT_US)) {
         printf("ERROR: Failed to start scheduler\n");
         return -1;
     }
-    printf("Scheduler started\n");
+    printf("Scheduler started successfully\n");
     
     // Initialize winding controller (Klipper-style)
     winding_controller = new WindingController(move_queue, spindle_controller);

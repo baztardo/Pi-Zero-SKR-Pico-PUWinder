@@ -23,7 +23,7 @@ def main():
     print("=" * 50)
     
     # Initialize controller with USB serial port
-    controller = WindingController(port="/dev/tty.usbmodem31442402")
+    controller = WindingController(port="/dev/tty.usbmodem314101")
     
     # Add status callback
     def status_callback(status_dict):

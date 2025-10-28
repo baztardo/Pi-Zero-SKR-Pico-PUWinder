@@ -53,16 +53,26 @@ Scheduler::Scheduler(MoveQueue* mq)
 }
 
 bool Scheduler::start(uint32_t interval) {
+    printf("[Scheduler] Starting scheduler...\n");
+    
     gpio_init(SCHED_HEARTBEAT_PIN);
     gpio_set_dir(SCHED_HEARTBEAT_PIN, GPIO_OUT);
     gpio_put(SCHED_HEARTBEAT_PIN, 0);
     
+    // Initialize FAN1 LED for debug
+    gpio_init(17);
+    gpio_set_dir(17, GPIO_OUT);
+    gpio_put(17, 0);
+    printf("[Scheduler] FAN1 LED initialized on pin 17\n");
+    
     interval_us = 50; // 20kHz = 50us period
     
     // Claim hardware alarm 0
+    printf("[Scheduler] Claiming hardware alarm 0...\n");
     hardware_alarm_claim(0);
     
     // Set up callback
+    printf("[Scheduler] Setting up alarm callback...\n");
     hardware_alarm_set_callback(0, [](uint alarm_num) {
         // Clear interrupt
         hw_clear_bits(&timer_hw->intr, 1u << alarm_num);
@@ -74,13 +84,17 @@ bool Scheduler::start(uint32_t interval) {
         }
     });
     
-    // Start first interrupt
-    timer_hw->alarm[0] = timer_hw->timerawl + 50;
-    hw_set_bits(&timer_hw->inte, 1u << 0);
-    irq_set_enabled(TIMER_IRQ_0, true);
+    // Start first interrupt using Pico SDK
+    printf("[Scheduler] Starting first interrupt...\n");
+    hardware_alarm_set_target(0, delayed_by_us(get_absolute_time(), 50));
+    
+    // Test if timer is working
+    printf("[Scheduler] Timer setup complete. Testing...\n");
+    sleep_ms(100);
+    printf("[Scheduler] Timer test complete.\n");
     
     running = true;
-    printf("Hardware timer started at 20kHz\n");
+    printf("[Scheduler] Hardware timer started at 20kHz\n");
     return true;
 }
 
@@ -118,6 +132,28 @@ bool Scheduler::timer_callback(repeating_timer_t* rt) {
 
 void Scheduler::handle_isr() {
     tick_count++;
+    
+    // Debug: Toggle FAN1 LED to show ISR is running
+    static uint32_t led_toggle_count = 0;
+    if ((led_toggle_count++ % 10000) == 0) {  // Every 10k ISR calls (0.5 second at 20kHz)
+        static bool led_state = false;
+        led_state = !led_state;
+        gpio_put(17, led_state);  // FAN1 pin 17
+        
+        // Also try the heartbeat pin
+        gpio_put(SCHED_HEARTBEAT_PIN, led_state);
+        
+        // Force a printf to see if ISR is running
+        printf("[ISR] Running! Count: %u\n", led_toggle_count);
+    }
+    
+    // Debug: Show scheduler ISR running occasionally
+    static uint32_t sched_debug_count = 0;
+    if ((sched_debug_count++ % 20000) == 0) {  // Every 20k ISR calls (1 second at 20kHz)
+        printf("[Scheduler] ISR #%u running, MoveQueue: %s\n", 
+               sched_debug_count, move_queue ? "YES" : "NO");
+    }
+    
     // check_endstops(move_queue);  // TODO: Implement endstop checking
     // Encoder now updated by Core 1 (see main.cpp core1_entry)
     // Removed: spindle_encoder->update() to reduce Core 0 ISR load
@@ -125,6 +161,11 @@ void Scheduler::handle_isr() {
     // Process traverse move queue
     if (move_queue) {
         move_queue->traverse_isr_handler();
+    } else {
+        static uint32_t no_movequeue_count = 0;
+        if ((no_movequeue_count++ % 20000) == 0) {
+            printf("[Scheduler] ERROR: MoveQueue is NULL!\n");
+        }
     }
     
     // Call user callback if registered
