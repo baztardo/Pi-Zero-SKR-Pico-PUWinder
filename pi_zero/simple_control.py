@@ -6,7 +6,7 @@ Quick testing and control without web interface
 
 import sys
 import time
-from winding_controller import WindingController, WindingParams
+from winding_controller import WindingController, WindingParameters
 
 def print_status(controller):
     """Print current status"""

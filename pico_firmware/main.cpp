@@ -117,6 +117,13 @@ int main() {
             winding_controller->update();
         }
         
+        // Note: Spindle RPM calculation is handled by ISR (hall sensor interrupts)
+        
+        // Update traverse controller (for homing and movement)
+        if (traverse_controller) {
+            traverse_controller->generate_steps();
+        }
+        
         // Handle communication
         if (communication_handler) {
             communication_handler->update();

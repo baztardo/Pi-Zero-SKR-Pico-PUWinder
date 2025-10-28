@@ -149,7 +149,9 @@ private:
     bool execute_g28();
     bool execute_m3_m4();
     bool execute_m5();
+    bool execute_m999();
     bool execute_m112();
+    bool execute_wind();
     bool execute_s();
     bool execute_m6();
     bool execute_m7_m8_m9();
@@ -171,11 +173,9 @@ private:
     bool execute_m0();     // Feed hold
     bool execute_m1();      // Resume from hold
     bool execute_m410();    // Quick stop
-    bool execute_m999();    // Reset from emergency stop
     bool execute_g4();      // Dwell with planner sync
     
     // Winding sequence commands
-    bool execute_wind();    // Start winding sequence
     bool execute_pause_wind();  // Pause winding
     bool execute_resume_wind(); // Resume winding
     bool execute_stop_wind();   // Stop winding

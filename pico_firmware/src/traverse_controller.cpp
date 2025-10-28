@@ -29,6 +29,7 @@ TraverseController::TraverseController()
     , max_speed_mm_per_sec(50.0f)  // 50 mm/s max
     , acceleration_mm_per_sec2(100.0f)  // 100 mm/s²
     , moving(false)
+    , homing(false)
     , homed(false)
     , enabled(false)
     , emergency_stopped(false)
@@ -148,19 +149,31 @@ void TraverseController::home() {
         return;
     }
     
-    printf("[TraverseController] Homing...\n");
+    printf("[TraverseController] Starting homing sequence...\n");
+    
+    // Check initial home switch state
+    bool home_state = gpio_get(home_pin);
+    printf("[TraverseController] Home switch initial state: %s\n", home_state ? "HIGH (triggered)" : "LOW (not triggered)");
+    
+    // Enable stepper
+    gpio_put(enable_pin, 0);  // Enable (active low)
     
     // Move towards home switch
     gpio_put(dir_pin, 0);  // Move towards home
     step_direction = false;
     
-    // Move until home switch is triggered
+    // Set up homing parameters
     steps_remaining = 10000;  // Large number of steps
-    calculate_step_interval();
-    moving = true;
     
-    // Check for home switch in main loop
-    // (This is a simplified version - real implementation would use interrupts)
+    // Set a reasonable homing speed (5 mm/s)
+    current_speed_mm_per_sec = 5.0f;
+    calculate_step_interval();
+    
+    moving = true;
+    homing = true;
+    
+    printf("[TraverseController] Homing in progress... (steps_remaining=%d, step_interval=%dus)\n", 
+           steps_remaining, step_interval_us);
 }
 
 // =============================================================================
@@ -242,6 +255,26 @@ void TraverseController::generate_steps() {
         return;
     }
     
+    // Check for home switch during homing
+    if (homing && gpio_get(home_pin)) {
+        printf("[TraverseController] Home switch triggered!\n");
+        moving = false;
+        homing = false;
+        homed = true;
+        current_position_mm = 0.0f;
+        target_position_mm = 0.0f;
+        steps_remaining = 0;
+        printf("[TraverseController] Homing complete at 0.00 mm\n");
+        return;
+    }
+    
+    // Debug: Show step generation progress
+    static uint32_t debug_counter = 0;
+    if (homing && (debug_counter++ % 1000 == 0)) {
+        printf("[TraverseController] Homing debug: steps_remaining=%d, home_switch=%s\n", 
+               steps_remaining, gpio_get(home_pin) ? "HIGH" : "LOW");
+    }
+    
     uint32_t now = time_us_32();
     
     if (now - last_step_time >= step_interval_us) {
@@ -260,10 +293,22 @@ void TraverseController::generate_steps() {
         steps_remaining--;
         last_step_time = now;
         
+        // Debug: Show step generation
+        static uint32_t step_counter = 0;
+        if (homing && (step_counter++ % 100 == 0)) {
+            printf("[TraverseController] Step %d: pos=%.2fmm, remaining=%d\n", 
+                   step_counter, current_position_mm, steps_remaining);
+        }
+        
         // Check if movement complete
         if (steps_remaining <= 0) {
             moving = false;
-            printf("[TraverseController] Movement complete at %.2f mm\n", current_position_mm);
+            if (homing) {
+                printf("[TraverseController] Homing timeout - no home switch detected\n");
+                homing = false;
+            } else {
+                printf("[TraverseController] Movement complete at %.2f mm\n", current_position_mm);
+            }
         }
     }
 }

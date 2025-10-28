@@ -392,6 +392,19 @@ void WindingController::update_rpm() {
 }
 
 void WindingController::update_display() {
+    // Send status to UART for Pi Zero
+    char status_buffer[128];
+    snprintf(status_buffer, sizeof(status_buffer), 
+             "Status: Layer %u/%u, Turns %u/%u, RPM %.1f\n", 
+             current_layer, params.total_layers, turns_completed, 
+             params.target_turns, current_rpm);
+    
+    // Send via UART (for Pi Zero)
+    for (int i = 0; status_buffer[i] != '\0'; i++) {
+        uart_putc(PI_UART_ID, status_buffer[i]);
+    }
+    
+    // Also send to USB serial for debugging
     printf("Status: Layer %u/%u, Turns %u/%u, RPM %.1f\n", 
            current_layer, params.total_layers, turns_completed, 
            params.target_turns, current_rpm);

@@ -122,7 +122,7 @@ class WindingController:
             
             while time.time() - start_time < timeout:
                 if self.serial_conn.in_waiting > 0:
-                    response = self.serial_conn.read(self.serial_conn.in_waiting).decode().strip()
+                    response = self.serial_conn.readline().decode().strip()
                     break
                 time.sleep(0.01)
             
@@ -141,7 +141,7 @@ class WindingController:
             return None
 
     def _parse_status_response(self, response: str):
-        """Parse STATUS: Spindle=0.1RPM(RUN) Traverse=0.00mm Turns=123"""
+        """Parse STATUS: Spindle=0.1RPM(RUN) Traverse=0.00mm"""
         try:
             if "Spindle=" in response:
                 rpm_part = response.split("Spindle=")[1].split("RPM")[0]
@@ -150,10 +150,6 @@ class WindingController:
             if "Traverse=" in response:
                 pos_part = response.split("Traverse=")[1].split("mm")[0]
                 self.traverse_position = float(pos_part)
-            
-            if "Turns=" in response:
-                turns_part = response.split("Turns=")[1].split()[0]  # Get first word after Turns=
-                self.current_turns = int(turns_part)
         except:
             pass
 
@@ -190,7 +186,7 @@ class WindingController:
         response = self.send_command(cmd)
         
         # Accept any response as success
-        if response and str(response).strip():
+        if response:
             self.state = WindingState.WINDING
             print("✅ Winding started")
             return True

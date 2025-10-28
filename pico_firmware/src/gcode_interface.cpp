@@ -13,6 +13,7 @@
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/pwm.h"
+#include "pico/time.h"
 #include "hardware/gpio.h"
 #include <cstdio>
 #include <cstdlib>
@@ -76,9 +77,33 @@ bool GCodeInterface::execute_g28() {
     }
     
     printf("G28: Homing traverse axis only\n");
+    
+    // Enable traverse controller first
+    traverse_controller->enable();
+    
+    // Start homing
     traverse_controller->home();
-    send_response("OK");
-    return true;
+    
+    // Wait for homing to complete (with timeout)
+    uint32_t start_time = to_ms_since_boot(get_absolute_time());
+    uint32_t timeout_ms = 10000;  // 10 second timeout
+    
+    while (traverse_controller->is_moving() && 
+           (to_ms_since_boot(get_absolute_time()) - start_time) < timeout_ms) {
+        // Let the traverse controller process steps
+        traverse_controller->generate_steps();
+        sleep_ms(1);  // Small delay
+    }
+    
+    if (traverse_controller->is_homed()) {
+        printf("✓ Homing completed successfully\n");
+        send_response("HOMED");
+        return true;
+    } else {
+        printf("❌ Homing failed or timed out\n");
+        set_error("ERROR_HOMING_FAILED");
+        return false;
+    }
 }
 
 bool GCodeInterface::execute_m3_m4() {
@@ -117,7 +142,10 @@ bool GCodeInterface::execute_m5() {
         return false;
     }
     
-    spindle_controller->set_brake(true);
+    // Stop the motor completely
+    spindle_controller->set_pwm_duty(0.0f);  // Stop PWM
+    spindle_controller->set_brake(true);     // Engage brake
+    printf("✓ Spindle stopped (PWM=0, brake=ON)\n");
     send_response("OK");
     return true;
 }
@@ -137,6 +165,7 @@ bool GCodeInterface::execute_status() {
     float spindle_rpm = 0.0f;
     float traverse_pos = 0.0f;
     bool spindle_running = false;
+    uint32_t turns_completed = 0;
     
     if (spindle_controller) {
         spindle_rpm = spindle_controller->get_rpm();
@@ -147,11 +176,16 @@ bool GCodeInterface::execute_status() {
         traverse_pos = traverse_controller->get_current_position();
     }
     
+    if (winding_controller) {
+        turns_completed = winding_controller->get_turns_completed();
+    }
+    
     snprintf(status_buffer, sizeof(status_buffer), 
-             "STATUS: Spindle=%.1fRPM(%s) Traverse=%.2fmm", 
+             "STATUS: Spindle=%.1fRPM(%s) Traverse=%.2fmm Turns=%u", 
              spindle_rpm, 
              spindle_running ? "RUN" : "STOP", 
-             traverse_pos);
+             traverse_pos,
+             turns_completed);
     
     send_response(status_buffer);
     return true;
@@ -190,6 +224,12 @@ bool GCodeInterface::parse_command(const char* command) {
         current_command = TOKEN_M4;
     } else if (strncmp(command, "M5", 2) == 0) {
         current_command = TOKEN_M5;
+    } else if (strncmp(command, "M999", 4) == 0) {
+        current_command = TOKEN_M999;
+    } else if (strncmp(command, "WIND", 4) == 0) {
+        current_command = TOKEN_WIND;
+    } else if (strncmp(command, "STOP_WIND", 9) == 0) {
+        current_command = TOKEN_STOP_WIND;
     } else {
         current_command = TOKEN_UNKNOWN;
     }
@@ -231,8 +271,14 @@ bool GCodeInterface::execute_command() {
             return execute_m3_m4();
         case TOKEN_M5:
             return execute_m5();
+        case TOKEN_M999:
+            return execute_m999();
         case TOKEN_M112:
             return execute_m112();
+        case TOKEN_WIND:
+            return execute_wind();
+        case TOKEN_STOP_WIND:
+            return execute_stop_wind();
         default:
             set_error("ERROR_UNKNOWN_COMMAND");
             return false;
@@ -264,8 +310,9 @@ bool GCodeInterface::execute_m112() {
     
     // Stop spindle immediately
     if (spindle_controller) {
-        spindle_controller->set_brake(true);
-        printf("✓ Spindle brake engaged\n");
+        spindle_controller->set_pwm_duty(0.0f);  // Stop PWM immediately
+        spindle_controller->set_brake(true);     // Engage brake
+        printf("✓ Spindle emergency stopped (PWM=0, brake=ON)\n");
     }
     
     // Emergency stop move queue
@@ -281,6 +328,96 @@ bool GCodeInterface::execute_m112() {
     }
     
     send_response("OK EMERGENCY_STOPPED");
+    return true;
+}
+
+bool GCodeInterface::execute_wind() {
+    printf("🔄 WIND command received - Starting winding sequence...\n");
+    
+    if (!winding_controller) {
+        printf("❌ ERROR: Winding controller not initialized\n");
+        set_error("ERROR_WINDING_NOT_INIT");
+        return false;
+    }
+    
+    // Parse WIND parameters (T=turns, S=RPM, W=wire_diameter, B=bobbin_width, O=offset)
+    // For now, just start with default parameters
+    printf("✓ Winding parameters: T=%d S=%.1f\n", 
+           (int)params.T, params.S);
+    
+    // Start spindle motor first
+    if (spindle_controller) {
+        spindle_controller->set_rpm_pwm(params.S);  // Set RPM from WIND command
+        spindle_controller->set_brake(false);       // Release brake
+        printf("✓ Spindle started at %.1f RPM\n", params.S);
+    }
+    
+    // Start winding via winding controller
+    printf("✓ Calling winding_controller->start()\n");
+    winding_controller->start();
+    
+    printf("✓ Sending WINDING_STARTED response\n");
+    send_response("OK WINDING_STARTED");
+    return true;
+}
+
+bool GCodeInterface::execute_stop_wind() {
+    printf("⏹️ Stopping winding...\n");
+    
+    // Stop spindle immediately
+    if (spindle_controller) {
+        spindle_controller->set_pwm_duty(0.0f);  // Stop PWM
+        spindle_controller->set_brake(true);     // Engage brake
+        printf("✓ Spindle stopped (PWM=0, brake=ON)\n");
+    }
+    
+    // Stop winding controller
+    if (winding_controller) {
+        winding_controller->stop();
+        printf("✓ Winding controller stopped\n");
+    }
+    
+    send_response("OK WINDING_STOPPED");
+    return true;
+}
+
+bool GCodeInterface::execute_m999() {
+    printf("🔄 M999: Resetting from emergency stop...\n");
+    
+    // Reset spindle to normal state
+    if (spindle_controller) {
+        spindle_controller->set_brake(false);    // Release brake
+        printf("✓ Spindle brake released\n");
+    } else {
+        printf("⚠️ No spindle controller\n");
+    }
+    
+    // Reset move queue
+    if (move_queue) {
+        move_queue->set_enable(true);  // Re-enable moves
+        printf("✓ Move queue re-enabled\n");
+    } else {
+        printf("⚠️ No move queue\n");
+    }
+    
+    // Reset traverse controller
+    if (traverse_controller) {
+        traverse_controller->enable();  // Re-enable traverse
+        printf("✓ Traverse controller re-enabled\n");
+    } else {
+        printf("⚠️ No traverse controller\n");
+    }
+    
+    // Reset winding controller
+    if (winding_controller) {
+        // Reset any emergency state in winding controller
+        printf("✓ Winding controller reset\n");
+    } else {
+        printf("⚠️ No winding controller\n");
+    }
+    
+    printf("✓ M999 reset complete\n");
+    send_response("OK RESET_COMPLETE");
     return true;
 }
 

@@ -62,6 +62,7 @@ private:
     
     // Movement state
     volatile bool moving;
+    volatile bool homing;
     volatile bool homed;
     volatile bool enabled;
     volatile bool emergency_stopped;
