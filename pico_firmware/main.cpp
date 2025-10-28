@@ -16,6 +16,7 @@
 #include "winding_controller.h"
 #include "gcode_interface.h"
 #include "communication_handler.h"
+#include "diagnostic_monitor.h"
 
 // Global instances
 BLDC_MOTOR* spindle_controller = nullptr;
@@ -25,6 +26,7 @@ Scheduler* scheduler = nullptr;
 WindingController* winding_controller = nullptr;
 GCodeInterface* gcode_interface = nullptr;
 CommunicationHandler* communication_handler = nullptr;
+DiagnosticMonitor* diagnostic_monitor = nullptr;
 
 int main() {
     // Initialize stdio
@@ -115,6 +117,11 @@ int main() {
     gcode_interface->set_communication_handler(communication_handler);
     printf("✓ Communication handler initialized\n");
     
+    // Initialize diagnostic monitor
+    printf("Initializing diagnostic monitor...\n");
+    diagnostic_monitor = new DiagnosticMonitor(move_queue);
+    printf("✓ Diagnostic monitor initialized\n");
+    
     printf("\n========================================\n");
     printf("SYSTEM READY\n");
     printf("========================================\n");
@@ -126,6 +133,8 @@ int main() {
     printf("\nReady for commands...\n\n");
     
     // Main loop
+    uint32_t last_diag_time = 0;
+    
     while (true) {
         // Update winding controller (generates chunks for MoveQueue)
         if (winding_controller) {
@@ -141,6 +150,20 @@ int main() {
         // Handle incoming commands
         if (communication_handler) {
             communication_handler->update();
+        }
+        
+        // Monitor queue health every second
+        if (diagnostic_monitor) {
+            diagnostic_monitor->update(1000);
+        }
+        
+        // Full diagnostics every 10 seconds
+        uint32_t now = time_us_32();
+        if ((now - last_diag_time) > 10000000) {
+            if (diagnostic_monitor) {
+                diagnostic_monitor->print_full_diagnostics();
+            }
+            last_diag_time = now;
         }
         
         // Small delay (allows up to 10kHz main loop rate)

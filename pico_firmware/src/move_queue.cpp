@@ -1,6 +1,10 @@
 // =============================================================================
-// move_queue.cpp - COMPLETE WORKING VERSION
-// Fixed ISR-driven step execution with full debugging
+// move_queue.cpp - FIXED VERSION (ISR Printf Removed)
+// Key fixes:
+// 1. Remove ALL printf from ISR
+// 2. Add LED indicators for ISR state
+// 3. Add diagnostic counters readable from main loop
+// 4. Keep safety checks but make them visible
 // =============================================================================
 
 #include "move_queue.h"
@@ -10,6 +14,14 @@
 #include <algorithm>
 #include <cstring>
 #include <cstdio>
+
+// ISR diagnostic counters (volatile for thread safety)
+static volatile uint32_t g_isr_call_count = 0;
+static volatile uint32_t g_chunks_loaded = 0;
+static volatile uint32_t g_steps_executed = 0;
+static volatile uint32_t g_feeding_paused_hits = 0;
+static volatile uint32_t g_emergency_stop_hits = 0;
+static volatile bool g_last_active_state = false;
 
 MoveQueue::MoveQueue() {
     head = 0;
@@ -37,11 +49,11 @@ void MoveQueue::init() {
     gpio_put(TRAVERSE_ENA_PIN, 0);  // Active low - motor enabled
     
     // Initialize debug LEDs
-    gpio_init(17);  // FAN1
+    gpio_init(17);  // FAN1 - ISR heartbeat
     gpio_set_dir(17, GPIO_OUT);
     gpio_put(17, 0);
     
-    gpio_init(18);  // FAN2
+    gpio_init(18);  // FAN2 - Active indicator
     gpio_set_dir(18, GPIO_OUT);
     gpio_put(18, 0);
     
@@ -49,8 +61,8 @@ void MoveQueue::init() {
     printf("[MoveQueue] - STEP pin (GPIO %d): Output, LOW\n", TRAVERSE_STEP_PIN);
     printf("[MoveQueue] - DIR pin (GPIO %d): Output, LOW\n", TRAVERSE_DIR_PIN);
     printf("[MoveQueue] - ENA pin (GPIO %d): Output, LOW (ENABLED)\n", TRAVERSE_ENA_PIN);
-    printf("[MoveQueue] - Debug LED FAN1 (GPIO 17): Ready\n");
-    printf("[MoveQueue] - Debug LED FAN2 (GPIO 18): Ready\n");
+    printf("[MoveQueue] - Debug LED FAN1 (GPIO 17): ISR Heartbeat\n");
+    printf("[MoveQueue] - Debug LED FAN2 (GPIO 18): Active Indicator\n");
 }
 
 bool MoveQueue::push_chunk(const StepChunk& chunk) {
@@ -59,19 +71,12 @@ bool MoveQueue::push_chunk(const StepChunk& chunk) {
     
     // Check if queue is full
     if (((h + 1) % MOVE_CHUNKS_CAPACITY) == t) {
-        printf("[MoveQueue] ❌ ERROR: Queue FULL! Cannot push chunk\n");
+        // Don't printf here - called from sync loop at high frequency
         return false;
     }
     
     queue[h] = chunk;
     head = (h + 1) % MOVE_CHUNKS_CAPACITY;
-    
-    // ✅ Debug: Confirm push (reduced frequency)
-    static uint32_t push_count = 0;
-    if ((push_count++ % 10) == 0) {
-        printf("[MoveQueue] Chunk pushed: %u steps @ %u us/step (depth: %u)\n", 
-               chunk.count, chunk.interval_us, get_queue_depth());
-    }
     
     return true;
 }
@@ -106,6 +111,7 @@ uint32_t MoveQueue::get_queue_depth() const {
 void MoveQueue::clear_queue() {
     tail = head;
     active_running = false;
+    g_last_active_state = false;
 }
 
 void MoveQueue::set_direction(bool forward) {
@@ -114,14 +120,6 @@ void MoveQueue::set_direction(bool forward) {
 
 void MoveQueue::set_enable(bool enable) {
     gpio_put(TRAVERSE_ENA_PIN, enable ? 0 : 1);  // Active low
-    
-    static bool last_state = false;
-    if (enable != last_state) {
-        printf("[MoveQueue] Motor %s (ENA=%d)\n", 
-               enable ? "ENABLED" : "DISABLED",
-               enable ? 0 : 1);
-        last_state = enable;
-    }
 }
 
 bool MoveQueue::is_active() {
@@ -138,75 +136,59 @@ void MoveQueue::execute_step_pulse() {
     busy_wait_us(STEP_PULSE_US);
     gpio_put(TRAVERSE_STEP_PIN, 0);
     
-    // ✅ Visual feedback - toggle FAN2 LED
-    static volatile uint32_t pulse_count = 0;
-    pulse_count++;
-    
-    if ((pulse_count % 10) == 0) {
-        static bool led_state = false;
-        led_state = !led_state;
-        gpio_put(18, led_state);  // FAN2 flashes with steps
-    }
-    
-    // ✅ Debug output (reduced frequency)
-    if ((pulse_count % 100) == 0) {
-        printf("[MoveQueue] ✓ Step #%lu executed\n", pulse_count);
-    }
+    // Increment counter (volatile, ISR-safe)
+    g_steps_executed++;
 }
 
+// =============================================================================
+// ISR Handler - NO PRINTF ALLOWED
+// =============================================================================
 void MoveQueue::traverse_isr_handler() {
-    // ✅ Counter for debug output
-    static volatile uint32_t isr_call_count = 0;
-    isr_call_count++;
+    // Increment call counter
+    g_isr_call_count++;
     
-    // ✅ Periodic ISR heartbeat (every 2000 calls = 0.1 sec @ 20kHz)
-    if ((isr_call_count % 2000) == 0) {
-        // Toggle FAN1 LED to show ISR is running
-        static bool fan1_state = false;
-        fan1_state = !fan1_state;
-        gpio_put(17, fan1_state);
-        
-        printf("[MoveQueue-ISR] #%lu: depth=%u, active=%s, h=%u, t=%u\n",
-               isr_call_count, get_queue_depth(), 
-               active_running ? "YES" : "NO", head, tail);
+    // Heartbeat LED (FAN1) - toggle every 2000 calls (0.1 sec @ 20kHz)
+    if ((g_isr_call_count % 2000) == 0) {
+        static bool heartbeat = false;
+        heartbeat = !heartbeat;
+        gpio_put(17, heartbeat);  // FAN1
     }
     
-    // ✅ CRITICAL: Check safety flags FIRST
+    // CRITICAL: Check safety flags FIRST
     if (feeding_paused) {
-        static uint32_t pause_warn_count = 0;
-        if ((pause_warn_count++ % 10000) == 0) {
-            printf("[MoveQueue-ISR] ⚠️  Feed hold active - not processing moves\n");
-        }
+        g_feeding_paused_hits++;
         return;
     }
     
     if (emergency_stop_active) {
-        return;  // Don't process any moves during emergency stop
+        g_emergency_stop_hits++;
+        return;
     }
     
     // If not running an active chunk, try to load one
     if (!active_running) {
         if (head == tail) {
-            // Queue empty - this is normal when not winding
+            // Queue empty - normal when not winding
             return;
         }
         
-        // ✅ Load next chunk
+        // Load next chunk
         active = queue[tail];
         tail = (tail + 1) % MOVE_CHUNKS_CAPACITY;
         active_running = true;
         last_step_time = time_us_32();
         
-        // ✅ CRITICAL DEBUG: Show chunk loading
-        printf("[MoveQueue-ISR] *** LOADING CHUNK ***: %u steps @ %u us/step\n", 
-               active.count, active.interval_us);
-        printf("[MoveQueue-ISR] Queue depth now: %u, Active: YES\n", 
-               get_queue_depth());
+        // Update counters
+        g_chunks_loaded++;
+        g_last_active_state = true;
+        
+        // Turn on FAN2 LED to show active
+        gpio_put(18, 1);
         
         return;  // Process on next ISR tick
     }
     
-    // ✅ Process active chunk - single step per ISR tick
+    // Process active chunk - single step per ISR tick
     uint32_t now = time_us_32();
     int32_t time_diff = (int32_t)(now - last_step_time);
     
@@ -215,7 +197,7 @@ void MoveQueue::traverse_isr_handler() {
         return;  // Not time yet
     }
 
-    // ✅ EXECUTE STEP
+    // EXECUTE STEP
     execute_step_pulse();
 
     // Update timing
@@ -232,14 +214,61 @@ void MoveQueue::traverse_isr_handler() {
     // Check if chunk complete
     if (active.count == 0) {
         active_running = false;
-        printf("[MoveQueue-ISR] Chunk complete, total steps: %ld\n", step_count);
+        g_last_active_state = false;
+        
+        // Turn off FAN2 LED
+        gpio_put(18, 0);
     }
+}
+
+// =============================================================================
+// Diagnostics - Call from main loop, not ISR
+// =============================================================================
+void MoveQueue::print_diagnostics() {
+    printf("\n╔═══════════════════════════════════════════════════════════╗\n");
+    printf("║              MOVEQUEUE DIAGNOSTICS                        ║\n");
+    printf("╚═══════════════════════════════════════════════════════════╝\n");
+    printf("ISR Stats:\n");
+    printf("  - ISR calls:           %lu\n", g_isr_call_count);
+    printf("  - Chunks loaded:       %lu\n", g_chunks_loaded);
+    printf("  - Steps executed:      %lu\n", g_steps_executed);
+    printf("  - Feed paused hits:    %lu\n", g_feeding_paused_hits);
+    printf("  - E-stop hits:         %lu\n", g_emergency_stop_hits);
+    printf("\n");
+    printf("Queue State:\n");
+    printf("  - Queue depth:         %u / %d\n", get_queue_depth(), MOVE_CHUNKS_CAPACITY);
+    printf("  - Head:                %u\n", head);
+    printf("  - Tail:                %u\n", tail);
+    printf("  - Active running:      %s\n", active_running ? "YES" : "NO");
+    printf("  - Last active state:   %s\n", g_last_active_state ? "YES" : "NO");
+    printf("\n");
+    printf("Safety Flags:\n");
+    printf("  - Feeding paused:      %s\n", feeding_paused ? "⚠️ YES" : "✓ NO");
+    printf("  - Emergency stop:      %s\n", emergency_stop_active ? "🛑 YES" : "✓ NO");
+    printf("\n");
+    printf("Active Chunk:\n");
+    if (active_running) {
+        printf("  - Steps remaining:     %u\n", active.count);
+        printf("  - Interval:            %u µs\n", active.interval_us);
+        printf("  - Acceleration:        %d µs/step\n", active.add_us);
+    } else {
+        printf("  - No active chunk\n");
+    }
+    printf("═══════════════════════════════════════════════════════════\n\n");
+}
+
+// Reset diagnostic counters
+void MoveQueue::reset_diagnostics() {
+    g_isr_call_count = 0;
+    g_chunks_loaded = 0;
+    g_steps_executed = 0;
+    g_feeding_paused_hits = 0;
+    g_emergency_stop_hits = 0;
 }
 
 // =============================================================================
 // Safety and Feed Control
 // =============================================================================
-
 void MoveQueue::pause_feeding() {
     feeding_paused = true;
     printf("[MoveQueue] ⚠️  Feed hold ACTIVATED\n");
@@ -260,4 +289,12 @@ void MoveQueue::emergency_stop() {
     set_enable(false);  // Disable traverse motor
     
     printf("[MoveQueue] 🛑 EMERGENCY STOP ACTIVATED\n");
+}
+
+bool MoveQueue::is_feeding_paused() const {
+    return feeding_paused;
+}
+
+bool MoveQueue::is_emergency_stopped() const {
+    return emergency_stop_active;
 }

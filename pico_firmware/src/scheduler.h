@@ -50,6 +50,11 @@ public:
     uint32_t get_tick_count() const;
     
     /**
+     * @brief Instance ISR handler
+     */
+    void handle_isr();
+    
+    /**
      * @brief Get ISR frequency in Hz
      * @return Frequency in Hz
      */
@@ -79,9 +84,4 @@ private:
      * @return true to keep repeating
      */
     static bool timer_callback(repeating_timer_t* rt);
-    
-    /**
-     * @brief Instance ISR handler
-     */
-    void handle_isr();
 };

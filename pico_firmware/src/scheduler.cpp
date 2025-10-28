@@ -13,6 +13,21 @@
 // Forward declaration of the stepper pulse handler
 void scheduler_tick();
 
+// Global scheduler instance for callback
+static Scheduler* g_scheduler_instance = nullptr;
+
+// Alarm callback function
+void scheduler_alarm_callback(uint alarm_num) {
+    // Clear interrupt
+    hw_clear_bits(&timer_hw->intr, 1u << alarm_num);
+    // Schedule next (absolute time prevents drift)
+    timer_hw->alarm[alarm_num] = timer_hw->timerawl + 50;
+    // Call ISR
+    if (g_scheduler_instance) {
+        g_scheduler_instance->handle_isr();
+    }
+}
+
 struct StepperState {
     uint step_pin;
     uint32_t interval_us;
@@ -38,8 +53,6 @@ void scheduler_queue_step(uint axis, uint32_t interval_us, int32_t add_us, uint3
     s.active = true;
 }
 
-// Global pointer to scheduler instance for static callback
-static Scheduler* g_scheduler_instance = nullptr;
 
 Scheduler::Scheduler(MoveQueue* mq)
     : move_queue(mq)
@@ -73,16 +86,7 @@ bool Scheduler::start(uint32_t interval) {
     
     // Set up callback
     printf("[Scheduler] Setting up alarm callback...\n");
-    hardware_alarm_set_callback(0, [](uint alarm_num) {
-        // Clear interrupt
-        hw_clear_bits(&timer_hw->intr, 1u << alarm_num);
-        // Schedule next (absolute time prevents drift)
-        timer_hw->alarm[alarm_num] = timer_hw->timerawl + 50;
-        // Call ISR
-        if (g_scheduler_instance) {
-            g_scheduler_instance->handle_isr();
-        }
-    });
+    hardware_alarm_set_callback(0, scheduler_alarm_callback);
     
     // Start first interrupt using Pico SDK
     printf("[Scheduler] Starting first interrupt...\n");
