@@ -38,7 +38,7 @@ TraverseController::TraverseController()
     , step_interval_us(0)
     , last_step_time(0)
     , step_direction(true)
-    , steps_per_mm(200.0f)  // 200 steps/mm (1.8° stepper, 8mm lead screw)
+    , steps_per_mm(6135.0f)  // 6135 steps/mm (calibrated value)
     , microsteps(TRAVERSE_MICROSTEPS)
 {
     instance = this;

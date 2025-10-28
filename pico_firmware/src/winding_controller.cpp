@@ -358,12 +358,17 @@ void WindingController::ramp_down_spindle() {
 }
 
 void WindingController::sync_traverse_to_spindle() {
-    if (!spindle_motor) return;
+    if (!spindle_motor) {
+        printf("[SYNC] No spindle motor!\n");
+        return;
+    }
     
     uint32_t current_pulses = spindle_motor->get_pulse_count();
     uint32_t pulse_delta = current_pulses - enc_last_sync;
     
     if (pulse_delta == 0) return;
+    
+    printf("[SYNC] Pulse delta: %u, Revolutions: %.3f\n", pulse_delta, (float)pulse_delta / (float)BLDC_DEFAULT_PPR);
     
     // Calculate revolutions
     float spindle_revolutions = (float)pulse_delta / (float)BLDC_DEFAULT_PPR;
@@ -383,6 +388,7 @@ void WindingController::sync_traverse_to_spindle() {
     int32_t traverse_steps = (int32_t)(traverse_distance_mm * steps_per_mm);
     
     if (abs(traverse_steps) > 0) {
+        printf("[SYNC] Moving traverse: %.3fmm, %d steps\n", traverse_distance_mm, traverse_steps);
         auto chunks = StepCompressor::compress_constant_velocity(
             abs(traverse_steps), TRAVERSE_MIN_WINDING_SPEED);
         
@@ -391,6 +397,7 @@ void WindingController::sync_traverse_to_spindle() {
         }
         
         current_traverse_position_mm += traverse_distance_mm;
+        printf("[SYNC] New traverse position: %.3fmm\n", current_traverse_position_mm);
     }
     
     enc_last_sync = current_pulses;  // Update cursor

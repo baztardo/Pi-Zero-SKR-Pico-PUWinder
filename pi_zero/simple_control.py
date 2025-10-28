@@ -22,8 +22,8 @@ def main():
     print("🔄 Pi Zero Winding Controller - Simple Interface")
     print("=" * 50)
     
-    # Initialize controller
-    controller = WindingController()
+    # Initialize controller with USB serial port
+    controller = WindingController(port="/dev/tty.usbmodem31442402")
     
     # Add status callback
     def status_callback(status_dict):
