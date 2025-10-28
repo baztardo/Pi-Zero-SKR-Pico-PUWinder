@@ -54,6 +54,7 @@ enum GCodeTokenType {
     TOKEN_STOP_WIND = 37,     // Stop winding
     TOKEN_TEST_HOME = 38,     // Test home switch
     TOKEN_TEST_STEPS = 39,    // Test steps for calibration
+    TOKEN_TEST_HOME_SWITCH = 40,  // Test home switch state
     TOKEN_UNKNOWN = 255
 };
 
@@ -183,6 +184,7 @@ private:
     bool execute_stop_wind();   // Stop winding
     bool execute_test_home();   // Test home switch
     bool execute_test_steps();  // Test steps for calibration
+    bool execute_test_home_switch();  // Test home switch state
     
     // Helper functions
     void log_command(const char* cmd);

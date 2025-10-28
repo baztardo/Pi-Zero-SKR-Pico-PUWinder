@@ -84,3 +84,33 @@
 #define MCU_NAME        "RP2040"
 #define FIRMWARE_NAME   "PU-Winder"
 
+
+// ---------------------------------------------------------------------------
+// # Mechanical Parameters
+// ---------------------------------------------------------------------------
+
+stepper_motor:
+  steps_per_rev: 200
+  microsteps: 16
+  total_steps_per_rev: 3200
+
+lead_screw:
+  pitch_mm: 2
+  threads_per_mm: 0.5
+
+# Calibrated Values
+calibration:
+  test_steps: 10000
+  test_distance_mm: 1.63
+  steps_per_mm: 6135
+  theoretical_steps_per_mm: 1600
+  ratio: 3.83
+
+# Homing Parameters
+homing:
+  phase1_max_distance_mm: 81
+  phase1_speed_mm_per_sec: 20
+  phase2_backoff_mm: 8
+  phase2_speed_mm_per_sec: 2
+  phase3_target_mm: 22
+  phase3_speed_mm_per_sec: 10

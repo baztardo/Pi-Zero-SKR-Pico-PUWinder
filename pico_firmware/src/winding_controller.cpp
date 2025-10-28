@@ -7,6 +7,7 @@
 #include "config.h"
 #include "spindle.h"
 #include "stepcompress.h"
+#include "traverse_controller.h"
 #include "pico/stdlib.h"
 #include <cmath>
 #include <cstdio>
@@ -88,6 +89,13 @@ bool WindingController::start() {
     // Reset homing flags
     homing_started = false;
     traverse_homing_started = false;
+    
+    // Enable traverse controller for winding
+    extern TraverseController* traverse_controller;
+    if (traverse_controller) {
+        traverse_controller->enable();
+        printf("✓ Traverse controller enabled for winding\n");
+    }
     
     return true;
 }
@@ -204,8 +212,8 @@ void WindingController::home_traverse() {
         
         // Create homing move
         uint32_t homing_steps = 10000;
-        auto chunks = StepCompressor::compress_trapezoid(
-            homing_steps, 0.0, TRAVERSE_HOMING_SPEED, TRAVERSE_RAPID_ACCEL);
+        auto chunks = StepCompressor::compress_constant_velocity(
+            homing_steps, TRAVERSE_HOMING_SPEED);
         
         for (const auto& chunk : chunks) {
             move_queue->push_chunk(chunk);
@@ -225,10 +233,30 @@ void WindingController::home_traverse() {
 void WindingController::move_to_start() {
     printf("Moving to start position: %.1f mm\n", params.start_position_mm);
     
+    // SAFETY CHECK: Limit start position to reasonable range
+    if (params.start_position_mm > 50.0f) {
+        printf("❌ SAFETY ERROR: Start position %.1f mm is too large! Limiting to 50mm\n", params.start_position_mm);
+        params.start_position_mm = 50.0f;
+    }
+    if (params.start_position_mm < 0.0f) {
+        printf("❌ SAFETY ERROR: Start position %.1f mm is negative! Setting to 0mm\n", params.start_position_mm);
+        params.start_position_mm = 0.0f;
+    }
+    
+    // Use simple constant velocity move to avoid memory issues
     uint32_t steps = mm_to_steps(params.start_position_mm);
     
-    auto chunks = StepCompressor::compress_trapezoid(
-        steps, 0.0, TRAVERSE_RAPID_SPEED, TRAVERSE_RAPID_ACCEL);
+    // SAFETY CHECK: Limit steps to prevent runaway
+    if (steps > 300000) {  // About 50mm at 6135 steps/mm
+        printf("❌ SAFETY ERROR: %u steps is too many! Limiting to 300,000 steps (50mm)\n", steps);
+        steps = 300000;
+        params.start_position_mm = steps_to_mm(steps);
+    }
+    
+    printf("✓ Moving %u steps (%.2f mm)\n", steps, params.start_position_mm);
+    
+    auto chunks = StepCompressor::compress_constant_velocity(
+        steps, TRAVERSE_RAPID_SPEED);
     
     for (const auto& chunk : chunks) {
         move_queue->push_chunk(chunk);
@@ -350,8 +378,8 @@ void WindingController::sync_traverse_to_spindle() {
     }
     
     // Convert to steps using the same calculation as traverse controller
-    // Based on your calibration: 6135 steps/mm
-    float steps_per_mm = 6135.0f;  // Use calibrated value
+    // Based on original calibration: 6135 steps/mm
+    float steps_per_mm = 6135.0f;  // Use original calibrated value
     int32_t traverse_steps = (int32_t)(traverse_distance_mm * steps_per_mm);
     
     if (abs(traverse_steps) > 0) {
@@ -418,12 +446,12 @@ void WindingController::update_display() {
 }
 
 uint32_t WindingController::mm_to_steps(float mm) {
-    // Use calibrated steps per mm value
+    // Use original calibrated steps per mm value
     return (uint32_t)(mm * 6135.0f);
 }
 
 float WindingController::steps_to_mm(uint32_t steps) {
-    // Use calibrated steps per mm value
+    // Use original calibrated steps per mm value
     return (float)steps / 6135.0f;
 }
 

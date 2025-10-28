@@ -225,12 +225,52 @@ bool GCodeInterface::parse_command(const char* command) {
         current_command = TOKEN_M999;
     } else if (strncmp(command, "WIND", 4) == 0) {
         current_command = TOKEN_WIND;
+        // Parse WIND parameters: WIND T1000 S300
+        char* cmd_ptr = (char*)command + 4; // Skip "WIND"
+        while (*cmd_ptr == ' ' || *cmd_ptr == '\t') cmd_ptr++; // Skip whitespace
+        
+        while (*cmd_ptr != '\0') {
+            if (*cmd_ptr == 'T') {
+                params.T = strtof(cmd_ptr + 1, &cmd_ptr);
+                params.has_T = true;
+                printf("Parsed T=%.0f\n", params.T);
+            } else if (*cmd_ptr == 'S') {
+                params.S = strtof(cmd_ptr + 1, &cmd_ptr);
+                params.has_S = true;
+                printf("Parsed S=%.1f\n", params.S);
+            } else if (*cmd_ptr == 'W') {
+                params.W = strtof(cmd_ptr + 1, &cmd_ptr);
+                params.has_W = true;
+                printf("Parsed W=%.3f\n", params.W);
+            } else if (*cmd_ptr == 'B') {
+                params.B = strtof(cmd_ptr + 1, &cmd_ptr);
+                params.has_B = true;
+                printf("Parsed B=%.1f\n", params.B);
+            } else if (*cmd_ptr == 'O') {
+                params.O = strtof(cmd_ptr + 1, &cmd_ptr);
+                params.has_O = true;
+                // SAFETY CHECK: Limit offset to reasonable range
+                if (params.O > 50.0f) {
+                    printf("❌ SAFETY WARNING: Offset %.1f mm is too large! Limiting to 50mm\n", params.O);
+                    params.O = 50.0f;
+                }
+                if (params.O < 0.0f) {
+                    printf("❌ SAFETY WARNING: Offset %.1f mm is negative! Setting to 0mm\n", params.O);
+                    params.O = 0.0f;
+                }
+                printf("Parsed O=%.1f\n", params.O);
+            } else {
+                cmd_ptr++;
+            }
+        }
     } else if (strncmp(command, "STOP_WIND", 9) == 0) {
         current_command = TOKEN_STOP_WIND;
     } else if (strncmp(command, "TEST_HOME", 9) == 0) {
         current_command = TOKEN_TEST_HOME;
     } else if (strncmp(command, "TEST_STEPS", 10) == 0) {
         current_command = TOKEN_TEST_STEPS;
+    } else if (strncmp(command, "TEST_HOME_SWITCH", 16) == 0) {
+        current_command = TOKEN_TEST_HOME_SWITCH;
     } else {
         current_command = TOKEN_UNKNOWN;
     }
@@ -284,6 +324,8 @@ bool GCodeInterface::execute_command() {
             return execute_test_home();
         case TOKEN_TEST_STEPS:
             return execute_test_steps();
+        case TOKEN_TEST_HOME_SWITCH:
+            return execute_test_home_switch();
         default:
             set_error("ERROR_UNKNOWN_COMMAND");
             return false;
@@ -352,10 +394,27 @@ bool GCodeInterface::execute_wind() {
         return false;
     }
     
-    // Parse WIND parameters (T=turns, S=RPM, W=wire_diameter, B=bobbin_width, O=offset)
-    // For now, just start with default parameters
-    printf("✓ Winding parameters: T=%d S=%.1f\n", 
-           (int)params.T, params.S);
+    // Use parsed WIND parameters (T=turns, S=RPM, W=wire_diameter, B=bobbin_width, O=offset)
+    printf("✓ Winding parameters: T=%.0f S=%.1f\n", 
+           params.T, params.S);
+    
+    // Update winding controller parameters
+    if (winding_controller) {
+        WindingParams winding_params;
+        winding_params.target_turns = (uint32_t)params.T;
+        winding_params.spindle_rpm = params.S;
+        if (params.has_W) {
+            winding_params.wire_diameter_mm = params.W;
+        }
+        if (params.has_B) {
+            winding_params.layer_width_mm = params.B;
+        }
+        if (params.has_O) {
+            winding_params.start_position_mm = params.O;
+        }
+        winding_controller->set_parameters(winding_params);
+        printf("✓ Updated winding controller parameters\n");
+    }
     
     // Start spindle motor first
     if (spindle_controller) {
@@ -427,6 +486,31 @@ bool GCodeInterface::execute_test_steps() {
     
     char response[64];
     snprintf(response, sizeof(response), "MOVED_10000_STEPS");
+    send_response(response);
+    return true;
+}
+
+bool GCodeInterface::execute_test_home_switch() {
+    printf("TEST_HOME_SWITCH: Checking home switch state...\n");
+    
+    // Read home switch state multiple times
+    bool home_state_1 = gpio_get(TRAVERSE_HOME_PIN);
+    sleep_ms(10);
+    bool home_state_2 = gpio_get(TRAVERSE_HOME_PIN);
+    sleep_ms(10);
+    bool home_state_3 = gpio_get(TRAVERSE_HOME_PIN);
+    
+    printf("Home switch (GPIO %d) readings: %s, %s, %s\n", 
+           TRAVERSE_HOME_PIN, 
+           home_state_1 ? "HIGH" : "LOW",
+           home_state_2 ? "HIGH" : "LOW", 
+           home_state_3 ? "HIGH" : "LOW");
+    
+    char response[128];
+    snprintf(response, sizeof(response), "HOME_SWITCH_GPIO%d=%s (triggered=%s)", 
+             TRAVERSE_HOME_PIN,
+             home_state_1 ? "HIGH" : "LOW",
+             home_state_1 ? "NO" : "YES");
     send_response(response);
     return true;
 }

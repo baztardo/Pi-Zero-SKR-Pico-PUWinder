@@ -300,3 +300,45 @@ class WindingController:
         self.status_running = False
         if self.status_thread:
             self.status_thread.join(timeout=1)
+
+    def get_progress(self) -> Dict[str, Any]:
+        """Get current winding progress"""
+        progress_percent = 0.0
+        if self.params.target_turns > 0:
+            progress_percent = (self.current_turns / self.params.target_turns) * 100.0
+        
+        return {
+            'state': self.state,
+            'current_turns': self.current_turns,
+            'target_turns': self.params.target_turns,
+            'progress_percent': progress_percent,
+            'current_rpm': self.current_rpm,
+            'current_layer': 1,  # Placeholder - could be calculated based on turns
+            'traverse_position': self.traverse_position
+        }
+
+    def pause_winding(self) -> bool:
+        """Pause winding process"""
+        print("⏸️ Pausing winding...")
+        response = self.send_command("PAUSE_WIND")
+        
+        if response:
+            self.state = WindingState.PAUSED
+            print("✅ Winding paused")
+            return True
+        else:
+            print(f"❌ Failed to pause winding: {response}")
+            return False
+
+    def resume_winding(self) -> bool:
+        """Resume winding process"""
+        print("▶️ Resuming winding...")
+        response = self.send_command("RESUME_WIND")
+        
+        if response:
+            self.state = WindingState.WINDING
+            print("✅ Winding resumed")
+            return True
+        else:
+            print(f"❌ Failed to resume winding: {response}")
+            return False

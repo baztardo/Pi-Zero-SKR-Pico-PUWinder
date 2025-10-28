@@ -81,11 +81,11 @@ void TraverseController::init() {
     gpio_set_dir(home_pin, GPIO_IN);
     gpio_pull_up(home_pin);
     
-    // Calculate steps per mm - based on actual calibration
-    // Your measurement: 10000 steps = 1.63mm
+    // Calculate steps per mm - based on original calibration
+    // Original calibration: 10000 steps = 1.63mm
     // So: steps_per_mm = 10000 / 1.63 = 6135 steps/mm
-    steps_per_mm = 10000.0f / 1.63f;  // Based on actual calibration
-    printf("[TraverseController] Steps per mm calculation: 10000 / 1.63 = %.1f (calibrated)\n", steps_per_mm);
+    steps_per_mm = 10000.0f / 1.63f;  // Based on original calibration
+    printf("[TraverseController] Steps per mm calculation: 10000 / 1.63 = %.1f (original calibration)\n", steps_per_mm);
     
     printf("[TraverseController] Initialized - Steps/mm: %.1f\n", steps_per_mm);
 }
@@ -167,7 +167,7 @@ void TraverseController::home() {
         printf("[TraverseController] Phase 1: Moving towards home switch (no limit)...\n");
         gpio_put(dir_pin, 0);  // Move towards home
         step_direction = false;
-        steps_remaining = 1000000;  // 1M steps - will definitely reach the switch
+        steps_remaining = 800000;  // 800k steps = ~130mm - enough for full 120mm travel
         current_speed_mm_per_sec = 20.0f;  // Faster homing speed
         calculate_step_interval();
         moving = true;
@@ -187,7 +187,7 @@ void TraverseController::back_off_from_switch() {
     printf("[TraverseController] Phase 2: Backing off from home switch...\n");
     gpio_put(dir_pin, 1);  // Move away from home (opposite of homing direction)
     step_direction = true;
-    steps_remaining = 50000;  // Back off 8mm (50000 steps)
+    steps_remaining = 49080;  // Back off exactly 8mm (8 * 6135 = 49080 steps)
     current_speed_mm_per_sec = 10.0f;  // Faster back-off speed
     calculate_step_interval();
     moving = true;
@@ -305,18 +305,14 @@ void TraverseController::generate_steps() {
     // Handle different homing phases
     if (homing) {
         if (homing_phase == 1) {
-            // Phase 1: Moving towards home switch
-            if (!gpio_get(home_pin)) {  // Switch triggered (LOW)
-                printf("[TraverseController] Home switch triggered at position %.2fmm! Moving to phase 2...\n", current_position_mm);
-                printf("[TraverseController] Travel distance to home: %.2fmm\n", fabs(current_position_mm));
-                homing_phase = 2;
-                back_off_from_switch();
-                return;
-            }
+            // Phase 1: Moving towards home switch - handled in main loop
+            // (Home switch detection moved to main generate_steps loop)
         } else if (homing_phase == 2) {
             // Phase 2: Backing off from switch
             if (steps_remaining <= 0) {
                 printf("[TraverseController] Back-off complete. Moving to phase 3...\n");
+                // Reset position to 0.0mm after back-off
+                current_position_mm = 0.0f;
                 homing_phase = 3;
                 move_to_start_position();
                 // Don't return - continue to Phase 3 processing
@@ -344,7 +340,22 @@ void TraverseController::generate_steps() {
     
     uint32_t now = time_us_32();
     
+    // CRITICAL: Check home switch BEFORE any step processing during homing
+    if (homing && homing_phase == 1 && !gpio_get(home_pin)) {
+        printf("[TraverseController] Home switch triggered at position %.2fmm! Moving to phase 2...\n", current_position_mm);
+        printf("[TraverseController] Travel distance to home: %.2fmm\n", fabs(current_position_mm));
+        printf("[TraverseController] BEFORE ZEROING: current_position_mm = %.2f\n", current_position_mm);
+        // ZERO the position IMMEDIATELY when home switch is hit
+        current_position_mm = 0.0f;
+        printf("[TraverseController] AFTER ZEROING: current_position_mm = %.2f\n", current_position_mm);
+        printf("[TraverseController] Position zeroed to 0.0mm\n");
+        homing_phase = 2;
+        back_off_from_switch();
+        return;
+    }
+    
     if (now - last_step_time >= step_interval_us) {
+        
         // Generate step pulse
         gpio_put(step_pin, 1);
         sleep_us(2);  // Short pulse

@@ -26,8 +26,11 @@ def main():
     controller = WindingController()
     
     # Add status callback
-    def status_callback(ctrl):
-        print_status(ctrl)
+    def status_callback(status_dict):
+        # Update controller state from status
+        if 'status' in status_dict:
+            controller._parse_status_response(status_dict['status'])
+        print_status(controller)
     
     controller.add_status_callback(status_callback)
     
@@ -39,6 +42,9 @@ def main():
     
     print("✅ Connected to Pico!")
     print(f"📋 Firmware: {controller.get_version()}")
+    
+    # Start status monitoring
+    controller.start_status_monitor()
     
     try:
         while True:
@@ -110,6 +116,7 @@ def main():
     except KeyboardInterrupt:
         print("\n🛑 Shutting down...")
     finally:
+        controller.stop_status_monitor()
         controller.disconnect()
 
 def change_settings(controller):
