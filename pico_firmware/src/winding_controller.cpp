@@ -12,6 +12,9 @@
 #include <cmath>
 #include <cstdio>
 
+// External reference to traverse controller for handoff
+extern TraverseController* traverse_controller;
+
 // Default constants
 #ifndef WIRE_TENSION_FACTOR
 #define WIRE_TENSION_FACTOR 0.95f  // 5% compression for tight winding
@@ -231,39 +234,81 @@ void WindingController::home_traverse() {
 }
 
 void WindingController::move_to_start() {
-    printf("Moving to start position: %.1f mm\n", params.start_position_mm);
+    printf("\n[WindingController] ========================================\n");
+    printf("[WindingController] MOVING TO START POSITION\n");
+    printf("[WindingController] ========================================\n");
     
-    // SAFETY CHECK: Limit start position to reasonable range
-    if (params.start_position_mm > 50.0f) {
-        printf("❌ SAFETY ERROR: Start position %.1f mm is too large! Limiting to 50mm\n", params.start_position_mm);
+    // Safety checks
+    if (params.start_position_mm > 120.0f) {
+        printf("❌ ERROR: Start position %.1f mm exceeds limit (120mm)\n", 
+               params.start_position_mm);
         params.start_position_mm = 50.0f;
     }
     if (params.start_position_mm < 0.0f) {
-        printf("❌ SAFETY ERROR: Start position %.1f mm is negative! Setting to 0mm\n", params.start_position_mm);
+        printf("❌ ERROR: Start position %.1f mm is negative\n", 
+               params.start_position_mm);
         params.start_position_mm = 0.0f;
     }
     
-    // Use simple constant velocity move to avoid memory issues
-    uint32_t steps = mm_to_steps(params.start_position_mm);
+    printf("[WindingController] Target: %.2f mm\n", params.start_position_mm);
     
-    // SAFETY CHECK: Limit steps to prevent runaway
-    if (steps > 300000) {  // About 50mm at 6135 steps/mm
-        printf("❌ SAFETY ERROR: %u steps is too many! Limiting to 300,000 steps (50mm)\n", steps);
-        steps = 300000;
-        params.start_position_mm = steps_to_mm(steps);
+    // ✅ CRITICAL: Handoff from TraverseController to MoveQueue
+    if (traverse_controller) {
+        // Stop TraverseController from trying to generate steps
+        // (it will only be used for position queries now)
+        printf("[WindingController] Stopping TraverseController step generation\n");
+        traverse_controller->stop_steps();  // Sets moving=false
     }
     
-    printf("✓ Moving %u steps (%.2f mm)\n", steps, params.start_position_mm);
+    // ✅ CRITICAL: MoveQueue takes control
+    printf("[WindingController] MoveQueue taking control of traverse motor\n");
     
+    // Ensure motor is enabled
+    move_queue->set_enable(true);  // Sets ENA=0 (active low)
+    printf("[WindingController] Motor ENABLED via MoveQueue\n");
+    
+    // Ensure feed hold is released
+    if (move_queue->is_feeding_paused()) {
+        printf("[WindingController] Releasing feed hold\n");
+        move_queue->resume_feeding();
+    }
+    
+    // Set direction
+    move_queue->set_direction(true);  // Forward to start position
+    printf("[WindingController] Direction: FORWARD\n");
+    
+    // Calculate steps
+    uint32_t steps = mm_to_steps(params.start_position_mm);
+    printf("[WindingController] Generating %u steps (%.2f mm)\n", 
+           steps, params.start_position_mm);
+    
+    // Generate and push chunks
     auto chunks = StepCompressor::compress_constant_velocity(
         steps, TRAVERSE_RAPID_SPEED);
     
+    printf("[WindingController] Generated %zu chunks\n", chunks.size());
+    
+    int pushed_count = 0;
     for (const auto& chunk : chunks) {
-        move_queue->push_chunk(chunk);
+        if (move_queue->push_chunk(chunk)) {
+            pushed_count++;
+        } else {
+            printf("❌ ERROR: Failed to push chunk!\n");
+        }
     }
     
+    printf("[WindingController] Pushed %d/%zu chunks successfully\n", 
+           pushed_count, chunks.size());
+    printf("[WindingController] Queue depth: %u\n", 
+           move_queue->get_queue_depth());
+    
+    // Update position tracking
     current_traverse_position_mm = params.start_position_mm;
+    
+    // Move to next state
     state = WindingState::RAMPING_UP;
+    printf("[WindingController] State: RAMPING_UP\n");
+    printf("[WindingController] ========================================\n\n");
 }
 
 void WindingController::ramp_up_spindle() {
@@ -410,9 +455,22 @@ void WindingController::sync_traverse_to_spindle() {
         auto chunks = StepCompressor::compress_constant_velocity(
             abs(steps_to_generate), (uint32_t)required_steps_per_sec);
         
+        printf("[SYNC] Generated %zu chunks for %d steps\n", 
+               chunks.size(), abs(steps_to_generate));
+        
+        int pushed = 0;
         for (const auto& chunk : chunks) {
-            move_queue->push_chunk(chunk);
+            if (move_queue->push_chunk(chunk)) {
+                pushed++;
+            } else {
+                printf("[SYNC] ❌ FAILED to push chunk!\n");
+            }
         }
+        
+        printf("[SYNC] Pushed %d/%zu chunks, Queue depth: %u, Active: %s\n",
+               pushed, chunks.size(), 
+               move_queue->get_queue_depth(),
+               move_queue->is_active() ? "YES" : "NO");
         
         // Update position
         float distance_moved_mm = (float)steps_to_generate / steps_per_mm;

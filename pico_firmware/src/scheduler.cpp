@@ -168,6 +168,13 @@ void Scheduler::handle_isr() {
         }
     }
     
+    // Debug: Confirm MoveQueue ISR is being called
+    static uint32_t mq_call_count = 0;
+    mq_call_count++;
+    if ((mq_call_count % 20000) == 0) {
+        printf("[Scheduler] MoveQueue ISR called #%u\n", mq_call_count);
+    }
+    
     // Call user callback if registered
     if (user_callback) {
         user_callback(user_callback_data);

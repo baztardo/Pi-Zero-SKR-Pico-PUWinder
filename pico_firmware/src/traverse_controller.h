@@ -43,9 +43,11 @@ public:
     void emergency_stop();
     void set_brake(bool enable);
     
+    // MoveQueue handoff
+    void stop_steps();
+    
     // Step generation (for real-time control)
     void generate_steps();
-    void stop_steps();
     
     // Homing phases
     void back_off_from_switch();

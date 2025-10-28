@@ -401,9 +401,15 @@ void TraverseController::generate_steps() {
 // Stop steps
 // =============================================================================
 void TraverseController::stop_steps() {
+    // Stop generating steps but DON'T disable the motor
+    // This allows MoveQueue ISR to take over control
     moving = false;
     steps_remaining = 0;
-    printf("[TraverseController] Steps stopped\n");
+    homing = false;
+    
+    // DON'T touch GPIO pins - MoveQueue will control them
+    
+    printf("[TraverseController] Step generation stopped (MoveQueue takeover)\n");
 }
 
 // =============================================================================

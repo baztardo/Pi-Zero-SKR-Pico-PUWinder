@@ -38,7 +38,7 @@ int main() {
     
     // Initialize spindle controller
     printf("Initializing spindle controller...\n");
-    spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_A_PIN);
+    spindle_controller = new BLDC_MOTOR(SPINDLE_HALL_PIN);
     if (!spindle_controller) {
         printf("ERROR: Failed to create spindle controller\n");
         return -1;
