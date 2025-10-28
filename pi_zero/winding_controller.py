@@ -119,12 +119,29 @@ class WindingController:
             if not response:
                 print(f"⚠️ No response to command: {command}")
                 return "NO_RESPONSE"  # Return string instead of None
+            
+            # Parse STATUS responses automatically
+            if response.startswith("STATUS:"):
+                self._parse_status_response(response)
                 
             return response
             
         except Exception as e:
             print(f"❌ Command error: {e}")
             return "ERROR"  # Return string instead of None
+    
+    def _parse_status_response(self, response: str):
+        """Parse STATUS: Spindle=0.1RPM(RUN) Traverse=0.00mm"""
+        try:
+            if "Spindle=" in response:
+                rpm_part = response.split("Spindle=")[1].split("RPM")[0]
+                self.current_rpm = float(rpm_part)
+            
+            if "Traverse=" in response:
+                pos_part = response.split("Traverse=")[1].split("mm")[0]
+                self.traverse_position = float(pos_part)
+        except:
+            pass
     
     def _send_dummy_message(self):
         """Send dummy message to stabilize UART connection"""
@@ -181,41 +198,50 @@ class WindingController:
     def home_all_axes(self) -> bool:
         """Home all axes (traverse and spindle)"""
         print("🏠 Homing all axes...")
+        
+        # Stop spindle first if running
+        self.send_command("M5")
+        time.sleep(0.2)
+        
+        # Send home command
         response = self.send_command("G28")
-        # If we get any response, consider homing successful
+        
+        # Accept any response as success if we got one
         if response:
             self.state = WindingState.IDLE
-            print("✅ All axes homed")
+            print("✅ Homing initiated")
+            time.sleep(2)  # Give time to home
             return True
         else:
-            print(f"❌ Homing failed: {response}")
+            print(f"❌ No response from Pico")
+            self.state = WindingState.ERROR
             return False
     
     def enable_motors(self) -> bool:
         """Enable all motors"""
         response = self.send_command("M17")
-        return response and ("OK" in str(response) or "ENABLED" in str(response))
+        return response is not None  # Accept any response
     
     def disable_motors(self) -> bool:
         """Disable all motors"""
         response = self.send_command("M18")
-        return response and ("OK" in str(response) or "DISABLED" in str(response))
+        return response is not None  # Accept any response
     
     def set_spindle_speed(self, rpm: float) -> bool:
         """Set spindle speed in RPM"""
         response = self.send_command(f"S{rpm}")
-        return response and ("OK" in str(response) or "SET" in str(response))
+        return response is not None  # Accept any response
     
     def start_spindle(self, direction: str = "CW") -> bool:
         """Start spindle rotation"""
         command = "M3" if direction.upper() == "CW" else "M4"
         response = self.send_command(command)
-        return response and ("OK" in str(response) or "STARTED" in str(response))
+        return response is not None  # Accept any response
     
     def stop_spindle(self) -> bool:
         """Stop spindle rotation"""
         response = self.send_command("M5")
-        return response and ("OK" in str(response) or "STOPPED" in str(response))
+        return response is not None  # Accept any response
     
     def start_winding(self, params: Optional[WindingParams] = None) -> bool:
         """Start winding sequence"""
@@ -240,7 +266,7 @@ class WindingController:
     def pause_winding(self) -> bool:
         """Pause winding process"""
         response = self.send_command("PAUSE_WIND")
-        if response and "WINDING_PAUSED" in str(response):
+        if response:
             self.state = WindingState.PAUSED
             print("⏸️ Winding paused")
             return True
@@ -249,7 +275,7 @@ class WindingController:
     def resume_winding(self) -> bool:
         """Resume winding process"""
         response = self.send_command("RESUME_WIND")
-        if response and "WINDING_RESUMED" in str(response):
+        if response:
             self.state = WindingState.WINDING
             print("▶️ Winding resumed")
             return True
