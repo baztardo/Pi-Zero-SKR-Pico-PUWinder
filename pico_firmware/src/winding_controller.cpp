@@ -313,9 +313,15 @@ void WindingController::ramp_down_spindle() {
     float target_rpm = params.spindle_rpm * (1.0f - ramp_progress);
     current_rpm = target_rpm;
     
+    // Actually set the spindle RPM
+    if (spindle_motor) {
+        spindle_motor->set_rpm_pwm(target_rpm);
+    }
+    
     if (target_rpm <= 0.0f) {
         if (spindle_motor) {
-            spindle_motor->set_brake(true);
+            spindle_motor->set_pwm_duty(0.0f);  // Stop PWM
+            spindle_motor->set_brake(true);     // Engage brake
         }
         printf("Spindle stopped - Winding complete!\n");
         state = WindingState::COMPLETE;
@@ -343,8 +349,9 @@ void WindingController::sync_traverse_to_spindle() {
         traverse_distance_mm = -traverse_distance_mm;
     }
     
-    // Convert to steps
-    float steps_per_mm = (200.0f * TRAVERSE_MICROSTEPS) / TRAVERSE_PITCH_MM;
+    // Convert to steps using the same calculation as traverse controller
+    // Based on your calibration: 6135 steps/mm
+    float steps_per_mm = 6135.0f;  // Use calibrated value
     int32_t traverse_steps = (int32_t)(traverse_distance_mm * steps_per_mm);
     
     if (abs(traverse_steps) > 0) {
@@ -411,13 +418,13 @@ void WindingController::update_display() {
 }
 
 uint32_t WindingController::mm_to_steps(float mm) {
-    float revs = mm / TRAVERSE_PITCH_MM;
-    return (uint32_t)(revs * 200.0f * TRAVERSE_MICROSTEPS);
+    // Use calibrated steps per mm value
+    return (uint32_t)(mm * 6135.0f);
 }
 
 float WindingController::steps_to_mm(uint32_t steps) {
-    float revs = (float)steps / (200.0f * TRAVERSE_MICROSTEPS);
-    return revs * TRAVERSE_PITCH_MM;
+    // Use calibrated steps per mm value
+    return (float)steps / 6135.0f;
 }
 
 void WindingController::home_all_axes() {

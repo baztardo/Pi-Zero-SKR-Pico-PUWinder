@@ -37,6 +37,7 @@ public:
     float get_speed() const;
     bool is_moving() const;
     bool is_homed() const;
+    float get_steps_per_mm() const;
     
     // Emergency functions
     void emergency_stop();
@@ -45,6 +46,10 @@ public:
     // Step generation (for real-time control)
     void generate_steps();
     void stop_steps();
+    
+    // Homing phases
+    void back_off_from_switch();
+    void move_to_start_position();
     
 private:
     // Hardware pins
@@ -66,6 +71,7 @@ private:
     volatile bool homed;
     volatile bool enabled;
     volatile bool emergency_stopped;
+    volatile uint8_t homing_phase;  // 1=towards switch, 2=back off, 3=move to start
     
     // Step generation
     volatile int32_t steps_remaining;

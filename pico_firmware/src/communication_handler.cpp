@@ -71,20 +71,34 @@ void CommunicationHandler::send_response(const char* response) {
     if (!initialized) return;
     
     printf("RESPONSE: %s\n", response);
-    // Send response over UART
-    for (int i = 0; response[i] != '\0'; i++) {
-        uart_putc(PI_UART_ID, response[i]);
+    
+    // Wait for UART to be ready (like FluidNC does)
+    while (!uart_is_writable(PI_UART_ID)) {
+        tight_loop_contents();
     }
-    uart_putc(PI_UART_ID, '\n');
+    
+    // Send response atomically (like FluidNC)
+    uart_puts(PI_UART_ID, response);
+    uart_puts(PI_UART_ID, "\n");
+    
+    // Wait for transmission to complete
+    uart_tx_wait_blocking(PI_UART_ID);
 }
 
 void CommunicationHandler::send_error(const char* error) {
     if (!initialized) return;
     
     printf("ERROR: %s\n", error);
-    // Send error over UART
-    for (int i = 0; error[i] != '\0'; i++) {
-        uart_putc(PI_UART_ID, error[i]);
+    
+    // Wait for UART to be ready (like FluidNC does)
+    while (!uart_is_writable(PI_UART_ID)) {
+        tight_loop_contents();
     }
-    uart_putc(PI_UART_ID, '\n');
+    
+    // Send error atomically (like FluidNC)
+    uart_puts(PI_UART_ID, error);
+    uart_puts(PI_UART_ID, "\n");
+    
+    // Wait for transmission to complete
+    uart_tx_wait_blocking(PI_UART_ID);
 }

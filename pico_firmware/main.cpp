@@ -129,8 +129,8 @@ int main() {
             communication_handler->update();
         }
         
-        // Scheduler handles all stepping via ISR
-        sleep_ms(10);
+        // Small delay to prevent CPU hogging but allow fast stepping
+        sleep_us(100);  // 100us delay - allows up to 10kHz stepping
     }
     
     // Cleanup (this will never be reached in normal operation)

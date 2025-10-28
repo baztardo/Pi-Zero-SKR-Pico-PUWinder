@@ -52,6 +52,8 @@ enum GCodeTokenType {
     TOKEN_PAUSE_WIND = 35,    // Pause winding
     TOKEN_RESUME_WIND = 36,   // Resume winding
     TOKEN_STOP_WIND = 37,     // Stop winding
+    TOKEN_TEST_HOME = 38,     // Test home switch
+    TOKEN_TEST_STEPS = 39,    // Test steps for calibration
     TOKEN_UNKNOWN = 255
 };
 
@@ -179,6 +181,8 @@ private:
     bool execute_pause_wind();  // Pause winding
     bool execute_resume_wind(); // Resume winding
     bool execute_stop_wind();   // Stop winding
+    bool execute_test_home();   // Test home switch
+    bool execute_test_steps();  // Test steps for calibration
     
     // Helper functions
     void log_command(const char* cmd);

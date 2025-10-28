@@ -60,8 +60,21 @@ bool GCodeInterface::execute_g0_g1() {
         return false;
     }
     
+    // Check if homed first
+    if (!traverse_controller->is_homed()) {
+        set_error("ERROR_NOT_HOMED");
+        return false;
+    }
+    
     if (params.has_Y) {
+        printf("G1: Moving to Y%.2f\n", params.Y);
+        
+        // Enable traverse controller
+        traverse_controller->enable();
+        
+        // Move to position
         traverse_controller->move_to_position(params.Y);
+        
         send_response("OK");
         return true;
     }
@@ -84,26 +97,10 @@ bool GCodeInterface::execute_g28() {
     // Start homing
     traverse_controller->home();
     
-    // Wait for homing to complete (with timeout)
-    uint32_t start_time = to_ms_since_boot(get_absolute_time());
-    uint32_t timeout_ms = 10000;  // 10 second timeout
-    
-    while (traverse_controller->is_moving() && 
-           (to_ms_since_boot(get_absolute_time()) - start_time) < timeout_ms) {
-        // Let the traverse controller process steps
-        traverse_controller->generate_steps();
-        sleep_ms(1);  // Small delay
-    }
-    
-    if (traverse_controller->is_homed()) {
-        printf("✓ Homing completed successfully\n");
-        send_response("HOMED");
-        return true;
-    } else {
-        printf("❌ Homing failed or timed out\n");
-        set_error("ERROR_HOMING_FAILED");
-        return false;
-    }
+    // Send immediate response (like FluidNC does)
+    // The homing will complete in the background
+    send_response("HOMED");
+    return true;
 }
 
 bool GCodeInterface::execute_m3_m4() {
@@ -230,6 +227,10 @@ bool GCodeInterface::parse_command(const char* command) {
         current_command = TOKEN_WIND;
     } else if (strncmp(command, "STOP_WIND", 9) == 0) {
         current_command = TOKEN_STOP_WIND;
+    } else if (strncmp(command, "TEST_HOME", 9) == 0) {
+        current_command = TOKEN_TEST_HOME;
+    } else if (strncmp(command, "TEST_STEPS", 10) == 0) {
+        current_command = TOKEN_TEST_STEPS;
     } else {
         current_command = TOKEN_UNKNOWN;
     }
@@ -279,6 +280,10 @@ bool GCodeInterface::execute_command() {
             return execute_wind();
         case TOKEN_STOP_WIND:
             return execute_stop_wind();
+        case TOKEN_TEST_HOME:
+            return execute_test_home();
+        case TOKEN_TEST_STEPS:
+            return execute_test_steps();
         default:
             set_error("ERROR_UNKNOWN_COMMAND");
             return false;
@@ -340,6 +345,13 @@ bool GCodeInterface::execute_wind() {
         return false;
     }
     
+    // Check if homing is complete first
+    if (!traverse_controller || !traverse_controller->is_homed()) {
+        printf("❌ ERROR: Must home traverse axis first (G28)\n");
+        set_error("ERROR_NOT_HOMED");
+        return false;
+    }
+    
     // Parse WIND parameters (T=turns, S=RPM, W=wire_diameter, B=bobbin_width, O=offset)
     // For now, just start with default parameters
     printf("✓ Winding parameters: T=%d S=%.1f\n", 
@@ -378,6 +390,44 @@ bool GCodeInterface::execute_stop_wind() {
     }
     
     send_response("OK WINDING_STOPPED");
+    return true;
+}
+
+bool GCodeInterface::execute_test_home() {
+    if (!traverse_controller) {
+        set_error("ERROR_TRAVERSE_NOT_INIT");
+        return false;
+    }
+    
+    printf("TEST_HOME: Checking home switch state...\n");
+    
+    // Read home switch state
+    bool home_state = gpio_get(TRAVERSE_HOME_PIN);
+    printf("Home switch (GPIO %d): %s\n", TRAVERSE_HOME_PIN, home_state ? "HIGH (not triggered)" : "LOW (triggered)");
+    
+    char response[64];
+    snprintf(response, sizeof(response), "HOME_SWITCH=%s", home_state ? "HIGH" : "LOW");
+    send_response(response);
+    return true;
+}
+
+bool GCodeInterface::execute_test_steps() {
+    if (!traverse_controller) {
+        set_error("ERROR_TRAVERSE_NOT_INIT");
+        return false;
+    }
+    
+    printf("TEST_STEPS: Moving 10000 steps for calibration...\n");
+    
+    // Enable traverse controller first
+    traverse_controller->enable();
+    
+    // Move 10000 steps (about 5mm based on current calculation)
+    traverse_controller->move_relative(10000.0f / traverse_controller->get_steps_per_mm());
+    
+    char response[64];
+    snprintf(response, sizeof(response), "MOVED_10000_STEPS");
+    send_response(response);
     return true;
 }
 
