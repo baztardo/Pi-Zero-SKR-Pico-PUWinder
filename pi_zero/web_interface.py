@@ -136,7 +136,11 @@ def api_reset():
         return jsonify({"success": False, "message": "Failed to reset emergency stop"})
 
 if __name__ == '__main__':
+    # Start status monitoring
+    controller.add_status_callback(update_status)
+    controller.start_status_monitor()  # ADD THIS LINE
+    
     print("🌐 Starting Pi Zero Winding Controller Web Interface")
     print("📱 Open your browser to: http://localhost:8080")
     print("📱 Or try: http://192.168.45.156:8080")
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=False)  # debug=False for stability
