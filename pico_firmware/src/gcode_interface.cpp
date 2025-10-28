@@ -70,12 +70,13 @@ bool GCodeInterface::execute_g0_g1() {
 }
 
 bool GCodeInterface::execute_g28() {
-    if (!winding_controller) {
-        set_error("ERROR_WINDING_NOT_INIT");
+    if (!traverse_controller) {
+        set_error("ERROR_TRAVERSE_NOT_INIT");
         return false;
     }
     
-    winding_controller->home_all_axes();
+    printf("G28: Homing traverse axis only\n");
+    traverse_controller->home();
     send_response("OK");
     return true;
 }
@@ -181,6 +182,8 @@ bool GCodeInterface::parse_command(const char* command) {
         current_command = TOKEN_G1;
     } else if (strncmp(command, "G28", 3) == 0) {
         current_command = TOKEN_G28;
+    } else if (strncmp(command, "M112", 4) == 0) {
+        current_command = TOKEN_M112;
     } else if (strncmp(command, "M3", 2) == 0) {
         current_command = TOKEN_M3;
     } else if (strncmp(command, "M4", 2) == 0) {
@@ -228,6 +231,8 @@ bool GCodeInterface::execute_command() {
             return execute_m3_m4();
         case TOKEN_M5:
             return execute_m5();
+        case TOKEN_M112:
+            return execute_m112();
         default:
             set_error("ERROR_UNKNOWN_COMMAND");
             return false;
@@ -252,6 +257,31 @@ void GCodeInterface::send_response(const char* response) {
         uart_puts(PI_UART_ID, response);
         uart_puts(PI_UART_ID, "\n");
     }
+}
+
+bool GCodeInterface::execute_m112() {
+    printf("🚨 EMERGENCY STOP M112!\n");
+    
+    // Stop spindle immediately
+    if (spindle_controller) {
+        spindle_controller->set_brake(true);
+        printf("✓ Spindle brake engaged\n");
+    }
+    
+    // Emergency stop move queue
+    if (move_queue) {
+        move_queue->emergency_stop();
+        printf("✓ Move queue emergency stopped\n");
+    }
+    
+    // Stop winding controller
+    if (winding_controller) {
+        winding_controller->emergency_stop();
+        printf("✓ Winding controller stopped\n");
+    }
+    
+    send_response("OK EMERGENCY_STOPPED");
+    return true;
 }
 
 void GCodeInterface::send_error(const char* error) {
