@@ -1,5 +1,5 @@
 // =============================================================================
-// communication_handler.cpp - UART Communication Handler (FIXED)
+// communication_handler.cpp - UART Communication Handler Implementation
 // Purpose: Handle UART communication, buffering, and command routing
 // =============================================================================
 
@@ -9,6 +9,9 @@
 #include "hardware/uart.h"
 #include <cstdio>
 
+// =============================================================================
+// Constructor
+// =============================================================================
 CommunicationHandler::CommunicationHandler(GCodeInterface* gcode_interface)
     : gcode_interface(gcode_interface)
     , initialized(false)
@@ -19,26 +22,31 @@ CommunicationHandler::CommunicationHandler(GCodeInterface* gcode_interface)
     printf("[CommunicationHandler] Created\n");
 }
 
+// =============================================================================
+// Destructor
+// =============================================================================
 CommunicationHandler::~CommunicationHandler() {
     printf("[CommunicationHandler] Destroyed\n");
 }
 
+// =============================================================================
+// Initialize UART communication
+// =============================================================================
 bool CommunicationHandler::init() {
+    // Initialize UART
     uart_init(PI_UART_ID, PI_UART_BAUD);
     gpio_set_function(PI_UART_TX, GPIO_FUNC_UART);
     gpio_set_function(PI_UART_RX, GPIO_FUNC_UART);
     
     initialized = true;
-    printf("[CommunicationHandler] UART initialized (ID: %d, Baud: %d)\n", 
-           PI_UART_ID, PI_UART_BAUD);
-    printf("[CommunicationHandler] TX pin: %d, RX pin: %d\n", 
-           PI_UART_TX, PI_UART_RX);
+    printf("[CommunicationHandler] UART initialized (ID: %d, Baud: %d)\n", PI_UART_ID, PI_UART_BAUD);
+    printf("[CommunicationHandler] TX pin: %d, RX pin: %d\n", PI_UART_TX, PI_UART_RX);
     
     return true;
 }
 
 // =============================================================================
-// FIXED: update() - Now has proper buffer overflow protection
+// Update communication handler (call from main loop)
 // =============================================================================
 void CommunicationHandler::update() {
     if (!initialized || !gcode_interface) {
@@ -54,58 +62,52 @@ void CommunicationHandler::update() {
                 command_buffer[buffer_pos] = '\0';
                 printf("[CommunicationHandler] Received: %s\n", command_buffer);
                 process_command(command_buffer);
-                buffer_pos = 0;  // Reset buffer
+                buffer_pos = 0;
             }
-        } 
-        // ✅ FIXED: Proper buffer overflow protection
-        else if (buffer_pos < (sizeof(command_buffer) - 1)) {
+        } else if (buffer_pos < sizeof(command_buffer) - 1) {
             command_buffer[buffer_pos++] = c;
-        } 
-        else {
-            // Buffer full - discard character and log error
-            printf("[CommunicationHandler] ERROR: Buffer overflow! Discarding character\n");
-            // Optionally reset buffer to prevent corruption
-            buffer_pos = 0;
-            command_buffer[0] = '\0';
-            send_error("ERROR_BUFFER_OVERFLOW");
         }
     }
 }
 
+// =============================================================================
+// Process a complete command
+// =============================================================================
 void CommunicationHandler::process_command(const char* command) {
     if (!gcode_interface) {
         send_error("ERROR_INTERFACE_NOT_INIT");
         return;
     }
     
+    // Process command through G-code interface
     gcode_interface->process_command(command);
     command_count++;
 }
 
+// =============================================================================
+// Send response over UART
+// =============================================================================
 void CommunicationHandler::send_response(const char* response) {
     if (!initialized) return;
     
     printf("RESPONSE: %s\n", response);
-    
-    // Send response over UART with length check
-    size_t len = 0;
-    while (response[len] != '\0' && len < 1024) {  // Prevent infinite loop
-        uart_putc(PI_UART_ID, response[len]);
-        len++;
+    // Send response over UART
+    for (int i = 0; response[i] != '\0'; i++) {
+        uart_putc(PI_UART_ID, response[i]);
     }
     uart_putc(PI_UART_ID, '\n');
 }
 
+// =============================================================================
+// Send error over UART
+// =============================================================================
 void CommunicationHandler::send_error(const char* error) {
     if (!initialized) return;
     
     printf("ERROR: %s\n", error);
-    
-    // Send error over UART with length check
-    size_t len = 0;
-    while (error[len] != '\0' && len < 1024) {  // Prevent infinite loop
-        uart_putc(PI_UART_ID, error[len]);
-        len++;
+    // Send error over UART
+    for (int i = 0; error[i] != '\0'; i++) {
+        uart_putc(PI_UART_ID, error[i]);
     }
     uart_putc(PI_UART_ID, '\n');
 }
