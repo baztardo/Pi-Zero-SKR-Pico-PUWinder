@@ -1,5 +1,5 @@
 // =============================================================================
-// scheduler.cpp - CLEAN WORKING SCHEDULER
+// scheduler_clean.cpp - CLEAN WORKING SCHEDULER
 // Using consistent Pico SDK API - no mixing with raw hardware registers
 // =============================================================================
 
@@ -128,3 +128,4 @@ void Scheduler::handle_isr() {
         user_callback(user_callback_data);
     }
 }
+

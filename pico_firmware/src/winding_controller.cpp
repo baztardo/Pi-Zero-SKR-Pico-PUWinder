@@ -408,6 +408,46 @@ void WindingController::sync_traverse_to_spindle() {
         return;
     }
     
+    // Calibrated steps per mm
+    const float steps_per_mm = 6135.0f;
+    
+    // ⭐ CRITICAL: Check for layer edge and reverse direction if needed
+    float edge_margin = 0.5f;  // 0.5mm safety margin from edges
+    float left_limit = params.start_position_mm + edge_margin;
+    float right_limit = params.start_position_mm + params.layer_width_mm - edge_margin;
+    
+    // Check if we need to reverse direction based on current position
+    if (traverse_direction && current_traverse_position_mm >= right_limit) {
+        // Hit right edge - reverse to LEFT
+        printf("[SYNC] ⚠️  RIGHT EDGE DETECTED at %.3f mm - REVERSING to LEFT\n", 
+               current_traverse_position_mm);
+        traverse_direction = false;
+        move_queue->set_direction(traverse_direction);
+        current_layer++;
+        turns_this_layer = 0;
+    } else if (!traverse_direction && current_traverse_position_mm <= left_limit) {
+        // Hit left edge - reverse to RIGHT
+        printf("[SYNC] ⚠️  LEFT EDGE DETECTED at %.3f mm - REVERSING to RIGHT\n", 
+               current_traverse_position_mm);
+        traverse_direction = true;
+        move_queue->set_direction(traverse_direction);
+        current_layer++;
+        turns_this_layer = 0;
+    }
+    
+    // ⭐ Check queue depth to prevent overflow
+    uint32_t queue_depth = move_queue->get_queue_depth();
+    const uint32_t MAX_QUEUE_DEPTH = 100;  // Leave 28 slots free
+    
+    if (queue_depth >= MAX_QUEUE_DEPTH) {
+        // Queue too full - skip chunk generation (but edge detection already happened above)
+        static uint32_t skip_count = 0;
+        if ((skip_count++ % 100) == 0) {
+            printf("[SYNC] Queue depth %u - skipping chunk generation\n", queue_depth);
+        }
+        return;
+    }
+    
     // REAL-TIME VELOCITY MATCHING (like Klipper/FluidNC)
     // Calculate current traverse velocity based on current RPM
     float current_rpm = spindle_motor->get_rpm();
@@ -417,7 +457,6 @@ void WindingController::sync_traverse_to_spindle() {
     float required_traverse_velocity_mm_per_sec = required_traverse_velocity_mm_per_min / 60.0f;
     
     // Convert to steps per second
-    float steps_per_mm = 6135.0f;  // Calibrated value
     float required_steps_per_sec = required_traverse_velocity_mm_per_sec * steps_per_mm;
     
     // Only move if we have meaningful velocity
@@ -429,9 +468,19 @@ void WindingController::sync_traverse_to_spindle() {
     // This runs at ~100Hz, so generate steps for 10ms worth of movement
     static uint32_t last_sync_time = 0;
     uint32_t current_time = time_us_32();
+    
+    // ⭐ CRITICAL: Initialize last_sync_time on first call
+    if (last_sync_time == 0) {
+        last_sync_time = current_time;
+        return;  // Skip first call to establish baseline
+    }
+    
     uint32_t delta_time_us = current_time - last_sync_time;
     
-    if (delta_time_us < 10000) {  // 10ms minimum
+    // ⭐ CRITICAL: Increase sync interval to 200ms to drastically reduce CPU load
+    // At 896 RPM with 0.056mm wire: ~0.19mm movement per 200ms
+    // This reduces chunk generation from 20 Hz to 5 Hz (75% less overhead!)
+    if (delta_time_us < 200000) {  // 200ms minimum (was 50ms)
         return;
     }
     
@@ -444,8 +493,14 @@ void WindingController::sync_traverse_to_spindle() {
             steps_to_generate = -steps_to_generate;
         }
         
-        printf("[SYNC] RPM: %.1f, Velocity: %.3f mm/s, Steps: %d\n", 
-               current_rpm, required_traverse_velocity_mm_per_sec, abs(steps_to_generate));
+        // ⭐ Reduce printf frequency to every 20th sync (1 per second at 50ms sync interval)
+        static uint32_t sync_count = 0;
+        bool should_print = (sync_count++ % 20) == 0;
+        
+        if (should_print) {
+            printf("[SYNC] RPM: %.1f, Velocity: %.3f mm/s, Steps: %d\n", 
+                   current_rpm, required_traverse_velocity_mm_per_sec, abs(steps_to_generate));
+        }
         
         // CRITICAL: Enable MoveQueue and set direction for sync moves
         move_queue->set_enable(true);
@@ -455,47 +510,46 @@ void WindingController::sync_traverse_to_spindle() {
         auto chunks = StepCompressor::compress_constant_velocity(
             abs(steps_to_generate), (uint32_t)required_steps_per_sec);
         
-        printf("[SYNC] Generated %zu chunks for %d steps\n", 
-               chunks.size(), abs(steps_to_generate));
+        if (should_print) {
+            printf("[SYNC] Generated %zu chunks for %d steps\n", 
+                   chunks.size(), abs(steps_to_generate));
+        }
         
         int pushed = 0;
         for (const auto& chunk : chunks) {
             if (move_queue->push_chunk(chunk)) {
                 pushed++;
             } else {
-                printf("[SYNC] ❌ FAILED to push chunk!\n");
+                if (should_print) {
+                    printf("[SYNC] ❌ FAILED to push chunk!\n");
+                }
             }
         }
         
-        printf("[SYNC] Pushed %d/%zu chunks, Queue depth: %u, Active: %s\n",
-               pushed, chunks.size(), 
-               move_queue->get_queue_depth(),
-               move_queue->is_active() ? "YES" : "NO");
+        if (should_print) {
+            printf("[SYNC] Pushed %d/%zu chunks, Queue depth: %u, Active: %s\n",
+                   pushed, chunks.size(), 
+                   move_queue->get_queue_depth(),
+                   move_queue->is_active() ? "YES" : "NO");
+        }
         
-        // Update position
-        float distance_moved_mm = (float)steps_to_generate / steps_per_mm;
-        current_traverse_position_mm += distance_moved_mm;
+        // ⭐ CRITICAL: Update position based on steps we QUEUED
+        // Note: This tracks where the traverse WILL BE after the queue executes
+        float distance_moved_mm = (float)abs(steps_to_generate) / steps_per_mm;
+        if (traverse_direction) {
+            current_traverse_position_mm += distance_moved_mm;  // Moving RIGHT
+        } else {
+            current_traverse_position_mm -= distance_moved_mm;  // Moving LEFT
+        }
         
-        printf("[SYNC] New traverse position: %.3fmm\n", current_traverse_position_mm);
-    }
-    
-    last_sync_time = current_time;
-    
-    // Check for layer edges
-    float edge_margin = 0.5f;
-    float left_limit = params.start_position_mm + edge_margin;
-    float right_limit = params.start_position_mm + params.layer_width_mm - edge_margin;
-    
-    if (traverse_direction && current_traverse_position_mm >= right_limit) {
-        printf("[SYNC] Right edge - reversing to LEFT\n");
-        traverse_direction = false;
-        current_layer++;
-        turns_this_layer = 0;
-    } else if (!traverse_direction && current_traverse_position_mm <= left_limit) {
-        printf("[SYNC] Left edge - reversing to RIGHT\n");
-        traverse_direction = true;
-        current_layer++;
-        turns_this_layer = 0;
+        if (should_print) {
+            printf("[SYNC] Position updated: %.3f mm (moved %.3f mm %s)\n",
+                   current_traverse_position_mm, distance_moved_mm,
+                   traverse_direction ? "RIGHT" : "LEFT");
+        }
+        
+        // ⭐ CRITICAL: Update last_sync_time ONLY after successful sync
+        last_sync_time = current_time;
     }
 }
 

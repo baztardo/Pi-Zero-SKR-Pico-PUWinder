@@ -90,18 +90,32 @@ std::vector<StepChunk> StepCompressor::compress_constant_velocity(
     double velocity,
     double max_err_us)
 {
-    // For constant velocity, we can just create one or a few large chunks
+    // For constant velocity, break into smaller chunks for better ISR responsiveness
     std::vector<StepChunk> chunks;
     
     if (total_steps == 0 || velocity <= 0) return chunks;
     
     uint32_t interval_us = (uint32_t)(1e6 / velocity);
     
-    StepChunk c;
-    c.interval_us = interval_us;
-    c.add_us = 0;  // No acceleration
-    c.count = total_steps;
-    chunks.push_back(c);
+    // ⭐ CRITICAL FIX: Break large moves into chunks of max 5000 steps
+    // This prevents a single massive chunk from blocking the queue
+    // At 3000 steps/sec, 5000 steps = 1.67 seconds per chunk (manageable)
+    const uint32_t MAX_STEPS_PER_CHUNK = 5000;
+    
+    uint32_t remaining_steps = total_steps;
+    while (remaining_steps > 0) {
+        uint32_t chunk_steps = (remaining_steps > MAX_STEPS_PER_CHUNK) 
+                              ? MAX_STEPS_PER_CHUNK 
+                              : remaining_steps;
+        
+        StepChunk c;
+        c.interval_us = interval_us;
+        c.add_us = 0;  // No acceleration
+        c.count = chunk_steps;
+        chunks.push_back(c);
+        
+        remaining_steps -= chunk_steps;
+    }
     
     return chunks;
 }

@@ -139,10 +139,26 @@ bool GCodeInterface::execute_m5() {
         return false;
     }
     
-    // Stop the motor completely
+    // ⭐ CRITICAL: Stop the winding controller first (if running)
+    if (winding_controller) {
+        WindingState current_state = winding_controller->get_state();
+        if (current_state != WindingState::IDLE && current_state != WindingState::COMPLETE) {
+            printf("[M5] Stopping winding controller (state=%d)...\n", (int)current_state);
+            winding_controller->stop();
+        }
+    }
+    
+    // ⭐ CRITICAL: Stop the MoveQueue (traverse motor)
+    if (move_queue && move_queue->is_active()) {
+        printf("[M5] Stopping traverse motor (MoveQueue)...\n");
+        move_queue->clear_queue();
+        move_queue->set_enable(false);  // Disable motor
+    }
+    
+    // Stop the spindle motor
     spindle_controller->set_pwm_duty(0.0f);  // Stop PWM
     spindle_controller->set_brake(true);     // Engage brake
-    printf("✓ Spindle stopped (PWM=0, brake=ON)\n");
+    printf("✓ M5: All motion stopped (Spindle=OFF, Traverse=OFF, Winding=OFF)\n");
     send_response("OK");
     return true;
 }

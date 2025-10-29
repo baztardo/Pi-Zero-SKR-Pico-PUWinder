@@ -28,6 +28,7 @@ GCodeInterface* gcode_interface = nullptr;
 CommunicationHandler* communication_handler = nullptr;
 DiagnosticMonitor* diagnostic_monitor = nullptr;
 
+
 int main() {
     // Initialize stdio
     stdio_init_all();

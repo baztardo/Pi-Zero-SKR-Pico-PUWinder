@@ -1,18 +1,16 @@
 // =============================================================================
-// scheduler.h - Hardware Timer ISR Scheduler
-// Purpose: Manage high-frequency ISR for step timing and encoder updates
+// scheduler.h - Hardware Timer ISR Scheduler (FIXED)
+// Purpose: Manage high-frequency ISR for step timing
 // =============================================================================
 
 #pragma once
 
 #include "pico/stdlib.h"
 #include "move_queue.h"
-// Encoder removed - no longer needed
 #include <cstdint>
 
 // Forward declarations
 class MoveQueue;
-// Encoder removed - no longer needed
 
 // =============================================================================
 // Scheduler Class
@@ -27,10 +25,10 @@ public:
     
     /**
      * @brief Initialize and start the hardware timer ISR
-     * @param interval_us ISR interval in microseconds
+     * @param interval_us ISR interval in microseconds (default 50µs = 20kHz)
      * @return true if successful
      */
-    bool start(uint32_t interval_us);
+    bool start(uint32_t interval_us = 50);
     
     /**
      * @brief Stop the hardware timer ISR
@@ -50,11 +48,6 @@ public:
     uint32_t get_tick_count() const;
     
     /**
-     * @brief Instance ISR handler
-     */
-    void handle_isr();
-    
-    /**
      * @brief Get ISR frequency in Hz
      * @return Frequency in Hz
      */
@@ -66,22 +59,19 @@ public:
      * @param user_data User data passed to callback
      */
     void register_callback(void (*callback)(void*), void* user_data);
+    
+    /**
+     * @brief ISR handler - called from hardware alarm callback
+     * MUST BE FAST - NO PRINTF ALLOWED
+     */
+    void handle_isr();
 
 private:
     MoveQueue* move_queue;
-    // Encoder removed - no longer needed
-    repeating_timer_t timer;
     volatile uint32_t tick_count;
     uint32_t interval_us;
     bool running;
     
     void (*user_callback)(void*);
     void* user_callback_data;
-    
-    /**
-     * @brief Static ISR callback (required for Pico SDK)
-     * @param rt Repeating timer handle
-     * @return true to keep repeating
-     */
-    static bool timer_callback(repeating_timer_t* rt);
 };
