@@ -1,13 +1,14 @@
 // =============================================================================
-// move_queue.h - MCU Move Queue & Step Consumer (FIXED)
-// Purpose: Fixed-size move queue with ISR-driven step execution for traverse axis
-// Key changes: Added diagnostic methods, removed ISR printf
+// move_queue.h - MCU Move Queue & Step Consumer (PIO HYBRID)
+// Purpose: Fixed-size move queue with PIO hardware stepping for traverse axis
+// Key changes: Uses PIO for winding, releases GPIO for homing
 // =============================================================================
 
 #pragma once
 
 #include "stepcompress.h"
 #include "config.h"
+#include "pio_stepper.h"
 #include <cstdint>
 
 // =============================================================================
@@ -51,11 +52,26 @@ public:
     void clear_queue();
     
     /**
-     * @brief ISR handler for traverse stepping
+     * @brief ISR handler for traverse stepping (feeds PIO when active)
      * Call this from ISR at high frequency (e.g., 20 kHz)
      * NO PRINTF ALLOWED IN THIS FUNCTION
      */
     void traverse_isr_handler();
+    
+    /**
+     * @brief Activate PIO mode for winding (releases GPIO control)
+     */
+    void activate_pio_mode();
+    
+    /**
+     * @brief Deactivate PIO mode after winding (returns GPIO control)
+     */
+    void deactivate_pio_mode();
+    
+    /**
+     * @brief Check if PIO is currently active
+     */
+    bool is_pio_active() const;
 
     /**
      * @brief Set traverse direction pin state
@@ -148,6 +164,9 @@ private:
     // FluidNC-style safety and feed control
     bool feeding_paused;
     bool emergency_stop_active;
+    
+    // PIO hardware stepper (with GPIO handoff capability)
+    PIOStepper* pio_stepper;
     
     /**
      * @brief Execute a step pulse on traverse step pin

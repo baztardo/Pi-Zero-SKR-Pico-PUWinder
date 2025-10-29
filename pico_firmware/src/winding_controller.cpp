@@ -110,6 +110,11 @@ void WindingController::stop() {
         spindle_motor->set_brake(true);
     }
     
+    // ⭐ DEACTIVATE PIO MODE - release GPIO back for homing
+    if (move_queue) {
+        move_queue->deactivate_pio_mode();
+    }
+    
     // Reset homing flags
     homing_started = false;
     traverse_homing_started = false;
@@ -208,8 +213,7 @@ void WindingController::home_spindle() {
 // =============================================================================
 void WindingController::home_traverse() {
     if (!traverse_homing_started) {
-        // FIX: Use instance variables instead of static
-        printf("Starting traverse homing\n");
+        // Start homing silently
         traverse_homing_start_time = time_us_32();
         traverse_homing_started = true;
         
@@ -226,7 +230,7 @@ void WindingController::home_traverse() {
     
     // Check if homing complete (3 second timeout)
     if (time_us_32() - traverse_homing_start_time > 3000000) {
-        printf("Traverse homed\n");
+        printf("✓ Traverse homed\n");
         current_traverse_position_mm = 0.0f;
         state = WindingState::MOVING_TO_START;
         traverse_homing_started = false;  // Reset for next time
@@ -262,6 +266,9 @@ void WindingController::move_to_start() {
     
     // ✅ CRITICAL: MoveQueue takes control
     printf("[WindingController] MoveQueue taking control of traverse motor\n");
+    
+    // ⭐ ACTIVATE PIO MODE for high-speed stepping
+    move_queue->activate_pio_mode();
     
     // Ensure motor is enabled
     move_queue->set_enable(true);  // Sets ENA=0 (active low)
@@ -442,11 +449,51 @@ void WindingController::sync_traverse_to_spindle() {
     if (queue_depth >= MAX_QUEUE_DEPTH) {
         // Queue too full - skip chunk generation (but edge detection already happened above)
         static uint32_t skip_count = 0;
-        if ((skip_count++ % 100) == 0) {
-            printf("[SYNC] Queue depth %u - skipping chunk generation\n", queue_depth);
+        static uint32_t consecutive_skips = 0;
+        
+        consecutive_skips++;
+        
+        // ⚠️ SAFETY: If queue stays full for too long (5000 skips = ~5 seconds), EMERGENCY STOP
+        if (consecutive_skips >= 5000) {
+            printf("\n");
+            printf("╔═══════════════════════════════════════════════════════════════╗\n");
+            printf("║  ❌ EMERGENCY STOP - QUEUE OVERFLOW DETECTED                 ║\n");
+            printf("╚═══════════════════════════════════════════════════════════════╝\n");
+            printf("[SAFETY] Queue stayed full for 5+ seconds - ISR cannot keep up!\n");
+            printf("[SAFETY] Queue depth: %u, Consecutive skips: %u\n", queue_depth, consecutive_skips);
+            printf("[SAFETY] Stopping all motion for safety...\n");
+            
+            // Stop winding
+            stop();
+            
+            // Stop spindle
+            if (spindle_motor) {
+                spindle_motor->set_pwm_duty(0.0f);
+                spindle_motor->set_brake(true);
+            }
+            
+            // Clear and disable move queue
+            if (move_queue) {
+                move_queue->clear_queue();
+                move_queue->set_enable(false);
+            }
+            
+            printf("[SAFETY] ✓ All motion stopped. Please investigate and reset.\n\n");
+            consecutive_skips = 0;  // Reset counter
+            return;
+        }
+        
+        // Print warning every 500 skips
+        if ((skip_count++ % 500) == 0) {
+            printf("[SYNC] ⚠️  Queue depth %u - skipping chunk generation (skip #%u)\n", 
+                   queue_depth, consecutive_skips);
         }
         return;
     }
+    
+    // ✅ Queue is healthy - reset consecutive skip counter
+    static uint32_t consecutive_skips = 0;
+    consecutive_skips = 0;
     
     // REAL-TIME VELOCITY MATCHING (like Klipper/FluidNC)
     // Calculate current traverse velocity based on current RPM
@@ -480,7 +527,7 @@ void WindingController::sync_traverse_to_spindle() {
     // ⭐ CRITICAL: Increase sync interval to 200ms to drastically reduce CPU load
     // At 896 RPM with 0.056mm wire: ~0.19mm movement per 200ms
     // This reduces chunk generation from 20 Hz to 5 Hz (75% less overhead!)
-    if (delta_time_us < 200000) {  // 200ms minimum (was 50ms)
+    if (delta_time_us < 250000) {  // 250ms minimum = 4Hz sync rate (less CPU load)
         return;
     }
     
@@ -493,14 +540,13 @@ void WindingController::sync_traverse_to_spindle() {
             steps_to_generate = -steps_to_generate;
         }
         
-        // ⭐ Reduce printf frequency to every 20th sync (1 per second at 50ms sync interval)
-        static uint32_t sync_count = 0;
-        bool should_print = (sync_count++ % 20) == 0;
-        
-        if (should_print) {
-            printf("[SYNC] RPM: %.1f, Velocity: %.3f mm/s, Steps: %d\n", 
-                   current_rpm, required_traverse_velocity_mm_per_sec, abs(steps_to_generate));
-        }
+        // ⭐ PERFORMANCE: Disable ALL sync printf during winding (too slow!)
+        // Uncomment for debugging only:
+        // static uint32_t sync_count = 0;
+        // if ((sync_count++ % 100) == 0) {
+        //     printf("[SYNC] RPM: %.1f, Velocity: %.3f mm/s, Steps: %d\n", 
+        //            current_rpm, required_traverse_velocity_mm_per_sec, abs(steps_to_generate));
+        // }
         
         // CRITICAL: Enable MoveQueue and set direction for sync moves
         move_queue->set_enable(true);
@@ -510,27 +556,9 @@ void WindingController::sync_traverse_to_spindle() {
         auto chunks = StepCompressor::compress_constant_velocity(
             abs(steps_to_generate), (uint32_t)required_steps_per_sec);
         
-        if (should_print) {
-            printf("[SYNC] Generated %zu chunks for %d steps\n", 
-                   chunks.size(), abs(steps_to_generate));
-        }
-        
-        int pushed = 0;
+        // Push all chunks (no printf for performance)
         for (const auto& chunk : chunks) {
-            if (move_queue->push_chunk(chunk)) {
-                pushed++;
-            } else {
-                if (should_print) {
-                    printf("[SYNC] ❌ FAILED to push chunk!\n");
-                }
-            }
-        }
-        
-        if (should_print) {
-            printf("[SYNC] Pushed %d/%zu chunks, Queue depth: %u, Active: %s\n",
-                   pushed, chunks.size(), 
-                   move_queue->get_queue_depth(),
-                   move_queue->is_active() ? "YES" : "NO");
+            move_queue->push_chunk(chunk);
         }
         
         // ⭐ CRITICAL: Update position based on steps we QUEUED
@@ -542,11 +570,7 @@ void WindingController::sync_traverse_to_spindle() {
             current_traverse_position_mm -= distance_moved_mm;  // Moving LEFT
         }
         
-        if (should_print) {
-            printf("[SYNC] Position updated: %.3f mm (moved %.3f mm %s)\n",
-                   current_traverse_position_mm, distance_moved_mm,
-                   traverse_direction ? "RIGHT" : "LEFT");
-        }
+        // Position tracking (no printf for performance)
         
         // ⭐ CRITICAL: Update last_sync_time ONLY after successful sync
         last_sync_time = current_time;
@@ -579,10 +603,14 @@ void WindingController::update_display() {
         uart_putc(PI_UART_ID, status_buffer[i]);
     }
     
-    // Also send to USB serial for debugging
-    printf("Status: Layer %u/%u, Turns %u/%u, RPM %.1f\n", 
-           current_layer, params.total_layers, turns_completed, 
-           params.target_turns, current_rpm);
+    // ⭐ PERFORMANCE: USB printf is SLOW (~1-5ms). Only print every 50 turns to reduce CPU load
+    static uint32_t last_print_turn = 0;
+    if (turns_completed - last_print_turn >= 50) {
+        printf("Status: Layer %u/%u, Turns %u/%u, RPM %.1f\n", 
+               current_layer, params.total_layers, turns_completed, 
+               params.target_turns, current_rpm);
+        last_print_turn = turns_completed;
+    }
 }
 
 uint32_t WindingController::mm_to_steps(float mm) {

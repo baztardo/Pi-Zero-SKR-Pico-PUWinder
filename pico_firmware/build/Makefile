@@ -130,6 +130,19 @@ pico_spindle_controller/fast:
 .PHONY : pico_spindle_controller/fast
 
 #=============================================================================
+# Target rules for targets named pico_spindle_controller_pio_stepper_pio_h
+
+# Build rule for target.
+pico_spindle_controller_pio_stepper_pio_h: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 pico_spindle_controller_pio_stepper_pio_h
+.PHONY : pico_spindle_controller_pio_stepper_pio_h
+
+# fast build rule for target.
+pico_spindle_controller_pio_stepper_pio_h/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller_pio_stepper_pio_h.dir/build.make CMakeFiles/pico_spindle_controller_pio_stepper_pio_h.dir/build
+.PHONY : pico_spindle_controller_pio_stepper_pio_h/fast
+
+#=============================================================================
 # Target rules for targets named bs2_default
 
 # Build rule for target.
@@ -1025,6 +1038,30 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.o:
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.S.o
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.o
+
+# target to build an object file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.o
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.i
+
+# target to preprocess a source file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.i
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.s
+
+# target to generate assembly for a file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.o
@@ -2058,6 +2095,30 @@ src/move_queue.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/move_queue.cpp.s
 .PHONY : src/move_queue.cpp.s
 
+src/pio_stepper.o: src/pio_stepper.cpp.o
+.PHONY : src/pio_stepper.o
+
+# target to build an object file
+src/pio_stepper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/pio_stepper.cpp.o
+.PHONY : src/pio_stepper.cpp.o
+
+src/pio_stepper.i: src/pio_stepper.cpp.i
+.PHONY : src/pio_stepper.i
+
+# target to preprocess a source file
+src/pio_stepper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/pio_stepper.cpp.i
+.PHONY : src/pio_stepper.cpp.i
+
+src/pio_stepper.s: src/pio_stepper.cpp.s
+.PHONY : src/pio_stepper.s
+
+# target to generate assembly for a file
+src/pio_stepper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/src/pio_stepper.cpp.s
+.PHONY : src/pio_stepper.cpp.s
+
 src/scheduler.o: src/scheduler.cpp.o
 .PHONY : src/scheduler.o
 
@@ -2212,6 +2273,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... bs2_default_bin"
 	@echo "... cyw43_driver_picow_cyw43_bus_pio_spi_pio_h"
+	@echo "... pico_spindle_controller_pio_stepper_pio_h"
 	@echo "... pico_status_led_ws2812_pio_h"
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
@@ -2320,6 +2382,9 @@ help:
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_irq/irq_handler_chain.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.i"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pio/pio.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_pll/pll.s"
@@ -2449,6 +2514,9 @@ help:
 	@echo "... src/move_queue.o"
 	@echo "... src/move_queue.i"
 	@echo "... src/move_queue.s"
+	@echo "... src/pio_stepper.o"
+	@echo "... src/pio_stepper.i"
+	@echo "... src/pio_stepper.s"
 	@echo "... src/scheduler.o"
 	@echo "... src/scheduler.i"
 	@echo "... src/scheduler.s"

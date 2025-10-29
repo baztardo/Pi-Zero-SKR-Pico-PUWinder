@@ -95,8 +95,8 @@
 #define DEFAULT_JERK            5000.0  // steps/sec³ (future use)
 
 // Traverse Motion Speeds
-#define TRAVERSE_HOMING_SPEED   1500    // steps/sec for homing
-#define TRAVERSE_RAPID_SPEED    1500    // steps/sec for rapid moves (was 3000, but ISR can't keep up)
+#define TRAVERSE_HOMING_SPEED   1200    // steps/sec for homing (ISR limit: ~1390 actual)
+#define TRAVERSE_RAPID_SPEED    1200    // steps/sec for rapid moves (ISR limit: ~1390 actual)
 #define TRAVERSE_RAPID_ACCEL    5000    // steps/sec² for rapid moves
 #define TRAVERSE_MIN_WINDING_SPEED 1000 // Minimum speed during winding (steps/sec)
 

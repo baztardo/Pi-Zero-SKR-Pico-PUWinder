@@ -42,7 +42,11 @@ add_executable(pico_spindle_controller
     src/traverse_controller.cpp
     src/gcode_interface.cpp
     src/communication_handler.cpp
+    src/pio_stepper.cpp
 )
+
+# Generate PIO header from .pio file
+pico_generate_pio_header(pico_spindle_controller ${CMAKE_CURRENT_LIST_DIR}/src/pio_stepper.pio)
 
 target_include_directories(pico_spindle_controller PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
@@ -53,6 +57,7 @@ target_link_libraries(pico_spindle_controller
     hardware_gpio
     hardware_timer
     hardware_irq
+    hardware_pio
 )
 
 pico_enable_stdio_usb(pico_spindle_controller 1)

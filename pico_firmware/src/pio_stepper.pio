@@ -1,0 +1,87 @@
+;
+; PIO Stepper Motor Control - Optimized for high-speed stepping
+; Generates step pulses with precise timing
+;
+; This state machine:
+; 1. Reads step interval from TX FIFO
+; 2. Waits for that interval
+; 3. Generates a step pulse (5µs high)
+; 4. Repeats
+;
+; Pin usage:
+;   - SIDESET pin 0: STEP (pulse output)
+;
+
+.program pio_stepper
+
+.side_set 1 opt                     ; Use side-set for step pin (optional for flexibility)
+
+.wrap_target
+    pull block                      ; Wait for next step interval (blocking)
+    out x, 32                       ; Load interval into X register
+    
+delay_loop:
+    jmp x-- delay_loop              ; Decrement and loop until X=0
+    
+    nop         side 1              ; STEP high (side-set)
+    set x, 4                        ; 5µs pulse width (5 cycles at 1MHz = 5µs)
+pulse_width:
+    jmp x-- pulse_width
+    
+    nop         side 0              ; STEP low (side-set)
+.wrap
+
+
+% c-sdk {
+static inline void pio_stepper_program_init(PIO pio, uint sm, uint offset, uint step_pin) {
+    // Configure step pin for PIO control
+    pio_gpio_init(pio, step_pin);
+    pio_sm_set_consecutive_pindirs(pio, sm, step_pin, 1, true);
+    
+    // Get default config
+    pio_sm_config c = pio_stepper_program_get_default_config(offset);
+    
+    // Configure side-set for step pin
+    sm_config_set_sideset_pins(&c, step_pin);
+    
+    // Set clock divider for 1MHz (1µs per instruction)
+    // System clock is 125MHz, so divider = 125
+    sm_config_set_clkdiv(&c, 125.0f);
+    
+    // Configure autopull: shift 32 bits from TX FIFO
+    sm_config_set_out_shift(&c, false, false, 32);
+    
+    // Join TX FIFO to get 8 words depth (more buffering)
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
+    
+    // Initialize and start state machine
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+
+// Function to release GPIO from PIO control (for homing)
+static inline void pio_stepper_release_gpio(PIO pio, uint sm, uint step_pin) {
+    // Disable state machine
+    pio_sm_set_enabled(pio, sm, false);
+    
+    // Clear FIFOs
+    pio_sm_clear_fifos(pio, sm);
+    
+    // Release pin back to regular GPIO
+    gpio_init(step_pin);
+    gpio_set_dir(step_pin, GPIO_OUT);
+    gpio_put(step_pin, 0);
+}
+
+// Function to reclaim GPIO for PIO (after homing)
+static inline void pio_stepper_reclaim_gpio(PIO pio, uint sm, uint step_pin) {
+    // Reconfigure pin for PIO
+    pio_gpio_init(pio, step_pin);
+    pio_sm_set_consecutive_pindirs(pio, sm, step_pin, 1, true);
+    
+    // Restart state machine
+    pio_sm_restart(pio, sm);
+    pio_sm_set_enabled(pio, sm, true);
+}
+
+%}

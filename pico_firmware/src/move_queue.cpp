@@ -30,39 +30,36 @@ MoveQueue::MoveQueue() {
     step_count = 0;
     feeding_paused = false;
     emergency_stop_active = false;
+    pio_stepper = nullptr;
 }
 
 void MoveQueue::init() {
-    printf("[MoveQueue] Initializing GPIO pins...\n");
+    printf("[MoveQueue] Initializing with PIO hybrid mode...\n");
     
-    // Initialize traverse stepper pins
+    // ⭐ Create PIO stepper (but keep it INACTIVE for now)
+    // This allows TraverseController to use GPIO for homing
+    pio_stepper = new PIOStepper(TRAVERSE_STEP_PIN, TRAVERSE_DIR_PIN);
+    
+    // Initialize STEP pin as regular GPIO (for homing)
+    // PIO will take over when activate_pio_mode() is called
     gpio_init(TRAVERSE_STEP_PIN);
     gpio_set_dir(TRAVERSE_STEP_PIN, GPIO_OUT);
     gpio_put(TRAVERSE_STEP_PIN, 0);
     
+    // DIR pin is always regular GPIO (not PIO-controlled)
     gpio_init(TRAVERSE_DIR_PIN);
     gpio_set_dir(TRAVERSE_DIR_PIN, GPIO_OUT);
     gpio_put(TRAVERSE_DIR_PIN, 0);
     
+    // Enable pin
     gpio_init(TRAVERSE_ENA_PIN);
     gpio_set_dir(TRAVERSE_ENA_PIN, GPIO_OUT);
     gpio_put(TRAVERSE_ENA_PIN, 0);  // Active low - motor enabled
     
-    // Initialize debug LEDs
-    gpio_init(17);  // FAN1 - ISR heartbeat
-    gpio_set_dir(17, GPIO_OUT);
-    gpio_put(17, 0);
-    
-    gpio_init(18);  // FAN2 - Active indicator
-    gpio_set_dir(18, GPIO_OUT);
-    gpio_put(18, 0);
-    
-    printf("[MoveQueue] Initialization complete\n");
-    printf("[MoveQueue] - STEP pin (GPIO %d): Output, LOW\n", TRAVERSE_STEP_PIN);
-    printf("[MoveQueue] - DIR pin (GPIO %d): Output, LOW\n", TRAVERSE_DIR_PIN);
-    printf("[MoveQueue] - ENA pin (GPIO %d): Output, LOW (ENABLED)\n", TRAVERSE_ENA_PIN);
-    printf("[MoveQueue] - Debug LED FAN1 (GPIO 17): ISR Heartbeat\n");
-    printf("[MoveQueue] - Debug LED FAN2 (GPIO 18): Active Indicator\n");
+    printf("[MoveQueue] ✓ Initialization complete (GPIO mode for homing)\n");
+    printf("[MoveQueue] - STEP pin (GPIO %d): GPIO mode (PIO available)\n", TRAVERSE_STEP_PIN);
+    printf("[MoveQueue] - DIR pin (GPIO %d): GPIO mode\n", TRAVERSE_DIR_PIN);
+    printf("[MoveQueue] - ENA pin (GPIO %d): Active LOW (ENABLED)\n", TRAVERSE_ENA_PIN);
 }
 
 bool MoveQueue::push_chunk(const StepChunk& chunk) {
@@ -188,7 +185,50 @@ void MoveQueue::traverse_isr_handler() {
         return;  // Process on next ISR tick
     }
     
-    // Process active chunk - single step per ISR tick
+    // ⭐ PIO MODE: Feed PIO FIFO instead of doing GPIO directly
+    // DEBUG: Check PIO state
+    static uint32_t debug_counter = 0;
+    if ((debug_counter++ % 10000) == 0) {
+        printf("[ISR-DEBUG] pio_stepper=%p, is_active=%d\n", 
+               (void*)pio_stepper, pio_stepper ? pio_stepper->is_active() : -1);
+    }
+    
+    if (pio_stepper && pio_stepper->is_active()) {
+        // DEBUG: Print once to confirm PIO path
+        static bool pio_debug_printed = false;
+        if (!pio_debug_printed) {
+            printf("[ISR] ✓✓✓ PIO MODE ACTIVE - feeding hardware FIFO!\n");
+            pio_debug_printed = true;
+        }
+        
+        // PIO mode - feed steps to hardware FIFO
+        while (active.count > 0 && pio_stepper->can_queue_step()) {
+            // Queue step with current interval
+            if (pio_stepper->queue_step(active.interval_us)) {
+                step_count++;
+                g_steps_executed++;
+                active.count--;
+                
+                // Adjust interval for acceleration
+                if (active.add_us != 0) {
+                    int64_t next_interval = (int64_t)active.interval_us + (int64_t)active.add_us;
+                    active.interval_us = (uint32_t)std::max((int64_t)1, next_interval);
+                }
+            } else {
+                break;  // FIFO full, try again next ISR call
+            }
+        }
+        
+        // Check if chunk complete
+        if (active.count == 0) {
+            active_running = false;
+            g_last_active_state = false;
+        }
+        return;
+    }
+    
+    // ⭐ GPIO MODE: Direct GPIO stepping (for homing/manual moves)
+    // This is the fallback when PIO is not active
     uint32_t now = time_us_32();
     int32_t time_diff = (int32_t)(now - last_step_time);
     
@@ -197,7 +237,7 @@ void MoveQueue::traverse_isr_handler() {
         return;  // Not time yet
     }
 
-    // EXECUTE STEP
+    // EXECUTE STEP via GPIO
     execute_step_pulse();
 
     // Update timing
@@ -297,4 +337,25 @@ bool MoveQueue::is_feeding_paused() const {
 
 bool MoveQueue::is_emergency_stopped() const {
     return emergency_stop_active;
+}
+
+// =============================================================================
+// PIO Mode Control - Handoff between GPIO (homing) and PIO (winding)
+// =============================================================================
+void MoveQueue::activate_pio_mode() {
+    if (pio_stepper) {
+        printf("[MoveQueue] 🚀 Activating PIO mode for winding...\n");
+        pio_stepper->activate();
+    }
+}
+
+void MoveQueue::deactivate_pio_mode() {
+    if (pio_stepper) {
+        printf("[MoveQueue] 🏠 Deactivating PIO mode (GPIO ready for homing)...\n");
+        pio_stepper->deactivate();
+    }
+}
+
+bool MoveQueue::is_pio_active() const {
+    return pio_stepper && pio_stepper->is_active();
 }

@@ -47,11 +47,25 @@ void CommunicationHandler::process_incoming_char(char c) {
         // End of command
         if (buffer_pos > 0) {
             command_buffer[buffer_pos] = '\0';
-            printf("[CommunicationHandler] Received: %s\n", command_buffer);
             
-            // Process command
-            if (gcode_interface) {
-                gcode_interface->process_command(command_buffer);
+            // ⭐ FIX: Strip leading garbage/whitespace from command
+            char* clean_cmd = command_buffer;
+            while (*clean_cmd && (*clean_cmd < ' ' || *clean_cmd > '~')) {
+                clean_cmd++;  // Skip non-printable chars
+            }
+            
+            // Skip leading whitespace
+            while (*clean_cmd == ' ' || *clean_cmd == '\t') {
+                clean_cmd++;
+            }
+            
+            if (*clean_cmd != '\0') {
+                printf("[CommunicationHandler] Received: %s\n", clean_cmd);
+                
+                // Process command
+                if (gcode_interface) {
+                    gcode_interface->process_command(clean_cmd);
+                }
             }
             
             buffer_pos = 0;  // Reset buffer
