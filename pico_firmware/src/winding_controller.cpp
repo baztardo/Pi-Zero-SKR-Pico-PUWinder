@@ -441,7 +441,22 @@ void WindingController::sync_traverse_to_spindle() {
         current_layer++;
         turns_this_layer = 0;
     }
+    // Timing check
+    static uint32_t last_sync_time = 0;
+    uint32_t current_time = time_us_32();
     
+    if (last_sync_time == 0) {
+        last_sync_time = current_time;
+        return;
+    }
+    
+    uint32_t delta_time_us = current_time - last_sync_time;
+    
+    // Return early if not time yet - THIS PREVENTS THE FAST LOOP!
+    if (delta_time_us < 250000) {
+        return;  // Not time yet - skip everything below
+    }
+
     // ⭐ Check queue depth to prevent overflow
     uint32_t queue_depth = move_queue->get_queue_depth();
     const uint32_t MAX_QUEUE_DEPTH = 100;  // Leave 28 slots free
@@ -509,26 +524,6 @@ void WindingController::sync_traverse_to_spindle() {
     // Only move if we have meaningful velocity
     if (required_steps_per_sec < 1.0f) {
         return;  // Too slow to matter
-    }
-    
-    // Calculate how many steps to generate this update cycle
-    // This runs at ~100Hz, so generate steps for 10ms worth of movement
-    static uint32_t last_sync_time = 0;
-    uint32_t current_time = time_us_32();
-    
-    // ⭐ CRITICAL: Initialize last_sync_time on first call
-    if (last_sync_time == 0) {
-        last_sync_time = current_time;
-        return;  // Skip first call to establish baseline
-    }
-    
-    uint32_t delta_time_us = current_time - last_sync_time;
-    
-    // ⭐ CRITICAL: Increase sync interval to 200ms to drastically reduce CPU load
-    // At 896 RPM with 0.056mm wire: ~0.19mm movement per 200ms
-    // This reduces chunk generation from 20 Hz to 5 Hz (75% less overhead!)
-    if (delta_time_us < 250000) {  // 250ms minimum = 4Hz sync rate (less CPU load)
-        return;
     }
     
     float delta_time_sec = delta_time_us / 1000000.0f;

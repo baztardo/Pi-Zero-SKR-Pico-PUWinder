@@ -185,14 +185,6 @@ void MoveQueue::traverse_isr_handler() {
         return;  // Process on next ISR tick
     }
     
-    // ⭐ PIO MODE: Feed PIO FIFO instead of doing GPIO directly
-    // DEBUG: Check PIO state
-    static uint32_t debug_counter = 0;
-    if ((debug_counter++ % 10000) == 0) {
-        printf("[ISR-DEBUG] pio_stepper=%p, is_active=%d\n", 
-               (void*)pio_stepper, pio_stepper ? pio_stepper->is_active() : -1);
-    }
-    
     if (pio_stepper && pio_stepper->is_active()) {
         // DEBUG: Print once to confirm PIO path
         static bool pio_debug_printed = false;
