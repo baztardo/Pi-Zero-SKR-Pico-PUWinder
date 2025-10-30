@@ -197,6 +197,18 @@ void WindingController::ramp_up_spindle() {
                params.spindle_rpm, params.ramp_time_sec);
         ramp_started = true;
         ramp_start_time = time_us_32();
+        
+        // ⭐ ACTIVATE PIO MODE for high-speed stepping during winding
+        if (move_queue) {
+            move_queue->activate_pio_mode();
+            printf("[RAMP] ✓ PIO mode activated for winding\n");
+        }
+        
+        // ⭐ Initialize traverse position from homing
+        if (traverse_controller) {
+            current_traverse_position_mm = traverse_controller->get_position();
+            printf("[RAMP] Traverse starting position: %.2f mm\n", current_traverse_position_mm);
+        }
     }
     
     uint32_t elapsed = time_us_32() - ramp_start_time;
@@ -206,6 +218,15 @@ void WindingController::ramp_up_spindle() {
     
     float current_target_rpm = params.spindle_rpm * ramp_progress;
     current_rpm = current_target_rpm;
+    
+    // ⭐ CRITICAL FIX: Actually apply the RPM to the motor (was missing!)
+    if (spindle_motor) {
+        spindle_motor->set_rpm_pwm(current_target_rpm);
+    }
+    
+    // ⭐ CRITICAL FIX: Start traverse movement during ramp-up so it syncs from the start
+    // This ensures traverse velocity matches spindle RPM as it ramps up
+    sync_traverse_to_spindle();
     
     if (ramp_progress >= 1.0f) {
         printf("Spindle ramp up complete\n");
@@ -254,27 +275,48 @@ void WindingController::sync_traverse_to_spindle() {
     const float steps_per_mm = 6135.0f;
     
     // ⭐ CRITICAL: Check for layer edge and reverse direction if needed
+    // ⚠️ SAFETY: Always check edges (even if queue is full) to prevent missing reversals
     float edge_margin = 0.5f;  // 0.5mm safety margin from edges
     float left_limit = params.start_position_mm + edge_margin;
     float right_limit = params.start_position_mm + params.layer_width_mm - edge_margin;
     
-    // Check if we need to reverse direction based on current position
-    if (traverse_direction && current_traverse_position_mm >= right_limit) {
-        // Hit right edge - reverse to LEFT
-        printf("[SYNC] ⚠️  RIGHT EDGE DETECTED at %.3f mm - REVERSING to LEFT\n", 
+    // ⚠️ SAFETY: Validate position is in reasonable range before edge check
+    // Physical limits: Start ~38mm, max travel from start is 40-45mm
+    // So absolute maximum position: ~38mm + 45mm = ~83mm
+    // Using 90mm as max to give safety margin above physical limit
+    const float MAX_PHYSICAL_POSITION_MM = 90.0f;  // Safety margin above ~83mm absolute max
+    
+    if (current_traverse_position_mm >= 0.0f && 
+        current_traverse_position_mm <= MAX_PHYSICAL_POSITION_MM) {
+        
+        // Check if we need to reverse direction based on current position
+        if (traverse_direction && current_traverse_position_mm >= right_limit) {
+            // Hit right edge - reverse to LEFT
+            printf("[SYNC] ⚠️  RIGHT EDGE DETECTED at %.3f mm (limit: %.3f) - REVERSING to LEFT\n", 
+                   current_traverse_position_mm, right_limit);
+            traverse_direction = false;
+            if (move_queue) {
+                move_queue->set_direction(traverse_direction);
+            }
+            current_layer++;
+            turns_this_layer = 0;
+        } else if (!traverse_direction && current_traverse_position_mm <= left_limit) {
+            // Hit left edge - reverse to RIGHT
+            printf("[SYNC] ⚠️  LEFT EDGE DETECTED at %.3f mm (limit: %.3f) - REVERSING to RIGHT\n", 
+                   current_traverse_position_mm, left_limit);
+            traverse_direction = true;
+            if (move_queue) {
+                move_queue->set_direction(traverse_direction);
+            }
+            current_layer++;
+            turns_this_layer = 0;
+        }
+    } else {
+        // ⚠️ SAFETY: Invalid position detected - emergency stop
+        printf("[SYNC] ❌ INVALID POSITION: %.3f mm - EMERGENCY STOP!\n", 
                current_traverse_position_mm);
-        traverse_direction = false;
-        move_queue->set_direction(traverse_direction);
-        current_layer++;
-        turns_this_layer = 0;
-    } else if (!traverse_direction && current_traverse_position_mm <= left_limit) {
-        // Hit left edge - reverse to RIGHT
-        printf("[SYNC] ⚠️  LEFT EDGE DETECTED at %.3f mm - REVERSING to RIGHT\n", 
-               current_traverse_position_mm);
-        traverse_direction = true;
-        move_queue->set_direction(traverse_direction);
-        current_layer++;
-        turns_this_layer = 0;
+        emergency_stop();
+        return;
     }
     // Timing check
     static uint32_t last_sync_time = 0;
@@ -292,7 +334,7 @@ void WindingController::sync_traverse_to_spindle() {
         return;  // Not time yet - skip everything below
     }
 
-    // ⭐ Check queue depth to prevent overflow
+    // ⭐ Check queue depth to prevent overflow (check before generating new chunks)
     uint32_t queue_depth = move_queue->get_queue_depth();
     const uint32_t MAX_QUEUE_DEPTH = 100;  // Leave 28 slots free
     
