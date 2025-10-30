@@ -197,7 +197,7 @@ void TraverseController::back_off_from_switch() {
 
 void TraverseController::move_to_start_position() {
     printf("[TraverseController] Phase 3: Moving to start position (22mm)...\n");
-    target_position_mm = 22.0f;  // 20mm + 2mm offset
+    target_position_mm = TC_start_offset;  // 
     float distance = target_position_mm - current_position_mm;
     steps_remaining = (int32_t)(distance * steps_per_mm);
     
@@ -334,8 +334,8 @@ void TraverseController::generate_steps() {
     // Debug: Show step generation progress
     static uint32_t debug_counter = 0;
     if (homing && (debug_counter++ % 1000 == 0)) {
-        printf("[TraverseController] Homing debug: steps_remaining=%d, home_switch=%s, moving=%d, enabled=%d, phase=%d\n", 
-               steps_remaining, gpio_get(home_pin) ? "HIGH" : "LOW", moving, enabled, homing_phase);
+        //printf("[TraverseController] Homing debug: steps_remaining=%d, home_switch=%s, moving=%d, enabled=%d, phase=%d\n", 
+               //steps_remaining, gpio_get(home_pin) ? "HIGH" : "LOW", moving, enabled, homing_phase);
     }
     
     uint32_t now = time_us_32();
@@ -374,8 +374,8 @@ void TraverseController::generate_steps() {
         // Debug: Show step generation
         static uint32_t step_counter = 0;
         if (homing && (step_counter++ % 100 == 0)) {
-            printf("[TraverseController] Step %d: pos=%.2fmm, remaining=%d\n", 
-                   step_counter, current_position_mm, steps_remaining);
+            //printf("[TraverseController] Step %d: pos=%.2fmm, remaining=%d\n", 
+                   //step_counter, current_position_mm, steps_remaining);
         }
         
         // Check if movement complete

@@ -301,13 +301,13 @@ float BLDC_MOTOR::get_ramp_progress() const {
 
 void BLDC_MOTOR::set_rpm_pwm(float rpm) {
     // Clamp RPM to reasonable range
-    rpm = fmaxf(0.0f, fminf(3000.0f, rpm));
+    rpm = fmaxf(0.0f, fminf(MAX_RPM, rpm));
     
     if (rpm > 0) {
         // Calculate PWM duty cycle based on RPM
         // For BLDC motors, we need a minimum PWM to start (usually 20-30%)
-        float min_duty = 20.0f;  // Minimum 20% to start motor
-        float max_duty = 100.0f; // Maximum 100%
+        float min_duty = PWM_DUTY_MIN;  // Minimum 20% to start motor
+        float max_duty = PWM_DUTY_MAX; // Maximum 100%
         
         // Calibrated mapping: 500 RPM -> 24.8% duty -> 1050 RPM actual
         // So we need to scale down the duty cycle to get correct RPM
@@ -315,7 +315,7 @@ void BLDC_MOTOR::set_rpm_pwm(float rpm) {
         float calibrated_rpm = rpm * scale_factor;
         
         // Linear mapping from 0-3000 RPM to 20-100% duty
-        float duty_percent = min_duty + ((calibrated_rpm / 3000.0f) * (max_duty - min_duty));
+        float duty_percent = min_duty + ((calibrated_rpm / MAX_RPM) * (max_duty - min_duty));
         
         printf("RPM: %.1f -> Duty: %.1f%%\n", rpm, duty_percent);
         set_pwm_duty(duty_percent);
