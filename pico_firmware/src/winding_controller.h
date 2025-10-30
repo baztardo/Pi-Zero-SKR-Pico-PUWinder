@@ -37,14 +37,14 @@ struct WindingParams {
     uint32_t turns_per_layer;
     uint32_t total_layers;
     
-    WindingParams() 
-        : target_turns(1000)
-        , spindle_rpm(300.0f)
-        , wire_diameter_mm(0.064f)
-        , layer_width_mm(50.0f)
-        , start_position_mm(20.0f)
-        , ramp_time_sec(3.0f)
-        , wire_pitch_mm(0.064f)
+    WindingParams()
+        : target_turns(WINDING_TARGET_TURNS)
+        , spindle_rpm(WINDING_SPINDLE_RPM)
+        , wire_diameter_mm(WINDING_WIRE_DIA_MM)
+        , layer_width_mm(WINDING_WIDTH_MM)        // From config.h
+        , start_position_mm(TC_start_offset)      // From config.h (traverse start offset)
+        , ramp_time_sec(WINDING_RAMP_TIME_SEC)
+        , wire_pitch_mm(WINDING_WIRE_DIA_MM)
         , turns_per_layer(0)
         , total_layers(0) {
         calculate_layers();
@@ -75,7 +75,8 @@ public:
     uint32_t get_turns_completed() const { return turns_completed; }
     float get_current_rpm() const { return current_rpm; }
     void emergency_stop();
-    
+    void reset();  // Reset controller to IDLE state for new windings
+
     void home_all_axes();
     void adjust_traverse_speed();
     void print_winding_metrics();

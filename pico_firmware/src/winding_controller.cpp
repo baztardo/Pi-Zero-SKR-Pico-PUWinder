@@ -74,8 +74,9 @@ void WindingController::set_parameters(const WindingParams& p) {
 }
 
 bool WindingController::start() {
+    printf("[WindingController] start() called - current state: %d\n", (int)state);
     if (state != WindingState::IDLE) {
-        printf("Cannot start: not idle\n");
+        printf("❌ Cannot start: not idle (state=%d)\n", (int)state);
         return false;
     }
     
@@ -102,15 +103,20 @@ void WindingController::stop() {
     if (spindle_motor) {
         spindle_motor->set_brake(true);
     }
-    
+
     // ⭐ DEACTIVATE PIO MODE - release GPIO back for homing
     if (move_queue) {
         move_queue->deactivate_pio_mode();
     }
-    
-    //reset homing
-    if (!traverse_controller->is_homed()) {
-        traverse_controller->home();
+
+    // ⭐ CRITICAL FIX: Reset traverse controller state and DISABLE for power saving
+    // Stop any ongoing movement, reset state, and disable motor to prevent heat/wear
+    if (traverse_controller) {
+        traverse_controller->stop_steps();  // Stop any ongoing steps
+        traverse_controller->emergency_stop();  // Reset emergency_stopped flag
+        traverse_controller->clear_emergency_stop();  // Clear emergency stop
+        traverse_controller->disable();  // ⭐ DISABLE motor to prevent heat/wear
+        printf("✓ Traverse controller reset and disabled for power saving\n");
     }
 }
 
@@ -151,6 +157,52 @@ void WindingController::emergency_stop() {
     if (!traverse_controller->is_homed()) {
         traverse_controller->home();
     }
+}
+
+// =============================================================================
+// NEW: reset() - Reset controller to IDLE state for new windings
+// =============================================================================
+void WindingController::reset() {
+    printf("[WindingController] Reset to IDLE state for new winding (was state: %d)\n", (int)state);
+
+    // Reset all state variables
+    state = WindingState::IDLE;
+    current_layer = 0;
+    turns_completed = 0;
+    turns_this_layer = 0;
+    current_rpm = 0.0f;
+    last_rpm_update_time = 0;
+    traverse_direction = true;  // Start moving RIGHT
+    current_traverse_position_mm = 0.0f;  // Will be set from traverse controller during ramp-up
+    ramp_started = false;
+    ramp_start_time = 0;
+    turn_accum = 0.0f;
+    encoder_sign = 1;
+
+    // Reset move queue if available
+    if (move_queue) {
+        move_queue->clear_queue();
+        move_queue->set_enable(false);
+        move_queue->deactivate_pio_mode();  // ⭐ EXTRA: Ensure PIO mode is deactivated
+    }
+
+    // ⭐ CRITICAL FIX: Also reset traverse controller state for re-homing
+    if (traverse_controller) {
+        traverse_controller->stop_steps();  // Stop any ongoing steps
+        traverse_controller->emergency_stop();  // Reset state
+        traverse_controller->clear_emergency_stop();  // Clear emergency flag
+        traverse_controller->disable();  // ⭐ DISABLE motor to prevent heat/wear
+        // DON'T reset homed state - keep it homed for new windings
+        printf("✓ Traverse controller reset and disabled for power saving\n");
+    }
+
+    // Reset spindle motor state (but don't stop if running)
+    if (spindle_motor) {
+        // Don't reset RPM here - let new WIND command set it
+        // spindle_motor->set_brake(false);  // Don't touch brake state
+    }
+
+    printf("[WindingController] ✓ Reset complete - now in IDLE state\n");
 }
 
 // =============================================================================

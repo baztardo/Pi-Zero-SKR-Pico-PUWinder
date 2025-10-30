@@ -37,10 +37,15 @@ public:
     float get_speed() const;
     bool is_moving() const;
     bool is_homed() const;
+    bool is_enabled() const { return enabled; }
     float get_steps_per_mm() const;
+
+    // Force reset homed state (for G28 re-homing)
+    void force_unhome() { homed = false; }
     
     // Emergency functions
     void emergency_stop();
+    void clear_emergency_stop();  // Reset emergency stop state
     void set_brake(bool enable);
     
     // MoveQueue handoff

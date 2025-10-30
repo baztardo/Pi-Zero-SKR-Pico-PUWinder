@@ -278,8 +278,18 @@ float TraverseController::get_steps_per_mm() const {
 void TraverseController::emergency_stop() {
     emergency_stopped = true;
     moving = false;
+    homing = false;
+    homing_phase = 0;
     steps_remaining = 0;
     printf("[TraverseController] EMERGENCY STOP!\n");
+}
+
+// =============================================================================
+// Clear emergency stop (reset state)
+// =============================================================================
+void TraverseController::clear_emergency_stop() {
+    emergency_stopped = false;
+    printf("[TraverseController] Emergency stop cleared\n");
 }
 
 // =============================================================================

@@ -88,15 +88,25 @@ bool GCodeInterface::execute_g28() {
         set_error("ERROR_TRAVERSE_NOT_INIT");
         return false;
     }
-    
+
     printf("G28: Homing traverse axis only\n");
-    
-    // Enable traverse controller first
+
+    // ⭐ CRITICAL FIX: Enable traverse controller (normally disabled for power saving)
     traverse_controller->enable();
-    
+    printf("✓ Traverse controller enabled for homing (power saving mode)\n");
+
+    // ⭐ CRITICAL FIX: Reset traverse controller state completely for re-homing
+    // This clears any lingering state from previous operations
+    traverse_controller->stop_steps();  // Stop any ongoing movement
+    traverse_controller->emergency_stop();  // Reset emergency state
+    traverse_controller->clear_emergency_stop();  // Clear emergency flag
+    // Force reset homed state to allow re-homing
+    traverse_controller->force_unhome();
+    printf("✓ Traverse controller state completely reset - ready for re-homing\n");
+
     // Start homing
     traverse_controller->home();
-    
+
     // Send immediate response (like FluidNC does)
     // The homing will complete in the background
     send_response("HOMING");
@@ -281,6 +291,8 @@ bool GCodeInterface::parse_command(const char* command) {
         }
     } else if (strncmp(command, "STOP_WIND", 9) == 0) {
         current_command = TOKEN_STOP_WIND;
+    } else if (strncmp(command, "RESET_WINDING", 13) == 0) {
+        current_command = TOKEN_RESET_WINDING;
     } else if (strncmp(command, "TEST_HOME", 9) == 0) {
         current_command = TOKEN_TEST_HOME;
     } else if (strncmp(command, "TEST_STEPS", 10) == 0) {
@@ -336,6 +348,8 @@ bool GCodeInterface::execute_command() {
             return execute_wind();
         case TOKEN_STOP_WIND:
             return execute_stop_wind();
+        case TOKEN_RESET_WINDING:
+            return execute_reset_winding();
         case TOKEN_TEST_HOME:
             return execute_test_home();
         case TOKEN_TEST_STEPS:
@@ -396,24 +410,29 @@ bool GCodeInterface::execute_m112() {
 
 bool GCodeInterface::execute_wind() {
     printf("🔄 WIND command received - Starting winding sequence...\n");
-    
+
     if (!winding_controller) {
         printf("❌ ERROR: Winding controller not initialized\n");
         set_error("ERROR_WINDING_NOT_INIT");
         return false;
     }
-    
+
+    // ⭐ CRITICAL FIX: Reset winding controller before starting new wind
+    // This clears the COMPLETE state and resets all variables
+    winding_controller->reset();
+    printf("✓ Winding controller reset for new winding\n");
+
     // Check if homing is complete first
     if (!traverse_controller || !traverse_controller->is_homed()) {
         printf("❌ ERROR: Must home traverse axis first (G28)\n");
         set_error("ERROR_NOT_HOMED");
         return false;
     }
-    
+
     // Use parsed WIND parameters (T=turns, S=RPM, W=wire_diameter, B=bobbin_width, O=offset)
-    printf("✓ Winding parameters: T=%.0f S=%.1f\n", 
+    printf("✓ Winding parameters: T=%.0f S=%.1f\n",
            params.T, params.S);
-    
+
     // Update winding controller parameters
     if (winding_controller) {
         WindingParams winding_params;
@@ -431,18 +450,22 @@ bool GCodeInterface::execute_wind() {
         winding_controller->set_parameters(winding_params);
         printf("✓ Updated winding controller parameters\n");
     }
-    
+
     // Start spindle motor first
     if (spindle_controller) {
         spindle_controller->set_rpm_pwm(params.S);  // Set RPM from WIND command
         spindle_controller->set_brake(false);       // Release brake
         printf("✓ Spindle started at %.1f RPM\n", params.S);
     }
-    
+
     // Start winding via winding controller
     printf("✓ Calling winding_controller->start()\n");
-    winding_controller->start();
-    
+    if (!winding_controller->start()) {
+        printf("❌ ERROR: Failed to start winding controller\n");
+        set_error("ERROR_WINDING_START_FAILED");
+        return false;
+    }
+
     printf("✓ Sending WINDING_STARTED response\n");
     send_response("OK WINDING_STARTED");
     return true;
@@ -450,21 +473,38 @@ bool GCodeInterface::execute_wind() {
 
 bool GCodeInterface::execute_stop_wind() {
     printf("⏹️ Stopping winding...\n");
-    
+
     // Stop spindle immediately
     if (spindle_controller) {
         spindle_controller->set_pwm_duty(0.0f);  // Stop PWM
         spindle_controller->set_brake(true);     // Engage brake
         printf("✓ Spindle stopped (PWM=0, brake=ON)\n");
     }
-    
+
     // Stop winding controller
     if (winding_controller) {
         winding_controller->stop();
         printf("✓ Winding controller stopped\n");
     }
-    
+
     send_response("OK WINDING_STOPPED");
+    return true;
+}
+
+bool GCodeInterface::execute_reset_winding() {
+    printf("🔄 RESET_WINDING: Resetting winding controller to IDLE state...\n");
+
+    if (!winding_controller) {
+        printf("❌ ERROR: Winding controller not initialized\n");
+        set_error("ERROR_WINDING_NOT_INIT");
+        return false;
+    }
+
+    // ⭐ FULL RESET: Reset winding controller to IDLE state
+    winding_controller->reset();
+    printf("✓ Winding controller reset to IDLE state\n");
+
+    send_response("OK WINDING_RESET");
     return true;
 }
 

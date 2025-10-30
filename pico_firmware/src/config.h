@@ -61,7 +61,8 @@
 #define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
 #define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
 #define TRAVERSE_MICROSTEPS 16      // 16x for traverse (PRECISION - slower but accurate)
-#define TC_start_offset      38.0f    // Start offset from home position    
+#define TC_start_offset      38.0f    // Start offset from home position   
+#define TRAVERSE_CARRIAGE_WIDTH 32.0f    // Carriage width in mm
 
 // Traverse Lead Screw
 #define TRAVERSE_PITCH_MM      6.0f    // YOUR ACTUAL 6mm leadscrew
