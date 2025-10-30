@@ -99,7 +99,7 @@ bool GCodeInterface::execute_g28() {
     
     // Send immediate response (like FluidNC does)
     // The homing will complete in the background
-    send_response("HOMED");
+    send_response("HOMING");
     return true;
 }
 

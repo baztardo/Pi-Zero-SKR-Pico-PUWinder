@@ -196,7 +196,7 @@ void TraverseController::back_off_from_switch() {
 }
 
 void TraverseController::move_to_start_position() {
-    printf("[TraverseController] Phase 3: Moving to start position (22mm)...\n");
+    printf("[TraverseController] Phase 3: Moving to start position (%.2fmm)...\n", TC_start_offset);
     target_position_mm = TC_start_offset;  // 
     float distance = target_position_mm - current_position_mm;
     steps_remaining = (int32_t)(distance * steps_per_mm);

@@ -15,9 +15,6 @@
 // =============================================================================
 enum class WindingState {
     IDLE,
-    HOMING_SPINDLE,
-    HOMING_TRAVERSE,
-    MOVING_TO_START,
     RAMPING_UP,
     WINDING,
     RAMPING_DOWN,
@@ -108,15 +105,6 @@ private:
     int32_t enc_last_sync;
     int32_t enc_last_rpm;
     
-    // ✅ FIXED: Instance variables instead of static
-    bool homing_started;
-    uint32_t homing_start_time;
-    bool traverse_homing_started;
-    uint32_t traverse_homing_start_time;
-    
-    void home_spindle();
-    void home_traverse();
-    void move_to_start();
     void ramp_up_spindle();
     void execute_winding();
     void ramp_down_spindle();

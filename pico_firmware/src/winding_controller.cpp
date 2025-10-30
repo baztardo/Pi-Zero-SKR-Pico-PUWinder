@@ -42,10 +42,7 @@ WindingController::WindingController(MoveQueue* mq, BLDC_MOTOR* spindle_motor)
     , traverse_steps_emitted(0.0)
     , enc_last_sync(0)
     , enc_last_rpm(0)
-    , homing_started(false)
-    , homing_start_time(0)
-    , traverse_homing_started(false)
-    , traverse_homing_start_time(0)
+
 {
     printf("[WindingController] Created with spindle motor\n");
 }
@@ -83,16 +80,12 @@ bool WindingController::start() {
     }
     
     printf("Starting winding process\n");
-    state = WindingState::HOMING_SPINDLE;
+    state = WindingState::RAMPING_UP;
     current_layer = 0;
     turns_completed = 0;
     turns_this_layer = 0;
     current_rpm = 0.0f;
-    
-    // Reset homing flags
-    homing_started = false;
-    traverse_homing_started = false;
-    
+     
     // Enable traverse controller for winding
     extern TraverseController* traverse_controller;
     if (traverse_controller) {
@@ -115,26 +108,15 @@ void WindingController::stop() {
         move_queue->deactivate_pio_mode();
     }
     
-    // Reset homing flags
-    homing_started = false;
-    traverse_homing_started = false;
+    //reset homing
+    if (!traverse_controller->is_homed()) {
+        traverse_controller->home();
+    }
 }
 
 void WindingController::update() {
     switch (state) {
         case WindingState::IDLE:
-            break;
-            
-        case WindingState::HOMING_SPINDLE:
-            home_spindle();
-            break;
-            
-        case WindingState::HOMING_TRAVERSE:
-            home_traverse();
-            break;
-            
-        case WindingState::MOVING_TO_START:
-            move_to_start();
             break;
             
         case WindingState::RAMPING_UP:
@@ -165,179 +147,9 @@ void WindingController::emergency_stop() {
     if (spindle_motor) {
         spindle_motor->set_brake(true);
     }
-    homing_started = false;
-    traverse_homing_started = false;
-}
-
-// =============================================================================
-// FIXED: home_spindle() - Now properly sets homing_started flag
-// =============================================================================
-void WindingController::home_spindle() {
-    if (!spindle_motor) {
-        printf("ERROR: BLDC motor not initialized!\n");
-        state = WindingState::ERROR;
-        return;
-    }
-    
-    if (!homing_started) {
-        // FIX: Now properly sets the flag
-        printf("Starting spindle homing to Z index\n");
-        spindle_motor->set_rpm_pwm(50.0f);
-        spindle_motor->set_brake(false);
-        homing_start_time = time_us_32();
-        homing_started = true;  // ✅ FIXED: Was missing!
-        printf("Waiting for Z-index pulse...\n");
-        return;
-    }
-    
-    // Check for Z-index pulse (every 18 pulses = 1 revolution for 3-phase BLDC)
-    uint32_t current_pulses = spindle_motor->get_pulse_count();
-    if (current_pulses >= BLDC_DEFAULT_PPR) {
-        printf("Z-index detected! Spindle homed\n");
-        spindle_motor->reset();  // Reset pulse counter
-        state = WindingState::HOMING_TRAVERSE;
-        homing_started = false;  // Reset for next time
-        return;
-    }
-    
-    // Timeout after 10 seconds
-    if (time_us_32() - homing_start_time > 10000000) {
-        printf("ERROR: Spindle homing timeout!\n");
-        state = WindingState::ERROR;
-        homing_started = false;
-    }
-}
-
-// =============================================================================
-// FIXED: home_traverse() - Now uses instance variables instead of static
-// =============================================================================
-void WindingController::home_traverse() {
-    if (!traverse_homing_started) {
-        // Start homing silently
-        traverse_homing_start_time = time_us_32();
-        traverse_homing_started = true;
-        
-        // Create homing move
-        uint32_t homing_steps = 10000;
-        auto chunks = StepCompressor::compress_constant_velocity(
-            homing_steps, TRAVERSE_HOMING_SPEED);
-        
-        for (const auto& chunk : chunks) {
-            move_queue->push_chunk(chunk);
-        }
-        return;
-    }
-    
-    // Check if homing complete (3 second timeout)
-    if (time_us_32() - traverse_homing_start_time > 3000000) {
-        printf("✓ Traverse homed\n");
-        current_traverse_position_mm = 0.0f;
-        state = WindingState::MOVING_TO_START;
-        traverse_homing_started = false;  // Reset for next time
-    }
-}
-
-void WindingController::move_to_start() {
-    printf("\n[WindingController] ========================================\n");
-    printf("[WindingController] MOVING TO START POSITION\n");
-    printf("[WindingController] ========================================\n");
-    
-    // Safety checks
-    if (params.start_position_mm > 120.0f) {
-        printf("❌ ERROR: Start position %.1f mm exceeds limit (120mm)\n", 
-               params.start_position_mm);
-        params.start_position_mm = 50.0f;
-    }
-    if (params.start_position_mm < 0.0f) {
-        printf("❌ ERROR: Start position %.1f mm is negative\n", 
-               params.start_position_mm);
-        params.start_position_mm = 0.0f;
-    }
-    
-    printf("[WindingController] Target: %.2f mm\n", params.start_position_mm);
-    
-    // ✅ CRITICAL: Handoff from TraverseController to MoveQueue
-    if (traverse_controller) {
-        // Stop TraverseController from trying to generate steps
-        // (it will only be used for position queries now)
-        printf("[WindingController] Stopping TraverseController step generation\n");
-        traverse_controller->stop_steps();  // Sets moving=false
-    }
-    
-    // ✅ CRITICAL: MoveQueue takes control
-    printf("[WindingController] MoveQueue taking control of traverse motor\n");
-    
-    // ⭐ ACTIVATE PIO MODE for high-speed stepping
-    move_queue->activate_pio_mode();
-    
-    // Ensure motor is enabled
-    move_queue->set_enable(true);  // Sets ENA=0 (active low)
-    printf("[WindingController] Motor ENABLED via MoveQueue\n");
-    
-    // Ensure feed hold is released
-    if (move_queue->is_feeding_paused()) {
-        printf("[WindingController] Releasing feed hold\n");
-        move_queue->resume_feeding();
-    }
-    
-    // Set direction
-    move_queue->set_direction(true);  // Forward to start position
-    printf("[WindingController] Direction: FORWARD\n");
-    
-    // Calculate steps
-    uint32_t steps = mm_to_steps(params.start_position_mm);
-    printf("[WindingController] Generating %u steps (%.2f mm)\n", 
-           steps, params.start_position_mm);
-    
-    // Generate and push chunks
-    auto chunks = StepCompressor::compress_constant_velocity(
-        steps, TRAVERSE_RAPID_SPEED);
-    
-    printf("[WindingController] Generated %zu chunks\n", chunks.size());
-    
-    int pushed_count = 0;
-    for (const auto& chunk : chunks) {
-        if (move_queue->push_chunk(chunk)) {
-            pushed_count++;
-        } else {
-            printf("❌ ERROR: Failed to push chunk!\n");
-        }
-    }
-    
-    printf("[WindingController] Pushed %d/%zu chunks successfully\n", 
-           pushed_count, chunks.size());
-    printf("[WindingController] Queue depth: %u\n", 
-           move_queue->get_queue_depth());
-    
-    // Update position tracking
-    current_traverse_position_mm = params.start_position_mm;
-    
-    // Move to next state
-    state = WindingState::RAMPING_UP;
-    printf("[WindingController] State: RAMPING_UP\n");
-    printf("[WindingController] ========================================\n\n");
-}
-
-void WindingController::ramp_up_spindle() {
-    if (!ramp_started) {
-        printf("Starting spindle ramp up to %.1f RPM over %.1f seconds\n", 
-               params.spindle_rpm, params.ramp_time_sec);
-        ramp_started = true;
-        ramp_start_time = time_us_32();
-    }
-    
-    uint32_t elapsed = time_us_32() - ramp_start_time;
-    float ramp_progress = (float)elapsed / (params.ramp_time_sec * 1000000.0f);
-    
-    if (ramp_progress > 1.0f) ramp_progress = 1.0f;
-    
-    float current_target_rpm = params.spindle_rpm * ramp_progress;
-    current_rpm = current_target_rpm;
-    
-    if (ramp_progress >= 1.0f) {
-        printf("Spindle ramp up complete\n");
-        state = WindingState::WINDING;
-        ramp_started = false;
+    // maybe add a check to see if the traverse is homed and if not, home it
+    if (!traverse_controller->is_homed()) {
+        traverse_controller->home();
     }
 }
 
@@ -376,6 +188,29 @@ void WindingController::execute_winding() {
             
             update_display();
         }
+    }
+}
+
+void WindingController::ramp_up_spindle() {
+    if (!ramp_started) {
+        printf("Starting spindle ramp up to %.1f RPM over %.1f seconds\n", 
+               params.spindle_rpm, params.ramp_time_sec);
+        ramp_started = true;
+        ramp_start_time = time_us_32();
+    }
+    
+    uint32_t elapsed = time_us_32() - ramp_start_time;
+    float ramp_progress = (float)elapsed / (params.ramp_time_sec * 1000000.0f);
+    
+    if (ramp_progress > 1.0f) ramp_progress = 1.0f;
+    
+    float current_target_rpm = params.spindle_rpm * ramp_progress;
+    current_rpm = current_target_rpm;
+    
+    if (ramp_progress >= 1.0f) {
+        printf("Spindle ramp up complete\n");
+        state = WindingState::WINDING;
+        ramp_started = false;
     }
 }
 
@@ -616,13 +451,6 @@ uint32_t WindingController::mm_to_steps(float mm) {
 float WindingController::steps_to_mm(uint32_t steps) {
     // Use original calibrated steps per mm value
     return (float)steps / 6135.0f;
-}
-
-void WindingController::home_all_axes() {
-    printf("[WindingController] Homing all axes\n");
-    homing_started = false;
-    traverse_homing_started = false;
-    state = WindingState::HOMING_SPINDLE;
 }
 
 void WindingController::adjust_traverse_speed() {
