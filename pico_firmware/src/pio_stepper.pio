@@ -19,15 +19,19 @@
 .wrap_target
     pull block                      ; Wait for next step interval (blocking)
     out x, 32                       ; Load interval into X register
-    
+
+    ; ⭐ PERFORMANCE: Skip zero intervals (immediate steps)
+    jmp !x, immediate_step          ; If X=0, do immediate step
+
 delay_loop:
     jmp x-- delay_loop              ; Decrement and loop until X=0
-    
+
+immediate_step:
     nop         side 1              ; STEP high (side-set)
     set x, 4                        ; 5µs pulse width (5 cycles at 1MHz = 5µs)
 pulse_width:
     jmp x-- pulse_width
-    
+
     nop         side 0              ; STEP low (side-set)
 .wrap
 

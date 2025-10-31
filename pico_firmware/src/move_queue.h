@@ -152,7 +152,7 @@ public:
     void reset_diagnostics();
 
 private:
-    StepChunk queue[128];  // MOVE_CHUNKS_CAPACITY
+    StepChunk queue[256];  // MOVE_CHUNKS_CAPACITY
     volatile uint16_t head;
     volatile uint16_t tail;
     

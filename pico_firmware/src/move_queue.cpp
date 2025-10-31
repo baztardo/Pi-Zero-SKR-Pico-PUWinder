@@ -65,28 +65,51 @@ void MoveQueue::init() {
 bool MoveQueue::push_chunk(const StepChunk& chunk) {
     uint16_t h = head;
     uint16_t t = tail;
-    
-    // Check if queue is full
-    if (((h + 1) % MOVE_CHUNKS_CAPACITY) == t) {
-        // Don't printf here - called from sync loop at high frequency
+
+    // ⭐ ROBUSTNESS: Check for queue corruption (head/tail out of bounds)
+    if (h >= MOVE_CHUNKS_CAPACITY || t >= MOVE_CHUNKS_CAPACITY) {
+        printf("[MoveQueue] ❌ QUEUE CORRUPTION DETECTED! head=%u tail=%u\n", h, t);
+        emergency_stop();
         return false;
     }
-    
+
+    // Check if queue is full
+    if (((h + 1) % MOVE_CHUNKS_CAPACITY) == t) {
+        // ⭐ ROBUSTNESS: Count consecutive failures to detect persistent issues
+        static uint32_t consecutive_full = 0;
+        consecutive_full++;
+        if (consecutive_full % 1000 == 0) {  // Log every 1000 failures
+            printf("[MoveQueue] ⚠️ Queue persistently full (failures: %u)\n", consecutive_full);
+        }
+        return false;
+    }
+
+    // Reset consecutive full counter on successful push
+    static uint32_t consecutive_full = 0;
+    consecutive_full = 0;
+
     queue[h] = chunk;
     head = (h + 1) % MOVE_CHUNKS_CAPACITY;
-    
+
     return true;
 }
 
 bool MoveQueue::pop_chunk(StepChunk& out) {
     uint16_t h = head;
     uint16_t t = tail;
-    
+
+    // ⭐ ROBUSTNESS: Double-check for corruption
+    if (h >= MOVE_CHUNKS_CAPACITY || t >= MOVE_CHUNKS_CAPACITY) {
+        printf("[MoveQueue] ❌ POP CORRUPTION DETECTED! head=%u tail=%u\n", h, t);
+        emergency_stop();
+        return false;
+    }
+
     if (h == t) return false;
-    
+
     out = queue[t];
     tail = (t + 1) % MOVE_CHUNKS_CAPACITY;
-    
+
     return true;
 }
 
@@ -173,7 +196,7 @@ void MoveQueue::traverse_isr_handler() {
         active = queue[tail];
         tail = (tail + 1) % MOVE_CHUNKS_CAPACITY;
         active_running = true;
-        last_step_time = time_us_32();
+        last_step_time = time_us_32() - active.interval_us;  // Start ready to feed immediately
         
         // Update counters
         g_chunks_loaded++;
@@ -193,14 +216,18 @@ void MoveQueue::traverse_isr_handler() {
             pio_debug_printed = true;
         }
         
-        // PIO mode - feed steps to hardware FIFO
-        while (active.count > 0 && pio_stepper->can_queue_step()) {
+        // PIO mode - feed steps to hardware FIFO aggressively
+        uint32_t steps_fed_this_isr = 0;
+        const uint32_t MAX_FEED_PER_ISR = 100;  // Feed up to 100 steps per ISR call (increased)
+
+        while (active.count > 0 && pio_stepper->can_queue_step() && steps_fed_this_isr < MAX_FEED_PER_ISR) {
             // Queue step with current interval
             if (pio_stepper->queue_step(active.interval_us)) {
                 step_count++;
                 g_steps_executed++;
                 active.count--;
-                
+                steps_fed_this_isr++;
+
                 // Adjust interval for acceleration
                 if (active.add_us != 0) {
                     int64_t next_interval = (int64_t)active.interval_us + (int64_t)active.add_us;
@@ -219,38 +246,50 @@ void MoveQueue::traverse_isr_handler() {
         return;
     }
     
-    // ⭐ GPIO MODE: Direct GPIO stepping (for homing/manual moves)
-    // This is the fallback when PIO is not active
-    uint32_t now = time_us_32();
-    int32_t time_diff = (int32_t)(now - last_step_time);
-    
-    // Check if it's time for next step
-    if (time_diff < (int32_t)active.interval_us) {
-        return;  // Not time yet
-    }
+        // ⭐ GPIO MODE: Direct GPIO stepping (for homing/manual moves)
+        // This is the fallback when PIO is not active
+        uint32_t now = time_us_32();
+        int32_t time_diff = (int32_t)(now - last_step_time);
 
-    // EXECUTE STEP via GPIO
-    execute_step_pulse();
+        // Check if it's time for next step
+        if (time_diff < (int32_t)active.interval_us) {
+            return;  // Not time yet
+        }
 
-    // Update timing
-    last_step_time += active.interval_us;
-    step_count++;
+        // ⭐ PERFORMANCE: Execute multiple steps per ISR call to reduce overhead
+        // This prevents ISR starvation at high step rates
+        uint32_t steps_executed_this_call = 0;
+        const uint32_t MAX_STEPS_PER_ISR = 100;  // Increased for high-speed operation
 
-    // Decrement remaining steps
-    if (active.count > 0) active.count--;
+        do {
+            // EXECUTE STEP via GPIO
+            execute_step_pulse();
+            steps_executed_this_call++;
 
-    // Adjust interval for acceleration
-    int64_t next_interval = (int64_t)active.interval_us + (int64_t)active.add_us;
-    active.interval_us = (uint32_t)std::max((int64_t)1, next_interval);
+            // Update timing
+            last_step_time += active.interval_us;
+            step_count++;
 
-    // Check if chunk complete
-    if (active.count == 0) {
-        active_running = false;
-        g_last_active_state = false;
-        
-        // Turn off FAN2 LED
-        gpio_put(18, 0);
-    }
+            // Decrement remaining steps
+            if (active.count > 0) active.count--;
+
+            // Adjust interval for acceleration
+            int64_t next_interval = (int64_t)active.interval_us + (int64_t)active.add_us;
+            active.interval_us = (uint32_t)std::max((int64_t)1, next_interval);
+
+            // Check if chunk complete
+            if (active.count == 0) {
+                active_running = false;
+                g_last_active_state = false;
+                gpio_put(18, 0);  // Turn off FAN2 LED
+                return;
+            }
+
+            // Continue if we haven't hit our limit and it's time for next step
+            now = time_us_32();
+            time_diff = (int32_t)(now - last_step_time);
+
+        } while (time_diff >= (int32_t)active.interval_us && steps_executed_this_call < MAX_STEPS_PER_ISR);
 }
 
 // =============================================================================

@@ -126,21 +126,26 @@ bool PIOStepper::can_queue_step() {
     return !pio_sm_is_tx_fifo_full(pio, sm);
 }
 
+void PIOStepper::feed_step() {
+    // For compatibility with ISR code - queue immediate step
+    queue_step(0);
+}
+
 void PIOStepper::emergency_stop() {
     if (!pio_active) {
         return;
     }
-    
+
     // Stop state machine
     pio_sm_set_enabled(pio, sm, false);
-    
+
     // Clear FIFO
     pio_sm_clear_fifos(pio, sm);
-    
+
     // Restart state machine
     pio_sm_restart(pio, sm);
     pio_sm_set_enabled(pio, sm, true);
-    
+
     printf("[PIOStepper] Emergency stop - FIFO cleared\n");
 }
 

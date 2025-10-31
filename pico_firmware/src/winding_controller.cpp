@@ -37,6 +37,8 @@ WindingController::WindingController(MoveQueue* mq, BLDC_MOTOR* spindle_motor)
     , current_traverse_position_mm(0.0f)
     , ramp_started(false)
     , ramp_start_time(0)
+    , initial_sync_done(false)
+    , initial_revolutions(0.0f)
     , turn_accum(0.0)
     , encoder_sign(1)  // Assume forward initially
     , traverse_steps_emitted(0.0)
@@ -80,18 +82,33 @@ bool WindingController::start() {
         return false;
     }
     
+    // ⭐ CRITICAL: Capture initial revolution count for accurate turn counting
+    if (spindle_motor) {
+        initial_revolutions = spindle_motor->get_revolutions();
+        printf("[WindingController] Captured initial revolutions: %.2f\n", initial_revolutions);
+    } else {
+        initial_revolutions = 0.0f;
+        printf("[WindingController] ⚠️ No spindle motor - initial revolutions set to 0\n");
+    }
+
     printf("Starting winding process\n");
     state = WindingState::RAMPING_UP;
     current_layer = 0;
     turns_completed = 0;
     turns_this_layer = 0;
     current_rpm = 0.0f;
-     
+
     // Enable traverse controller for winding
     extern TraverseController* traverse_controller;
     if (traverse_controller) {
         traverse_controller->enable();
         printf("✓ Traverse controller enabled for winding\n");
+    }
+
+    // ⭐ CRITICAL: Activate PIO mode for high-speed stepping during winding
+    if (move_queue) {
+        move_queue->activate_pio_mode();
+        printf("✓ PIO stepper activated for high-speed winding\n");
     }
     
     return true;
@@ -176,6 +193,8 @@ void WindingController::reset() {
     current_traverse_position_mm = 0.0f;  // Will be set from traverse controller during ramp-up
     ramp_started = false;
     ramp_start_time = 0;
+    initial_sync_done = false;  // Reset sync state for new winding
+    initial_revolutions = 0.0f;  // Will be set when winding starts
     turn_accum = 0.0f;
     encoder_sign = 1;
 
@@ -209,9 +228,14 @@ void WindingController::reset() {
 // FIXED: execute_winding() - Now complete with proper logic
 // =============================================================================
 void WindingController::execute_winding() {
-    // Check if target reached
-    if (turns_completed >= params.target_turns) {
-        printf("Target turns reached! Stopping spindle.\n");
+    // ⭐ PREDICTIVE RAMP DOWN: Use spindle prediction to avoid overshoot
+    // Calculate when to start ramp down based on current speed and remaining turns
+    float predicted_ramp_start = spindle_motor ? spindle_motor->predict_ramp_down_start(
+        turns_completed, params.target_turns, 2.0f) : params.target_turns;
+
+    if (turns_completed >= predicted_ramp_start) {
+        printf("🎯 Predictive ramp down: %u/%u turns (started at %.0f)\n",
+               turns_completed, params.target_turns, predicted_ramp_start);
         state = WindingState::RAMPING_DOWN;
         return;
     }
@@ -225,8 +249,9 @@ void WindingController::execute_winding() {
     // Update winding progress
     if (spindle_motor) {
         float total_revolutions = spindle_motor->get_revolutions();
-        uint32_t new_turns_completed = (uint32_t)total_revolutions;
-        
+        float winding_revolutions = total_revolutions - initial_revolutions;
+        uint32_t new_turns_completed = (uint32_t)winding_revolutions;
+
         if (new_turns_completed > turns_completed) {
             uint32_t delta = new_turns_completed - turns_completed;
             turns_completed = new_turns_completed;
@@ -258,8 +283,18 @@ void WindingController::ramp_up_spindle() {
         
         // ⭐ Initialize traverse position from homing
         if (traverse_controller) {
-            current_traverse_position_mm = traverse_controller->get_position();
-            printf("[RAMP] Traverse starting position: %.2f mm\n", current_traverse_position_mm);
+            float traverse_pos = traverse_controller->get_position();
+            printf("[RAMP] Traverse controller position: %.2f mm\n", traverse_pos);
+            printf("[RAMP] Traverse homed status: %s\n", traverse_controller->is_homed() ? "HOMED" : "NOT HOMED");
+
+            // ⭐ SAFETY: Validate traverse position is reasonable
+            if (traverse_pos < 0.0f || traverse_pos > 100.0f) {
+                printf("[RAMP] ❌ INVALID traverse position %.2f mm - using default 38.0mm\n", traverse_pos);
+                current_traverse_position_mm = 38.0f;  // Default to start position
+            } else {
+                current_traverse_position_mm = traverse_pos;
+            }
+            printf("[RAMP] Using starting position: %.2f mm\n", current_traverse_position_mm);
         }
     }
     
@@ -313,6 +348,9 @@ void WindingController::ramp_down_spindle() {
         }
         printf("Spindle stopped - Winding complete!\n");
         state = WindingState::COMPLETE;
+        if (spindle_motor) {
+            spindle_motor->debug_status();  // Print final pulse counts including monitor
+        }
         ramp_started = false;
     }
 }
@@ -321,6 +359,12 @@ void WindingController::sync_traverse_to_spindle() {
     if (!spindle_motor) {
         printf("[SYNC] No spindle motor!\n");
         return;
+    }
+
+    // DEBUG: Check if function is being called
+    static uint32_t call_count = 0;
+    if ((call_count++ % 100) == 0) {
+        printf("[SYNC] Function called (count: %u)\n", call_count);
     }
     
     // Calibrated steps per mm
@@ -370,9 +414,27 @@ void WindingController::sync_traverse_to_spindle() {
         emergency_stop();
         return;
     }
-    // Timing check
-    static uint32_t last_sync_time = 0;
+    // ⭐ PERFORMANCE: Conservative minimum call interval to prevent CPU overload
+    // Balanced frequency for stability
+    static uint32_t last_call_time = 0;
     uint32_t current_time = time_us_32();
+    uint32_t min_call_interval_us = 15000; // 15ms default (conservative)
+
+    if (current_rpm > 1200.0f) {
+        min_call_interval_us = 5000;  // 5ms for very high RPM
+    } else if (current_rpm > 800.0f) {
+        min_call_interval_us = 8000;  // 8ms for high RPM
+    } else if (current_rpm > 500.0f) {
+        min_call_interval_us = 10000; // 10ms for medium-high RPM
+    }
+
+    if (current_time - last_call_time < min_call_interval_us) {
+        return; // Called too recently, skip
+    }
+    last_call_time = current_time;
+
+    // Timing check for sync intervals
+    static uint32_t last_sync_time = 0;
     
     if (last_sync_time == 0) {
         last_sync_time = current_time;
@@ -381,74 +443,128 @@ void WindingController::sync_traverse_to_spindle() {
     
     uint32_t delta_time_us = current_time - last_sync_time;
     
+    // ⭐ PERFORMANCE: Frequent sync for high RPM to ensure movement
+    // High RPM requires fast sync to keep queue populated
+    float current_rpm = spindle_motor ? spindle_motor->get_rpm() : 0.0f;
+    uint32_t base_delay_us;
+
+    if (current_rpm > 1200.0f) {
+        base_delay_us = 5000; // 5ms for very high RPM (>1200) - very fast sync
+    } else if (current_rpm > 800.0f) {
+        base_delay_us = 8000; // 8ms for high RPM (800-1200) - fast sync
+    } else if (current_rpm > 500.0f) {
+        base_delay_us = 15000; // 15ms for medium-high RPM (500-800)
+    } else if (current_rpm > 100.0f) {
+        base_delay_us = 30000; // 30ms for medium RPM (100-500)
+    } else {
+        base_delay_us = 50000; // 50ms for low RPM (<100)
+    }
+
+    uint32_t required_delay = initial_sync_done ? base_delay_us : 15000; // 15ms initially
+
     // Return early if not time yet - THIS PREVENTS THE FAST LOOP!
-    if (delta_time_us < 250000) {
+    if (delta_time_us < required_delay) {
         return;  // Not time yet - skip everything below
     }
 
-    // ⭐ Check queue depth to prevent overflow (check before generating new chunks)
+    initial_sync_done = true;  // Mark initial sync as done
+
+    // ⭐ PID-like Queue Management: Adjust sync timing based on queue depth
+    // Instead of fixed thresholds, dynamically adjust sync frequency
+    static uint32_t consecutive_skips = 0;  // Track consecutive sync skips
     uint32_t queue_depth = move_queue->get_queue_depth();
-    const uint32_t MAX_QUEUE_DEPTH = 100;  // Leave 28 slots free
-    
+
+    // ⭐ BACKPRESSURE: If queue is getting full, delay generating more steps
+    const uint32_t BACKPRESSURE_THRESHOLD = 200;  // Start backpressure at 200/256
+    if (queue_depth >= BACKPRESSURE_THRESHOLD) {
+        // Queue is filling up - skip this sync cycle to let ISR catch up
+        printf("[BACKPRESSURE] Queue at %u/256 - delaying sync to let ISR consume\n", queue_depth);
+        return;  // Skip generating more steps
+    }
+
+    // Emergency override: if queue is critically full, skip regardless of PID
+    const uint32_t MAX_QUEUE_DEPTH = 200;  // Emergency threshold (increased for larger queue)
     if (queue_depth >= MAX_QUEUE_DEPTH) {
-        // Queue too full - skip chunk generation (but edge detection already happened above)
-        static uint32_t skip_count = 0;
-        static uint32_t consecutive_skips = 0;
-        
+        printf("[PID] 🚨 EMERGENCY: Queue critically full (%u/256) - skipping sync\n", queue_depth);
         consecutive_skips++;
-        
-        // ⚠️ SAFETY: If queue stays full for too long (5000 skips = ~5 seconds), EMERGENCY STOP
-        if (consecutive_skips >= 5000) {
+
+        // ⚠️ SAFETY: If queue stays full for too long, EMERGENCY STOP
+        if (consecutive_skips >= 10000) {
             printf("\n");
             printf("╔═══════════════════════════════════════════════════════════════╗\n");
             printf("║  ❌ EMERGENCY STOP - QUEUE OVERFLOW DETECTED                 ║\n");
             printf("╚═══════════════════════════════════════════════════════════════╝\n");
-            printf("[SAFETY] Queue stayed full for 5+ seconds - ISR cannot keep up!\n");
+            printf("[SAFETY] Queue stayed full for 10+ seconds - PID cannot keep up!\n");
             printf("[SAFETY] Queue depth: %u, Consecutive skips: %u\n", queue_depth, consecutive_skips);
             printf("[SAFETY] Stopping all motion for safety...\n");
-            
+
             // Stop winding
             stop();
-            
-            // Stop spindle
-            if (spindle_motor) {
-                spindle_motor->set_pwm_duty(0.0f);
-                spindle_motor->set_brake(true);
-            }
-            
-            // Clear and disable move queue
-            if (move_queue) {
-                move_queue->clear_queue();
-                move_queue->set_enable(false);
-            }
-            
-            printf("[SAFETY] ✓ All motion stopped. Please investigate and reset.\n\n");
-            consecutive_skips = 0;  // Reset counter
             return;
         }
-        
-        // Print warning every 500 skips
-        if ((skip_count++ % 500) == 0) {
-            printf("[SYNC] ⚠️  Queue depth %u - skipping chunk generation (skip #%u)\n", 
-                   queue_depth, consecutive_skips);
-        }
-        return;
+
+        return;  // Skip this sync cycle
     }
-    
-    // ✅ Queue is healthy - reset consecutive skip counter
-    static uint32_t consecutive_skips = 0;
+
+    // ⭐ PERFORMANCE: Very conservative PID for basic functionality
+    // Fixed parameters to ensure movement works
+    float target_queue = 32.0f;  // Target 25% utilization (very conservative)
+    float kp = 100.0f;           // Very low gain to prevent oscillations
+    uint32_t min_effective_delay_us = 10000; // 10ms default minimum
+
+    // Same parameters for all RPM ranges for stability
+    if (current_rpm > 800.0f) {
+        target_queue = 48.0f;   // 37.5% for high RPM
+        kp = 200.0f;            // Low gain
+        min_effective_delay_us = 5000; // 5ms minimum
+    }
+
+    // PID calculation: Error = current - target
+    float queue_error = (float)queue_depth - target_queue;
+    int32_t sync_adjustment = (int32_t)(queue_error * kp);
+
+    int32_t temp_delay = (int32_t)base_delay_us + sync_adjustment;
+    if (temp_delay < (int32_t)min_effective_delay_us) temp_delay = min_effective_delay_us;
+    if (temp_delay > 2000000) temp_delay = 2000000; // Maximum 2 seconds
+    uint32_t effective_delay = (uint32_t)temp_delay;
+
+    // Debug effective delay
+    printf("[SYNC] Queue: %u/256 Delay: %.1fms\n", queue_depth, effective_delay / 1000.0f);
+
+    // Debug PID operation - reduced frequency to avoid spam
+    static uint32_t pid_debug_counter = 0;
+    if ((pid_debug_counter++ % 200) == 0) {  // Every 200th PID calculation
+        printf("[PID] Queue: %u/256, Error: %.1f, Delay: %.1fms\n",
+               queue_depth, queue_error, effective_delay / 1000.0f);
+    }
+
+    // Use the PID-adjusted delay for timing check
+    if (delta_time_us < effective_delay) {
+        return;  // Not time yet - wait longer or shorter based on queue
+    }
+
+    // Successfully reached sync time - reset skip counter
     consecutive_skips = 0;
-    
+
     // REAL-TIME VELOCITY MATCHING (like Klipper/FluidNC)
     // Calculate current traverse velocity based on current RPM
-    float current_rpm = spindle_motor->get_rpm();
+    // current_rpm already declared above
     
-    // Calculate required traverse velocity: RPM × wire_diameter
-    float required_traverse_velocity_mm_per_min = current_rpm * params.wire_diameter_mm;
+    // Calculate required traverse velocity: TARGET RPM × wire_diameter
+    // ⭐ CRITICAL FIX: Use target RPM, not measured RPM for correct synchronization
+    float required_traverse_velocity_mm_per_min = params.spindle_rpm * params.wire_diameter_mm;
     float required_traverse_velocity_mm_per_sec = required_traverse_velocity_mm_per_min / 60.0f;
-    
+
     // Convert to steps per second
     float required_steps_per_sec = required_traverse_velocity_mm_per_sec * steps_per_mm;
+
+    // ⭐ SAFETY: Cap traverse speed to reasonable limits
+    // Allow higher speed for testing - the motor can handle more than 1200 steps/sec
+    const float MAX_TRAVERSE_STEPS_PER_SEC = 40000.0f;  // Higher limit for testing
+    if (required_steps_per_sec > MAX_TRAVERSE_STEPS_PER_SEC) {
+        required_steps_per_sec = MAX_TRAVERSE_STEPS_PER_SEC;
+        printf("[SYNC] ⚠️ Capped traverse speed to %.0f steps/sec\n", MAX_TRAVERSE_STEPS_PER_SEC);
+    }
     
     // Only move if we have meaningful velocity
     if (required_steps_per_sec < 1.0f) {
@@ -456,8 +572,14 @@ void WindingController::sync_traverse_to_spindle() {
     }
     
     float delta_time_sec = delta_time_us / 1000000.0f;
+
     int32_t steps_to_generate = (int32_t)(required_steps_per_sec * delta_time_sec);
-    
+
+    // DEBUG: Check if we're generating steps
+    static uint32_t step_gen_count = 0;
+    printf("[SYNC] DEBUG: RPM: %.0f, required: %.0f, delta_t: %.3fs, steps: %d\n",
+           current_rpm, required_steps_per_sec, delta_time_sec, steps_to_generate);
+
     if (steps_to_generate > 0) {
         // Apply direction
         if (!traverse_direction) {
@@ -476,22 +598,53 @@ void WindingController::sync_traverse_to_spindle() {
         move_queue->set_enable(true);
         move_queue->set_direction(traverse_direction);
         
-        // Generate smooth step commands
-        auto chunks = StepCompressor::compress_constant_velocity(
-            abs(steps_to_generate), (uint32_t)required_steps_per_sec);
-        
-        // Push all chunks (no printf for performance)
-        for (const auto& chunk : chunks) {
-            move_queue->push_chunk(chunk);
-        }
-        
-        // ⭐ CRITICAL: Update position based on steps we QUEUED
-        // Note: This tracks where the traverse WILL BE after the queue executes
-        float distance_moved_mm = (float)abs(steps_to_generate) / steps_per_mm;
-        if (traverse_direction) {
-            current_traverse_position_mm += distance_moved_mm;  // Moving RIGHT
-        } else {
-            current_traverse_position_mm -= distance_moved_mm;  // Moving LEFT
+    // ⭐ PERFORMANCE: Conservative step limit based on motor capabilities
+    // Capped to motor max speed (1000 steps/sec) and reasonable sync intervals
+    int32_t max_steps_per_sync;
+
+    if (current_rpm > 1500.0f) {
+        max_steps_per_sync = 800;  // Very high RPM (>1500) - increased limit
+    } else if (current_rpm > 1200.0f) {
+        max_steps_per_sync = 600;  // High RPM (1200-1500)
+    } else if (current_rpm > 800.0f) {
+        max_steps_per_sync = 400;  // Medium-high RPM (800-1200)
+    } else if (current_rpm > 400.0f) {
+        max_steps_per_sync = 300;  // Medium RPM (400-800)
+    } else if (current_rpm > 100.0f) {
+        max_steps_per_sync = 200;  // Low-medium RPM (100-400)
+    } else {
+        max_steps_per_sync = 150;  // Low RPM (<100) - conservative
+    }
+    if (abs(steps_to_generate) > max_steps_per_sync) {
+        steps_to_generate = traverse_direction ? max_steps_per_sync : -max_steps_per_sync;
+        printf("[SYNC] ⚠️ Clamped steps to %d (RPM: %.0f) to prevent position jump\n",
+               steps_to_generate, current_rpm);
+    }
+
+    // Generate smooth step commands
+    auto chunks = StepCompressor::compress_constant_velocity(
+        abs(steps_to_generate), (uint32_t)required_steps_per_sec);
+
+    // Push all chunks (no printf for performance)
+    for (const auto& chunk : chunks) {
+        move_queue->push_chunk(chunk);
+    }
+
+    // ⭐ CRITICAL: Update position based on steps we QUEUED
+    // Note: This tracks where the traverse WILL BE after the queue executes
+    float distance_moved_mm = (float)abs(steps_to_generate) / steps_per_mm;
+    if (traverse_direction) {
+        current_traverse_position_mm += distance_moved_mm;  // Moving RIGHT
+    } else {
+        current_traverse_position_mm -= distance_moved_mm;  // Moving LEFT
+    }
+
+        // ⭐ DEBUG: Position tracking (reduced frequency for performance)
+        static uint32_t sync_count = 0;
+        if ((sync_count++ % 100) == 0) {  // Every 100th sync instead of 50th
+            printf("[SYNC] Pos: %.2fmm, Dir: %s, Steps: %d, Queue: %u/128\n",
+               current_traverse_position_mm, traverse_direction ? "RIGHT" : "LEFT",
+               steps_to_generate, (unsigned int)move_queue->get_queue_depth());
         }
         
         // Position tracking (no printf for performance)

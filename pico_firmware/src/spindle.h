@@ -59,8 +59,18 @@ public:
     float get_angular_velocity() const;
     uint32_t get_predicted_next_pulse() const;
     int get_pulse_position() const;
-    
-    
+
+    // Motor Hall sensor RPM (separate from spindle monitor)
+    float get_motor_rpm() const;
+
+    // Predictive ramp down calculations
+    float predict_ramp_down_start(float current_turns, float target_turns, float ramp_time_sec = 2.0f) const;
+
+    // Hall sensor monitoring
+    uint64_t get_monitor_pulse_count() const { return monitor_pulse_count; }
+    void reset_monitor_pulse_count() { monitor_pulse_count = 0; }
+
+
 private:
     // Pulse tracking
     static const int HISTORY_SIZE = 20;
@@ -93,8 +103,20 @@ private:
     float min_rpm;
     bool is_ramping_to_target;
     uint32_t ramp_start_time;
-    
+
+    // Hall sensor monitoring for debugging
+    uint64_t monitor_pulse_count;
+
+    // Monitor pulse timing (for accurate 1-pulse-per-revolution RPM)
+    uint32_t monitor_pulse_times[HISTORY_SIZE];
+    uint32_t monitor_pulse_timestamps[HISTORY_SIZE];
+    int monitor_pulse_index;
+    uint32_t last_monitor_edge_time;
+    uint32_t monitor_edge_count;
+
     static void isr_wrapper(uint gpio, uint32_t events);
     void handle_pulse();
+    void handle_monitor_pulse();
     void calculate_rpm();
+    void calculate_rpm_from_monitor();
 };

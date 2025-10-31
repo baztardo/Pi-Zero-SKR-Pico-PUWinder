@@ -70,6 +70,11 @@ public:
      * @brief Check if can queue another step
      */
     bool can_queue_step();
+
+    /**
+     * @brief Feed an immediate step (for ISR compatibility)
+     */
+    void feed_step();
     
     /**
      * @brief Emergency stop - clear FIFO and stop immediately

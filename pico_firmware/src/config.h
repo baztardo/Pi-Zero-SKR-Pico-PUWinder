@@ -28,7 +28,7 @@
 #define BLDC_DIRECTION_CCW     0       // Counter-clockwise direction
 
 // BLDC Motor Default Settings
-#define BLDC_DEFAULT_PPR       36      // Default pulses per revolution (3-phase BLDC: 6 states × 3 phases × 2 edges = 36 edges per electrical revolution)
+#define BLDC_DEFAULT_PPR       24      // Pulses per revolution (4 pole pairs × 6 pulses/elec rev)
 #define BLDC_DEBOUNCE_US       100     // Debounce time in microseconds
 #define BLDC_SMOOTH_ALPHA      0.1f    // Default smoothing factor (0.1 = 10% new, 90% old)
 
@@ -48,6 +48,7 @@
 #define SPINDLE_DIR_PIN       20    // Direction → DIR pin - HIGH=CW, LOW=CCW
 #define SPINDLE_ENABLE_PIN    21    // Enable → Power 12/24v
 #define SPINDLE_HALL_A_PIN    22    // Speed feedback ← SC pin (just this one)
+#define SPINDLE_HALL_MONITOR_PIN 29 // For monitoring Hall sensor signal (digital GPIO)
 
 #define PWM_DUTY_MIN         0.5f  // Minimum 20% to start motor
 #define PWM_DUTY_MAX         100.0f // Maximum 100%
@@ -63,6 +64,7 @@
 #define TRAVERSE_MICROSTEPS 16      // 16x for traverse (PRECISION - slower but accurate)
 #define TC_start_offset      38.0f    // Start offset from home position   
 #define TRAVERSE_CARRIAGE_WIDTH 32.0f    // Carriage width in mm
+// So total travel is Home + Carriage Width = 38mm + 32mm 
 
 // Traverse Lead Screw
 #define TRAVERSE_PITCH_MM      6.0f    // YOUR ACTUAL 6mm leadscrew
@@ -142,7 +144,7 @@
 #define AXIS_TRAVERSE          1       // Traverse axis index
 
 // Move queue configuration
-#define MOVE_CHUNKS_CAPACITY    128     // Maximum chunks per axis
+#define MOVE_CHUNKS_CAPACITY    256     // Maximum chunks per axis
 
 // TMC2209 configuration
 #define R_SENSE                 0.11f   // Sense resistor value (ohms)

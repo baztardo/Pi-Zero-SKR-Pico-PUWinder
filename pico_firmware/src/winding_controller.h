@@ -99,7 +99,10 @@ private:
     
     bool ramp_started;
     uint32_t ramp_start_time;
-    
+    bool initial_sync_done;  // Track if first sync has completed
+
+    float initial_revolutions;  // Revolution count at start of winding
+
     double turn_accum;
     int8_t encoder_sign;
     double traverse_steps_emitted;

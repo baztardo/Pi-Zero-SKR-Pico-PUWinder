@@ -35,13 +35,19 @@ BLDC_MOTOR::BLDC_MOTOR(uint pulse_pin)
     , min_rpm(0.0f)
     , is_ramping_to_target(false)
     , ramp_start_time(0)
+    , monitor_pulse_count(0)
+    , monitor_pulse_index(0)
+    , last_monitor_edge_time(0)
+    , monitor_edge_count(0)
 {
     g_speed_pulse_instance = this;
-    
+
     // Initialize pulse history arrays
     for (int i = 0; i < HISTORY_SIZE; i++) {
         pulse_times[i] = 0;
         pulse_timestamps[i] = 0;
+        monitor_pulse_times[i] = 0;
+        monitor_pulse_timestamps[i] = 0;
     }
 }
 
@@ -69,7 +75,19 @@ void BLDC_MOTOR::init() {
         true,
         &BLDC_MOTOR::isr_wrapper
     );
-    
+
+    // Initialize monitor pin for Hall sensor debugging
+    gpio_init(SPINDLE_HALL_MONITOR_PIN);
+    gpio_set_dir(SPINDLE_HALL_MONITOR_PIN, GPIO_IN);
+    gpio_pull_up(SPINDLE_HALL_MONITOR_PIN);
+
+    // Enable interrupt on monitor pin (rising edge only - 1 pulse per revolution)
+    gpio_set_irq_enabled(
+        SPINDLE_HALL_MONITOR_PIN,
+        GPIO_IRQ_EDGE_RISE,
+        true
+    );
+
     // Initialize PWM for spindle control
     gpio_set_function(SPINDLE_PWM_PIN, GPIO_FUNC_PWM);
     uint slice_num = pwm_gpio_to_slice_num(SPINDLE_PWM_PIN);
@@ -90,7 +108,11 @@ void BLDC_MOTOR::init() {
 // =============================================================================
 void BLDC_MOTOR::isr_wrapper(uint gpio, uint32_t events) {
     if (g_speed_pulse_instance) {
-        g_speed_pulse_instance->handle_pulse();
+        if (gpio == g_speed_pulse_instance->pulse_pin) {
+            g_speed_pulse_instance->handle_pulse();
+        } else if (gpio == SPINDLE_HALL_MONITOR_PIN) {
+            g_speed_pulse_instance->handle_monitor_pulse();
+        }
     }
 }
 
@@ -116,7 +138,7 @@ void BLDC_MOTOR::handle_pulse() {
     
     // Calculate instantaneous RPM (for quick response)
     float pulses_per_second = 1000000.0f / dt_us;
-    instantaneous_rpm = (pulses_per_second * 60.0f) / 18.0f;
+    instantaneous_rpm = (pulses_per_second * 60.0f) / pulses_per_revolution;
     
     // Calculate averaged RPM (for stability)
     if (edge_count >= 10) {
@@ -133,38 +155,117 @@ void BLDC_MOTOR::handle_pulse() {
     }
 }
 
+// =============================================================================
+// Monitor pin ISR handler (1 pulse per revolution - use for accurate RPM)
+// =============================================================================
+void BLDC_MOTOR::handle_monitor_pulse() {
+    uint32_t now = time_us_32();
+    uint32_t dt_us = now - last_monitor_edge_time;
+
+    // Filter: Ignore pulses faster than 5000 μs (RPM > 12,000) to prevent noise
+    // At 2000 RPM, pulses come every 30,000 μs (30ms), so 5000μs is reasonable
+    if (dt_us < 5000) {
+        return;
+    }
+
+    // Store this pulse timing (same as handle_pulse but for monitor)
+    monitor_pulse_times[monitor_pulse_index] = dt_us;
+    monitor_pulse_timestamps[monitor_pulse_index] = now;
+    monitor_pulse_index = (monitor_pulse_index + 1) % HISTORY_SIZE;
+    monitor_edge_count++;
+
+    last_monitor_edge_time = now;
+
+    monitor_pulse_count++;
+    if (monitor_pulse_count <= 10) {
+        printf("[MONITOR] Pulse #%llu detected\n", monitor_pulse_count);
+    } else if (monitor_pulse_count % 100 == 0) {
+        printf("[MONITOR] Pulse count: %llu\n", monitor_pulse_count);
+    }
+
+    // Calculate instantaneous RPM from monitor pulses (1 pulse = 1 revolution)
+    float pulses_per_second = 1000000.0f / dt_us;
+    instantaneous_rpm = pulses_per_second * 60.0f;  // Direct RPM calculation
+
+    // Update RPM calculation if we have enough monitor pulses
+    if (monitor_edge_count >= 5) {
+        calculate_rpm_from_monitor();
+    }
+}
+
 void BLDC_MOTOR::calculate_rpm() {
     // METHOD 1: Simple Moving Average (good for steady speed)
     uint32_t sum = 0;
     int count = (edge_count < HISTORY_SIZE) ? edge_count : HISTORY_SIZE;
-    
+
     for (int i = 0; i < count; i++) {
         sum += pulse_times[i];
     }
-    
+
     uint32_t avg_period = sum / count;
     float pulses_per_second = 1000000.0f / avg_period;
-    float rpm_avg = (pulses_per_second * 60.0f) / 18.0f;
-    
+    float rpm_avg = (pulses_per_second * 60.0f) / pulses_per_revolution;
+
     // METHOD 2: Linear Regression (best for accuracy during acceleration)
     // Calculate RPM from first to last pulse in history
     int oldest_index = (pulse_index + HISTORY_SIZE - count) % HISTORY_SIZE;
     uint32_t time_span = pulse_timestamps[pulse_index] - pulse_timestamps[oldest_index];
-    
+
     if (time_span > 0) {
         // pulses / time = frequency
         float freq = (count * 1000000.0f) / time_span;
-        float rpm_regression = (freq * 60.0f) / 18.0f;
-        
+        float rpm_regression = (freq * 60.0f) / pulses_per_revolution;
+
         // Blend both methods: 70% regression, 30% average
         // Regression is better during speed changes
         measured_rpm = (rpm_regression * 0.7f) + (rpm_avg * 0.3f);
     } else {
         measured_rpm = rpm_avg;
     }
-    
+
     // Apply exponential smoothing filter
     // Alpha = 0.3 (adjust: lower = smoother but slower response)
+    const float ALPHA = 0.3f;
+    if (filtered_rpm == 0.0f) {
+        filtered_rpm = measured_rpm;
+    } else {
+        filtered_rpm = (ALPHA * measured_rpm) + ((1.0f - ALPHA) * filtered_rpm);
+    }
+}
+
+// =============================================================================
+// Calculate RPM from monitor pulses (1 pulse = 1 revolution - most accurate)
+// =============================================================================
+void BLDC_MOTOR::calculate_rpm_from_monitor() {
+    // Use monitor pulses for RPM calculation (1 pulse = 1 revolution)
+    uint32_t sum = 0;
+    int count = (monitor_edge_count < HISTORY_SIZE) ? monitor_edge_count : HISTORY_SIZE;
+
+    for (int i = 0; i < count; i++) {
+        sum += monitor_pulse_times[i];
+    }
+
+    uint32_t avg_period = sum / count;
+    float pulses_per_second = 1000000.0f / avg_period;
+
+    // Monitor pulses: 1 pulse = 1 revolution, so RPM = pulses_per_second * 60
+    float rpm_avg = pulses_per_second * 60.0f;
+
+    // Linear Regression method for monitor pulses
+    int oldest_index = (monitor_pulse_index + HISTORY_SIZE - count) % HISTORY_SIZE;
+    uint32_t time_span = monitor_pulse_timestamps[monitor_pulse_index] - monitor_pulse_timestamps[oldest_index];
+
+    if (time_span > 0) {
+        float freq = (count * 1000000.0f) / time_span;
+        float rpm_regression = freq * 60.0f;  // 1 pulse = 1 revolution
+
+        // Blend both methods
+        measured_rpm = (rpm_regression * 0.7f) + (rpm_avg * 0.3f);
+    } else {
+        measured_rpm = rpm_avg;
+    }
+
+    // Apply exponential smoothing filter (same as main calculate_rpm)
     const float ALPHA = 0.3f;
     if (filtered_rpm == 0.0f) {
         filtered_rpm = measured_rpm;
@@ -193,12 +294,90 @@ MotorDirection BLDC_MOTOR::get_direction() const {
 // Get current RPM
 // =============================================================================
 float BLDC_MOTOR::get_rpm() const {
-    return filtered_rpm;  // Return stable, filtered RPM
+    // ⭐ CRITICAL: Use monitor-based RPM if available (GPIO29 = 1 pulse/rev)
+    // This gives accurate RPM measurement independent of motor Hall sensor PPR
+    if (monitor_edge_count >= 3) {
+        // Primary method: Use the time since last monitor pulse for current RPM
+        uint32_t time_since_last_monitor = time_us_32() - last_monitor_edge_time;
+        if (time_since_last_monitor > 0 && time_since_last_monitor < 200000) {  // Within 200ms (reasonable for RPM measurement)
+            float freq = 1000000.0f / time_since_last_monitor;
+            float rpm = freq * 60.0f;  // 1 pulse = 1 revolution
+            if (rpm >= 100 && rpm <= 3000) {  // Sanity check for reasonable RPM range
+                return rpm;
+            }
+        }
+
+        // Secondary method: Calculate from recent monitor pulse history (more stable)
+        if (monitor_pulse_index > 0) {
+            int count = (monitor_pulse_index < HISTORY_SIZE) ? monitor_pulse_index : HISTORY_SIZE;
+            if (count >= 3) {  // Need at least 3 samples for stability
+                uint32_t time_span = monitor_pulse_timestamps[monitor_pulse_index] -
+                                   monitor_pulse_timestamps[(monitor_pulse_index - count + HISTORY_SIZE) % HISTORY_SIZE];
+                if (time_span > 0) {
+                    float freq = (count * 1000000.0f) / time_span;
+                    float rpm = freq * 60.0f;
+                    if (rpm >= 100 && rpm <= 3000) {
+                        return rpm;
+                    }
+                }
+            }
+        }
+    }
+
+    // Fallback: Use motor Hall sensor RPM scaled by gear ratio
+    // Motor RPM = spindle RPM × gear_ratio, so spindle RPM = motor RPM / gear_ratio
+    float motor_rpm = filtered_rpm;
+    if (motor_rpm >= 150 && motor_rpm <= 4500) {  // Motor RPM range check
+        return motor_rpm / 1.5f;  // Gear ratio 60:40 = 1.5:1
+    }
+
+    return 0.0f;  // No valid RPM measurement
 }
 
 // ⭐ NEW: Advanced RPM methods
 float BLDC_MOTOR::get_instantaneous_rpm() const {
     return instantaneous_rpm;
+}
+
+// =============================================================================
+// Get motor RPM from Hall sensors (not spindle monitor)
+// =============================================================================
+float BLDC_MOTOR::get_motor_rpm() const {
+    // Return RPM calculated from motor Hall sensors (filtered_rpm)
+    // This is separate from get_rpm() which prioritizes GPIO29 spindle monitor
+    return filtered_rpm;
+}
+
+// =============================================================================
+// Predictive ramp down calculations
+// =============================================================================
+float BLDC_MOTOR::predict_ramp_down_start(float current_turns, float target_turns, float ramp_time_sec) const {
+    // Predict when to start ramp down to avoid overshoot
+    // Based on current RPM and remaining turns needed
+
+    float current_rpm = get_rpm();
+    if (current_rpm <= 0) return target_turns;  // Can't predict, start at target
+
+    float remaining_turns = target_turns - current_turns;
+    if (remaining_turns <= 0) return target_turns;  // Already done
+
+    // Calculate turns per second at current RPM
+    float turns_per_second = current_rpm / 60.0f;
+
+    // Calculate how many seconds of ramp down time we need
+    // During ramp down, speed decreases, so we need to account for average speed
+    float ramp_turns_needed = turns_per_second * ramp_time_sec * 0.5f;  // Assume 50% average speed during ramp
+
+    // Start ramp down when we have enough turns left for the ramp period
+    float ramp_start_turns = target_turns - ramp_turns_needed;
+
+    // Don't start ramp down too early (minimum 10% of target)
+    float min_ramp_start = target_turns * 0.1f;
+    if (ramp_start_turns < min_ramp_start) {
+        ramp_start_turns = min_ramp_start;
+    }
+
+    return ramp_start_turns;
 }
 
 uint32_t BLDC_MOTOR::get_time_since_pulse() const {
@@ -309,9 +488,9 @@ void BLDC_MOTOR::set_rpm_pwm(float rpm) {
         float min_duty = PWM_DUTY_MIN;  // Minimum 20% to start motor
         float max_duty = PWM_DUTY_MAX; // Maximum 100%
         
-        // Calibrated mapping: 500 RPM -> 24.8% duty -> 1050 RPM actual
-        // So we need to scale down the duty cycle to get correct RPM
-        float scale_factor = 500.0f / 1050.0f;  // ~0.48
+        // Calibrated scaling based on tachometer: S1000 → 1960 RPM actual
+        // Scale factor = target/actual = 1000/1960 ≈ 0.51
+        float scale_factor = 1000.0f / 1960.0f;  // ~0.51
         float calibrated_rpm = rpm * scale_factor;
         
         // Linear mapping from 0-3000 RPM to 20-100% duty
@@ -340,19 +519,25 @@ void BLDC_MOTOR::set_pulses_per_revolution(uint ppr) {
 // =============================================================================
 void BLDC_MOTOR::reset() {
     edge_count = 0;
+    monitor_pulse_count = 0;
+    monitor_edge_count = 0;
     measured_rpm = 0.0f;
     filtered_rpm = 0.0f;
     instantaneous_rpm = 0.0f;
     last_pulse_period = 0;
     pulse_index = 0;
+    monitor_pulse_index = 0;
     last_edge_time = time_us_32();
-    
+    last_monitor_edge_time = time_us_32();
+
     // Clear pulse history
     for (int i = 0; i < HISTORY_SIZE; i++) {
         pulse_times[i] = 0;
         pulse_timestamps[i] = 0;
+        monitor_pulse_times[i] = 0;
+        monitor_pulse_timestamps[i] = 0;
     }
-    
+
     printf("[BLDC-PULSE] Counters reset\n");
 }
 
@@ -383,9 +568,12 @@ void BLDC_MOTOR::debug_status() const {
     printf("╠════════════════════════════════════════╣\n");
     printf("║ GPIO Pin:           %2u                ║\n", pulse_pin);
     printf("║ Total Pulses:       %lu                ║\n", (unsigned long)edge_count);
+    printf("║ Monitor Pulses:     %llu               ║\n", monitor_pulse_count);
     printf("║ Revolutions:        %.2f               ║\n", get_revolutions());
-    printf("║ RPM:                %.1f               ║\n", measured_rpm);
+    printf("║ Spindle RPM:        %.1f (GPIO29)      ║\n", get_rpm());
+    printf("║ Motor RPM:          %.1f (Hall)        ║\n", get_motor_rpm());
     printf("║ Frequency:          %.1f Hz             ║\n", get_frequency());
     printf("║ Pulses/Rev:         %u                ║\n", pulses_per_revolution);
+    printf("║ Gear Ratio:         60:40 (1.5:1)     ║\n");
     printf("╚════════════════════════════════════════╝\n");
 }
