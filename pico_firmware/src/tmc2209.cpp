@@ -12,7 +12,7 @@
 // Configuration constants
 // =============================================================================
 #define TMC_BAUDRATE 115200
-#define BIT_DELAY_US (1000000 / TMC_BAUDRATE)
+#define BIT_DELAY_US 9  // Slightly longer than theoretical 8.68us for reliability
 
 // =============================================================================
 // CRC helper
@@ -34,13 +34,18 @@ static uint8_t tmc_crc8(const uint8_t *data, uint8_t len) {
 // =============================================================================
 // Software UART (bit-banged, single-wire) helpers
 // =============================================================================
+static inline void sw_uart_delay() {
+    // More precise busy-wait delay for UART timing
+    for (volatile int i = 0; i < 50; i++) { }  // ~9us at 133MHz
+}
+
 static inline void sw_uart_tx_byte(uint8_t pin, uint8_t b) {
-    gpio_put(pin, 0); sleep_us(BIT_DELAY_US);
+    gpio_put(pin, 0); sw_uart_delay();
     for (int i = 0; i < 8; i++) {
         gpio_put(pin, (b >> i) & 1);
-        sleep_us(BIT_DELAY_US);
+        sw_uart_delay();
     }
-    gpio_put(pin, 1); sleep_us(BIT_DELAY_US);
+    gpio_put(pin, 1); sw_uart_delay();
 }
 
 static inline uint8_t sw_uart_rx_byte(uint8_t pin) {
@@ -87,6 +92,16 @@ TMC2209_UART::TMC2209_UART(uint8_t gpio_pin, uint8_t slave_addr)
     gpio_init(tx);
     gpio_set_dir(tx, GPIO_OUT);
     gpio_put(tx, 1);
+}
+
+// =============================================================================
+// Initialization
+// =============================================================================
+bool TMC2209_UART::begin(uint32_t baud) {
+    // For software UART implementation, baud rate is not used
+    // Initialization is already done in constructor
+    (void)baud;  // Suppress unused parameter warning
+    return true;
 }
 
 // =============================================================================

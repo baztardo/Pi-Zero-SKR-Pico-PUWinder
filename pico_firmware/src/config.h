@@ -59,9 +59,9 @@
 #define TRAVERSE_DIR_PIN    4
 #define TRAVERSE_ENA_PIN    6
 #define TRAVERSE_HOME_PIN   16
-#define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
-#define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
-#define TRAVERSE_MICROSTEPS 16      // 16x for traverse (PRECISION - slower but accurate)
+#define TRAVERSE_DIR_INVERT  1   // set 1 if traverse moves the wrong way
+#define TRAVERSE_CURRENT_MA 500     // Traverse motor RMS current (mA) - increased for better torque
+#define TRAVERSE_MICROSTEPS 16       // 4x for traverse (reduce if motor stalls)
 #define TC_start_offset      38.0f    // Start offset from home position   
 #define TRAVERSE_CARRIAGE_WIDTH 32.0f    // Carriage width in mm
 // So total travel is Home + Carriage Width = 38mm + 32mm 

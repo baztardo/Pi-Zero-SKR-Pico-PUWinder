@@ -18,11 +18,13 @@ TraverseController* g_traverse_controller = nullptr;
 // =============================================================================
 // Constructor
 // =============================================================================
-TraverseController::TraverseController()
+TraverseController::TraverseController(MoveQueue* mq)
     : step_pin(TRAVERSE_STEP_PIN)
     , dir_pin(TRAVERSE_DIR_PIN)
     , enable_pin(TRAVERSE_ENA_PIN)
     , home_pin(TRAVERSE_HOME_PIN)
+    , tmc_driver(nullptr)
+    , move_queue(mq)
     , current_position_mm(0.0f)
     , target_position_mm(0.0f)
     , current_speed_mm_per_sec(0.0f)
@@ -51,6 +53,10 @@ TraverseController::TraverseController()
 // =============================================================================
 TraverseController::~TraverseController() {
     disable();
+    if (tmc_driver) {
+        delete tmc_driver;
+        tmc_driver = nullptr;
+    }
     instance = nullptr;
     g_traverse_controller = nullptr;
 }
@@ -69,7 +75,7 @@ void TraverseController::init() {
     // Configure direction pin
     gpio_init(dir_pin);
     gpio_set_dir(dir_pin, GPIO_OUT);
-    gpio_put(dir_pin, 0);
+    set_direction(false);  // Default direction
     
     // Configure enable pin
     gpio_init(enable_pin);
@@ -80,7 +86,53 @@ void TraverseController::init() {
     gpio_init(home_pin);
     gpio_set_dir(home_pin, GPIO_IN);
     gpio_pull_up(home_pin);
-    
+
+    // Initialize TMC2209 driver (Hardware UART - worked great!)
+    printf("[TraverseController] Initializing TMC2209 driver (Hardware UART)...\n");
+    tmc_driver = new TMC2209_UART(TMC_UART_ID, TMC_UART_TX_PIN, TMC_UART_RX_PIN, 0);
+    printf("[TraverseController] TMC2209 object created (UART%d, TX=%d, RX=%d)\n", TMC_UART_ID, TMC_UART_TX_PIN, TMC_UART_RX_PIN);
+
+    if (tmc_driver->begin(TMC_UART_BAUD)) {
+        printf("[TraverseController] UART begin() succeeded\n");
+        if (tmc_driver->init_driver(TRAVERSE_CURRENT_MA, TRAVERSE_MICROSTEPS)) {
+            printf("[TraverseController] ✓ TMC2209 initialized successfully\n");
+            printf("[TraverseController]   Current: %d mA, Microsteps: %d\n", TRAVERSE_CURRENT_MA, TRAVERSE_MICROSTEPS);
+
+    // Test read a register to verify communication
+    uint32_t status = 0;
+    if (tmc_driver->get_driver_status(&status)) {
+        printf("[TraverseController] ✓ TMC2209 status read: 0x%08X\n", status);
+    } else {
+        printf("[TraverseController] ✗ Failed to read TMC2209 status register\n");
+    }
+
+    // Test CHOPCONF register (microstepping configuration)
+    uint32_t chopconf = 0;
+    if (tmc_driver->readRegister(0x6C, chopconf)) {  // CHOPCONF register
+        uint8_t mres = (chopconf >> 24) & 0x0F;
+        uint8_t microsteps = 0;
+        switch(mres) {
+            case 1: microsteps = 128; break;
+            case 2: microsteps = 64; break;
+            case 3: microsteps = 32; break;
+            case 4: microsteps = 16; break;
+            case 5: microsteps = 8; break;
+            case 6: microsteps = 4; break;
+            case 7: microsteps = 2; break;
+            case 8: microsteps = 1; break;
+            default: microsteps = 1; break;
+        }
+        printf("[TraverseController] ✓ CHOPCONF: 0x%08X (MRES=%d, microsteps=%d)\n", chopconf, mres, microsteps);
+    } else {
+        printf("[TraverseController] ✗ Cannot read CHOPCONF register\n");
+    }
+        } else {
+            printf("[TraverseController] ✗ TMC2209 driver initialization failed\n");
+        }
+    } else {
+        printf("[TraverseController] ✗ TMC2209 UART initialization failed\n");
+    }
+
     // Calculate steps per mm - based on original calibration
     // Original calibration: 10000 steps = 1.63mm
     // So: steps_per_mm = 10000 / 1.63 = 6135 steps/mm
@@ -96,7 +148,31 @@ void TraverseController::init() {
 void TraverseController::enable() {
     gpio_put(enable_pin, 0);  // Active low
     enabled = true;
-    printf("[TraverseController] Enabled\n");
+    printf("[TraverseController] Enabled (ENA pin %d = LOW)\n", enable_pin);
+}
+
+// =============================================================================
+// Set direction with inversion
+// =============================================================================
+void TraverseController::set_direction(bool direction) {
+    // Apply direction inversion if configured
+    bool actual_direction = direction;
+    if (TRAVERSE_DIR_INVERT) {
+        actual_direction = !direction;
+    }
+    gpio_put(dir_pin, actual_direction ? 1 : 0);
+}
+
+// =============================================================================
+// Test TMC2209 communication
+// =============================================================================
+bool TraverseController::test_tmc2209_status(uint32_t* status) {
+    if (!tmc_driver || !status) {
+        return false;
+    }
+
+    // Try to read the TMC2209 CHOPCONF register (0x6C) to check microstepping
+    return tmc_driver->readRegister(0x6C, *status);
 }
 
 void TraverseController::disable() {
@@ -114,27 +190,9 @@ void TraverseController::move_to_position(float position_mm) {
         printf("[TraverseController] Cannot move - disabled or emergency stopped\n");
         return;
     }
-    
-    target_position_mm = position_mm;
-    float distance = target_position_mm - current_position_mm;
-    
-    if (fabs(distance) < 0.01f) {  // Already at position
-        printf("[TraverseController] Already at position %.2f mm\n", position_mm);
-        return;
-    }
-    
-    // Calculate steps needed
-    steps_remaining = (int32_t)(fabs(distance) * steps_per_mm);
-    step_direction = (distance > 0);
-    
-    // Set direction pin
-    gpio_put(dir_pin, step_direction ? 1 : 0);
-    
-    // Calculate step interval based on speed
-    calculate_step_interval();
-    
-    moving = true;
-    printf("[TraverseController] Moving to %.2f mm (%d steps)\n", position_mm, steps_remaining);
+
+    // Use the MoveQueue-based stepper_move_to method
+    stepper_move_to(position_mm, current_speed_mm_per_sec * 60.0f);  // Convert mm/s to mm/min
 }
 
 // =============================================================================
@@ -152,66 +210,45 @@ void TraverseController::home() {
         printf("[TraverseController] Cannot home - disabled or emergency stopped\n");
         return;
     }
-    
+
     printf("[TraverseController] Starting homing sequence...\n");
-    
+
     // Check initial home switch state
     bool home_state = gpio_get(home_pin);
     printf("[TraverseController] Home switch initial state: %s\n", home_state ? "HIGH (not triggered)" : "LOW (triggered)");
-    
+
     // Enable stepper
     gpio_put(enable_pin, 0);  // Enable (active low)
-    
+
     // Phase 1: Move towards home switch (if not already triggered)
     if (home_state) {  // Switch not triggered, move towards it
         printf("[TraverseController] Phase 1: Moving towards home switch (no limit)...\n");
-        gpio_put(dir_pin, 0);  // Move towards home
-        step_direction = false;
-        steps_remaining = 800000;  // 800k steps = ~130mm - enough for full 120mm travel
-        current_speed_mm_per_sec = 20.0f;  // Faster homing speed
-        calculate_step_interval();
-        moving = true;
+        // Move -200mm at 20mm/s (should be enough to hit switch)
+        stepper_move_to(-200.0f, 1200.0f);  // 1200 mm/min = 20 mm/s
         homing = true;
-        homing_phase = 1;  // Phase 1: moving towards switch
+        homing_phase = 1;
     } else {
         // Switch already triggered, go to phase 2 (back off)
         printf("[TraverseController] Switch already triggered, going to phase 2...\n");
         homing_phase = 2;
         back_off_from_switch();
     }
-    
+
     printf("[TraverseController] Homing phase %d started\n", homing_phase);
 }
 
 void TraverseController::back_off_from_switch() {
     printf("[TraverseController] Phase 2: Backing off from home switch...\n");
-    gpio_put(dir_pin, 1);  // Move away from home (opposite of homing direction)
-    step_direction = true;
-    steps_remaining = 49080;  // Back off exactly 8mm (8 * 6135 = 49080 steps)
-    current_speed_mm_per_sec = 10.0f;  // Faster back-off speed
-    calculate_step_interval();
-    moving = true;
+    // Move +8mm at 10mm/s (600 mm/min)
+    stepper_move_to(8.0f, 600.0f);
     homing = true;
     homing_phase = 2;
 }
 
 void TraverseController::move_to_start_position() {
     printf("[TraverseController] Phase 3: Moving to start position (%.2fmm)...\n", TC_start_offset);
-    target_position_mm = TC_start_offset;  // 
-    float distance = target_position_mm - current_position_mm;
-    steps_remaining = (int32_t)(distance * steps_per_mm);
-    
-    if (distance > 0) {
-        gpio_put(dir_pin, 1);  // Move away from home
-        step_direction = true;
-    } else {
-        gpio_put(dir_pin, 0);  // Move towards home
-        step_direction = false;
-    }
-    
-    current_speed_mm_per_sec = 20.0f;  // Fast speed to start position
-    calculate_step_interval();
-    moving = true;
+    // Move to start offset position at 10mm/s (600 mm/min)
+    stepper_move_to(TC_start_offset, 600.0f);
     homing = true;
     homing_phase = 3;
 }
@@ -248,6 +285,7 @@ float TraverseController::get_position() const {
 // Check if homed
 // =============================================================================
 bool TraverseController::is_homed() const {
+    printf("[TraverseController] is_homed() called, homed=%d\n", homed);
     return homed;
 }
 
@@ -305,103 +343,51 @@ void TraverseController::set_brake(bool brake_enable) {
 }
 
 // =============================================================================
-// Generate steps (call from main loop)
+// Generate steps (call from main loop) - Now monitors MoveQueue
 // =============================================================================
 void TraverseController::generate_steps() {
-    if (!moving || !enabled || emergency_stopped) {
+    if (!move_queue) {
         return;
     }
-    
-    // Handle different homing phases
+
+    // Check if MoveQueue has completed all chunks
+    if (moving && !move_queue->has_chunk()) {
+        // Move is complete
+        moving = false;
+        current_position_mm = target_position_mm;
+        printf("[TraverseController] Move complete at %.2f mm\n", current_position_mm);
+    }
+
+    // Handle homing phases (still need direct control for switch detection)
     if (homing) {
         if (homing_phase == 1) {
-            // Phase 1: Moving towards home switch - handled in main loop
-            // (Home switch detection moved to main generate_steps loop)
-        } else if (homing_phase == 2) {
-            // Phase 2: Backing off from switch
-            if (steps_remaining <= 0) {
-                printf("[TraverseController] Back-off complete. Moving to phase 3...\n");
-                // Reset position to 0.0mm after back-off
+            // Check home switch during homing
+            if (!gpio_get(home_pin)) {
+                printf("[TraverseController] Home switch triggered! Stopping homing move...\n");
+                // Stop the MoveQueue chunks
+                move_queue->clear_queue();
                 current_position_mm = 0.0f;
+                homing_phase = 2;
+                back_off_from_switch();
+                return;
+            }
+        } else if (homing_phase == 2) {
+            // Phase 2: Backing off - check if MoveQueue is done
+            if (!move_queue->has_chunk()) {
+                printf("[TraverseController] Back-off complete. Moving to phase 3...\n");
+                current_position_mm = 8.0f;  // 8mm from home
                 homing_phase = 3;
                 move_to_start_position();
-                // Don't return - continue to Phase 3 processing
             }
         } else if (homing_phase == 3) {
             // Phase 3: Moving to start position
-            if (steps_remaining <= 0) {
+            if (!move_queue->has_chunk()) {
                 printf("[TraverseController] Start position reached. Homing complete!\n");
                 moving = false;
                 homing = false;
                 homed = true;
                 current_position_mm = target_position_mm;
-                printf("[TraverseController] Final position: %.2f mm\n", current_position_mm);
-                return;
-            }
-        }
-    }
-    
-    // Debug: Show step generation progress
-    static uint32_t debug_counter = 0;
-    if (homing && (debug_counter++ % 1000 == 0)) {
-        //printf("[TraverseController] Homing debug: steps_remaining=%d, home_switch=%s, moving=%d, enabled=%d, phase=%d\n", 
-               //steps_remaining, gpio_get(home_pin) ? "HIGH" : "LOW", moving, enabled, homing_phase);
-    }
-    
-    uint32_t now = time_us_32();
-    
-    // CRITICAL: Check home switch BEFORE any step processing during homing
-    if (homing && homing_phase == 1 && !gpio_get(home_pin)) {
-        printf("[TraverseController] Home switch triggered at position %.2fmm! Moving to phase 2...\n", current_position_mm);
-        printf("[TraverseController] Travel distance to home: %.2fmm\n", fabs(current_position_mm));
-        printf("[TraverseController] BEFORE ZEROING: current_position_mm = %.2f\n", current_position_mm);
-        // ZERO the position IMMEDIATELY when home switch is hit
-        current_position_mm = 0.0f;
-        printf("[TraverseController] AFTER ZEROING: current_position_mm = %.2f\n", current_position_mm);
-        printf("[TraverseController] Position zeroed to 0.0mm\n");
-        homing_phase = 2;
-        back_off_from_switch();
-        return;
-    }
-    
-    if (now - last_step_time >= step_interval_us) {
-        
-        // Generate step pulse
-        gpio_put(step_pin, 1);
-        sleep_us(2);  // Short pulse
-        gpio_put(step_pin, 0);
-        
-        // Update position
-        if (step_direction) {
-            current_position_mm += 1.0f / steps_per_mm;
-        } else {
-            current_position_mm -= 1.0f / steps_per_mm;
-        }
-        
-        steps_remaining--;
-        last_step_time = now;
-        
-        // Debug: Show step generation
-        static uint32_t step_counter = 0;
-        if (homing && (step_counter++ % 100 == 0)) {
-            //printf("[TraverseController] Step %d: pos=%.2fmm, remaining=%d\n", 
-                   //step_counter, current_position_mm, steps_remaining);
-        }
-        
-        // Check if movement complete
-        if (steps_remaining <= 0) {
-            if (homing) {
-                // Handle homing phase transitions
-                if (homing_phase == 1) {
-                    printf("[TraverseController] Homing timeout - no home switch detected after %.2fmm travel\n", fabs(current_position_mm));
-                    moving = false;
-                    homing = false;
-                }
-                // For phases 2 and 3, let the homing logic handle the transition
-                // Don't set moving=false or homing=false here
-            } else {
-                moving = false;
-                printf("[TraverseController] Movement complete at %.2f mm\n", current_position_mm);
+                printf("[TraverseController] Final position: %.2f mm, homed=%d\n", current_position_mm, homed);
             }
         }
     }
@@ -480,31 +466,49 @@ void TraverseController::stepper_step() {
 }
 
 void TraverseController::stepper_move_to(float position, float feed_rate) {
-    // Move stepper to position (from Code-snippets)
-    target_position_mm = position;
-    current_speed_mm_per_sec = feed_rate / 60.0f;  // Convert mm/min to mm/s
-    
-    float distance = position - current_position_mm;
-    bool direction = distance > 0;
-    
-    gpio_put(dir_pin, direction);
-    
-    // Calculate number of steps (assuming 200 steps/mm)
-    uint32_t steps = (uint32_t)fabsf(distance * steps_per_mm);
-    
-    // Calculate step delay based on feed rate
-    uint32_t step_delay_us = (uint32_t)(60000000.0f / (feed_rate * steps_per_mm));
-    
-    printf("Moving %.2f mm at %.1f mm/min (%d steps)\n", 
-           distance, feed_rate, steps);
-    
-    for (uint32_t i = 0; i < steps; i++) {
-        stepper_step();
-        sleep_us(step_delay_us);
+    if (!move_queue) {
+        printf("[TraverseController] ERROR: No MoveQueue available for move!\n");
+        return;
     }
-    
-    current_position_mm = position;
-    moving = false;
+
+    target_position_mm = position;
+    float distance = position - current_position_mm;
+
+    if (fabsf(distance) < 0.001f) {
+        printf("[TraverseController] Already at position %.3fmm\n", position);
+        return;
+    }
+
+    uint32_t total_steps = (uint32_t)fabsf(distance * steps_per_mm);
+    double velocity_steps_per_sec = (feed_rate / 60.0f) * steps_per_mm;  // Convert mm/min to steps/sec
+
+    printf("[TraverseController] MoveQueue: %.2fmm (%.0f steps, %.0f steps/sec)\n",
+           distance, total_steps, velocity_steps_per_sec);
+
+    // Generate step chunks using constant velocity
+    auto chunks = StepCompressor::compress_constant_velocity(
+        total_steps,
+        velocity_steps_per_sec,
+        20.0  // max timing error in microseconds
+    );
+
+    // Set direction
+    bool direction = distance > 0;
+    set_direction(direction);
+
+    // Push chunks to MoveQueue
+    size_t chunks_queued = 0;
+    for (const auto& chunk : chunks) {
+        if (move_queue->push_chunk(chunk)) {
+            chunks_queued++;
+        } else {
+            printf("[TraverseController] ERROR: MoveQueue full after %lu chunks!\n", chunks_queued);
+            break;
+        }
+    }
+
+    moving = true;
+    printf("[TraverseController] Queued %lu chunks for %.2fmm move\n", chunks_queued, distance);
 }
 
 bool TraverseController::stepper_home() {
@@ -512,7 +516,7 @@ bool TraverseController::stepper_home() {
     printf("Homing stepper...\n");
     
     // Move towards home switch
-    gpio_put(dir_pin, 0);  // Move towards home
+    set_direction(false);  // Move towards home
     
     while (!gpio_get(home_pin)) {
         stepper_step();

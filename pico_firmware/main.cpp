@@ -48,19 +48,8 @@ int main() {
     }
     spindle_controller->init();
     printf("✓ Spindle controller initialized\n");
-    
-    // Initialize traverse controller
-    printf("Initializing traverse controller...\n");
-    traverse_controller = new TraverseController();
-    if (!traverse_controller) {
-        printf("ERROR: Failed to create traverse controller\n");
-        return -1;
-    }
-    traverse_controller->init();
-    printf("✓ Traverse controller initialized\n");
-    printf("  (Used for homing and manual moves only)\n");
-    
-    // Initialize move queue (Klipper-style ISR system)
+
+    // Initialize move queue FIRST (Klipper-style ISR system)
     printf("Initializing move queue (ISR-driven)...\n");
     move_queue = new MoveQueue();
     if (!move_queue) {
@@ -69,6 +58,17 @@ int main() {
     }
     move_queue->init();
     printf("✓ Move queue initialized\n");
+
+    // Initialize traverse controller (now with MoveQueue)
+    printf("Initializing traverse controller...\n");
+    traverse_controller = new TraverseController(move_queue);
+    if (!traverse_controller) {
+        printf("ERROR: Failed to create traverse controller\n");
+        return -1;
+    }
+    traverse_controller->init();
+    printf("✓ Traverse controller initialized\n");
+    printf("  (Uses MoveQueue for real-time stepping)\n");
     printf("  (Handles stepping during winding)\n");
     
     // Initialize scheduler (20kHz ISR)

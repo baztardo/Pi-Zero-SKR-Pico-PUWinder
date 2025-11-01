@@ -75,10 +75,12 @@ class PicoMotionPlanner:
         )
         print(f"Connected to Pico motion controller")
 
-        # Test connection
+        # Test connection - Check that we get any response
         response = self.send_command("PING")
-        if "RESPONSE:" not in response or len(response.strip()) == 0:
-            raise Exception("Failed to communicate with Pico")
+        if len(response.strip()) == 0:
+            raise Exception(f"Failed to communicate with Pico - no response to PING")
+        if "PONG" not in response and "RESPONSE:" not in response:
+            raise Exception(f"Failed to communicate with Pico - unexpected response: {response}")
         print("✓ Connection verified")
 
     def send_command(self, command: str, timeout: float = 2.0) -> str:

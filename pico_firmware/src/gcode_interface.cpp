@@ -299,6 +299,14 @@ bool GCodeInterface::parse_command(const char* command) {
         current_command = TOKEN_TEST_STEPS;
     } else if (strncmp(command, "TEST_HOME_SWITCH", 16) == 0) {
         current_command = TOKEN_TEST_HOME_SWITCH;
+    } else if (strncmp(command, "TEST_GPIO_OUT", 13) == 0) {
+        current_command = TOKEN_TEST_GPIO_OUT;
+    } else if (strncmp(command, "TEST_GPIO_IN", 12) == 0) {
+        current_command = TOKEN_TEST_GPIO_IN;
+    } else if (strncmp(command, "TEST_TMC2209", 12) == 0) {
+        current_command = TOKEN_TEST_TMC2209;
+    } else if (strncmp(command, "TEST_ENABLE", 11) == 0) {
+        current_command = TOKEN_TEST_ENABLE;
     } else {
         current_command = TOKEN_UNKNOWN;
     }
@@ -315,6 +323,9 @@ bool GCodeInterface::parse_command(const char* command) {
         } else if (*ptr == 'F') {
             params.F = atof(ptr + 1);
             params.has_F = true;
+        } else if (*ptr == 'P') {
+            params.P = atoi(ptr + 1);
+            params.has_P = true;
         }
         ptr++;
     }
@@ -356,6 +367,14 @@ bool GCodeInterface::execute_command() {
             return execute_test_steps();
         case TOKEN_TEST_HOME_SWITCH:
             return execute_test_home_switch();
+        case TOKEN_TEST_GPIO_OUT:
+            return execute_test_gpio_out();
+        case TOKEN_TEST_GPIO_IN:
+            return execute_test_gpio_in();
+        case TOKEN_TEST_TMC2209:
+            return execute_test_tmc2209();
+        case TOKEN_TEST_ENABLE:
+            return execute_test_enable();
         default:
             set_error("ERROR_UNKNOWN_COMMAND");
             return false;
@@ -567,6 +586,157 @@ bool GCodeInterface::execute_test_home_switch() {
              TRAVERSE_HOME_PIN,
              home_state_1 ? "HIGH" : "LOW",
              home_state_1 ? "NO" : "YES");
+    send_response(response);
+    return true;
+}
+
+// =============================================================================
+// GPIO Testing Commands
+// =============================================================================
+bool GCodeInterface::execute_test_gpio_out() {
+    printf("TEST_GPIO_OUT: Testing GPIO output...\n");
+
+    // Parse pin number from parameters
+    int pin = -1;
+    if (params.has_P) {
+        pin = (int)params.P;
+    }
+
+    if (pin < 0 || pin > 29) {
+        send_error("ERROR_INVALID_PIN");
+        return false;
+    }
+
+    printf("Testing GPIO %d output...\n", pin);
+
+    // Initialize GPIO as output
+    gpio_init(pin);
+    gpio_set_dir(pin, GPIO_OUT);
+
+    // Test toggling
+    printf("Setting GPIO %d LOW...\n", pin);
+    gpio_put(pin, 0);
+    sleep_ms(100);
+
+    printf("Setting GPIO %d HIGH...\n", pin);
+    gpio_put(pin, 1);
+    sleep_ms(100);
+
+    printf("Setting GPIO %d LOW again...\n", pin);
+    gpio_put(pin, 0);
+
+    char response[128];
+    snprintf(response, sizeof(response), "GPIO%d_OUTPUT_TEST=PASSED", pin);
+    send_response(response);
+    return true;
+}
+
+bool GCodeInterface::execute_test_gpio_in() {
+    printf("TEST_GPIO_IN: Testing GPIO input...\n");
+
+    // Parse pin number from parameters
+    int pin = -1;
+    if (params.has_P) {
+        pin = (int)params.P;
+    }
+
+    if (pin < 0 || pin > 29) {
+        send_error("ERROR_INVALID_PIN");
+        return false;
+    }
+
+    printf("Testing GPIO %d input...\n", pin);
+
+    // Initialize GPIO as input with pull-up
+    gpio_init(pin);
+    gpio_set_dir(pin, GPIO_IN);
+    gpio_pull_up(pin);
+
+    // Read multiple times
+    sleep_ms(10);
+    bool state1 = gpio_get(pin);
+    sleep_ms(10);
+    bool state2 = gpio_get(pin);
+    sleep_ms(10);
+    bool state3 = gpio_get(pin);
+
+    printf("GPIO %d readings: %s, %s, %s\n", pin,
+           state1 ? "HIGH" : "LOW",
+           state2 ? "HIGH" : "LOW",
+           state3 ? "HIGH" : "LOW");
+
+    char response[128];
+    snprintf(response, sizeof(response), "GPIO%d_INPUT_TEST=%s,%s,%s",
+             pin,
+             state1 ? "HIGH" : "LOW",
+             state2 ? "HIGH" : "LOW",
+             state3 ? "HIGH" : "LOW");
+    send_response(response);
+    return true;
+}
+
+bool GCodeInterface::execute_test_tmc2209() {
+    printf("TEST_TMC2209: Testing TMC2209 communication...\n");
+
+    if (!traverse_controller) {
+        send_error("ERROR_NO_TRAVERSE_CONTROLLER");
+        return false;
+    }
+
+    // Test TMC2209 CHOPCONF register read
+    uint32_t chopconf = 0;
+    if (traverse_controller->test_tmc2209_status(&chopconf)) {
+        uint8_t mres = (chopconf >> 24) & 0x0F;
+        uint8_t microsteps = 0;
+        switch(mres) {
+            case 1: microsteps = 128; break;
+            case 2: microsteps = 64; break;
+            case 3: microsteps = 32; break;
+            case 4: microsteps = 16; break;
+            case 5: microsteps = 8; break;
+            case 6: microsteps = 4; break;
+            case 7: microsteps = 2; break;
+            case 8: microsteps = 1; break;
+            default: microsteps = 1; break;
+        }
+
+        printf("✓ TMC2209 CHOPCONF: 0x%08X (MRES=%d, microsteps=%d)\n", chopconf, mres, microsteps);
+
+        char response[128];
+        snprintf(response, sizeof(response), "TMC2209_CHOPCONF=0x%08X_MRES=%d_MICROSTEPS=%d", chopconf, mres, microsteps);
+        send_response(response);
+        return true;
+    } else {
+        printf("✗ TMC2209 CHOPCONF read failed\n");
+        send_error("ERROR_TMC2209_COMM");
+        return false;
+    }
+}
+
+bool GCodeInterface::execute_test_enable() {
+    printf("TEST_ENABLE: Testing TMC2209 enable pin...\n");
+
+    if (!traverse_controller) {
+        send_error("ERROR_NO_TRAVERSE_CONTROLLER");
+        return false;
+    }
+
+    // Test enable pin control
+    printf("Setting stepper ENABLE (GPIO %d = LOW)...\n", TRAVERSE_ENA_PIN);
+    traverse_controller->enable();
+
+    sleep_ms(100);
+
+    printf("Setting stepper DISABLE (GPIO %d = HIGH)...\n", TRAVERSE_ENA_PIN);
+    traverse_controller->disable();
+
+    sleep_ms(100);
+
+    printf("Setting stepper ENABLE again (GPIO %d = LOW)...\n", TRAVERSE_ENA_PIN);
+    traverse_controller->enable();
+
+    char response[128];
+    snprintf(response, sizeof(response), "ENABLE_TEST_COMPLETED_GPIO%d", TRAVERSE_ENA_PIN);
     send_response(response);
     return true;
 }

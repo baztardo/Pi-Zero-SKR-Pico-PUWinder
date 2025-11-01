@@ -9,13 +9,16 @@
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
 #include "config.h"
+#include "tmc2209.h"
+#include "move_queue.h"
+#include "stepcompress.h"
 
 // =============================================================================
 // Traverse Controller Class
 // =============================================================================
 class TraverseController {
 public:
-    TraverseController();
+    TraverseController(MoveQueue* move_queue);
     ~TraverseController();
     
     // Initialization
@@ -64,6 +67,12 @@ private:
     uint dir_pin;
     uint enable_pin;
     uint home_pin;
+
+    // TMC2209 driver
+    TMC2209_UART* tmc_driver;
+
+    // MoveQueue for real-time stepping
+    MoveQueue* move_queue;
     
     // Position tracking
     volatile float current_position_mm;
@@ -90,11 +99,17 @@ private:
     float steps_per_mm;
     uint32_t microsteps;
     
+public:
+    // Test methods (public for debugging)
+    bool test_tmc2209_status(uint32_t* status);  // Test TMC2209 communication
+
+private:
     // Internal methods
     void step_motor();
     void calculate_step_interval();
     void update_position();
     bool check_home_switch();
+    void set_direction(bool direction);  // Set direction with inversion
     
     // Static ISR wrapper
     static void step_timer_isr();

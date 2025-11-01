@@ -43,6 +43,44 @@ A sophisticated winding machine controller that combines Raspberry Pi Zero and S
 └─────────────────┘             └─────────────────┘
 ```
 
+## ⚡ Power Supply & USB Issues
+
+### ⚠️ IMPORTANT: CM4 Power Issues with Pico
+
+**Problem:** The Pico draws power from USB and can cause voltage drops/crashes on the CM4 when plugging/unplugging.
+
+### ✅ Recommended Solutions:
+
+#### **Option 1: Powered USB Hub (Easiest)**
+```
+CM4 USB Port → Powered USB Hub → Pico
+                    ↑
+              Separate 5V Power Supply
+```
+- Use a **powered USB hub** between CM4 and Pico
+- Provides stable power to Pico
+- Prevents CM4 voltage drops
+
+#### **Option 2: Separate Pico Power Supply**
+```
+CM4 USB → Pico (data only)
+5V Supply → Pico VIN pin
+```
+- Power Pico from separate 5V supply
+- CM4 USB only for communication
+- Most stable configuration
+
+#### **Option 3: Better USB Cables**
+- Use **high-quality USB cables** with good power delivery
+- Avoid cheap/damaged cables
+- Try different CM4 USB ports
+
+### 🔍 Symptoms of Power Issues:
+- CM4 reboots when plugging/unplugging Pico
+- Communication drops or corruption
+- File system errors on CM4
+- Pico appears/disappears from `/dev/ttyACM*`
+
 ## 🚀 Quick Start
 
 ### 1. Clone Repository

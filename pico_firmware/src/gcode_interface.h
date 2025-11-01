@@ -56,6 +56,10 @@ enum GCodeTokenType {
     TOKEN_TEST_HOME = 39,     // Test home switch
     TOKEN_TEST_STEPS = 40,    // Test steps for calibration
     TOKEN_TEST_HOME_SWITCH = 41,  // Test home switch state
+    TOKEN_TEST_GPIO_OUT = 42,     // Test GPIO output
+    TOKEN_TEST_GPIO_IN = 43,      // Test GPIO input
+    TOKEN_TEST_TMC2209 = 44,      // Test TMC2209
+    TOKEN_TEST_ENABLE = 45,       // Test enable pin
     TOKEN_UNKNOWN = 255
 };
 
@@ -187,6 +191,10 @@ private:
     bool execute_test_home();   // Test home switch
     bool execute_test_steps();  // Test steps for calibration
     bool execute_test_home_switch();  // Test home switch state
+    bool execute_test_gpio_out();     // Test GPIO output
+    bool execute_test_gpio_in();      // Test GPIO input
+    bool execute_test_tmc2209();      // Test TMC2209
+    bool execute_test_enable();       // Test enable pin
     
     // Helper functions
     void log_command(const char* cmd);
