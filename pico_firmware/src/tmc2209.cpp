@@ -159,14 +159,8 @@ void TMC2209_UART::testRead() {
         }
     }
 
-    // Timeout indicator (LED on FAN3)
-    gpio_init(DEBUG_PIN);
-    gpio_set_dir(DEBUG_PIN, GPIO_OUT);
 
     if (got < 5) {
-        gpio_put(DEBUG_PIN, 1);
-        sleep_ms(500);
-        gpio_put(DEBUG_PIN, 0);
         printf("UART timeout (no response)\n");
         return; // Timeout
     }
@@ -178,13 +172,6 @@ void TMC2209_UART::testRead() {
     }
     printf("\n");
 
-    // Blink short success signal
-    for (int i = 0; i < 3; i++) {
-        gpio_put(DEBUG_PIN, 1);
-        sleep_ms(100);
-        gpio_put(DEBUG_PIN, 0);
-        sleep_ms(100);
-    }
 }
 
 

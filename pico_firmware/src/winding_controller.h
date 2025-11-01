@@ -102,6 +102,7 @@ private:
     bool initial_sync_done;  // Track if first sync has completed
 
     float initial_revolutions;  // Revolution count at start of winding
+    uint64_t initial_monitor_pulses;  // Monitor pulse count at start of winding
 
     double turn_accum;
     int8_t encoder_sign;

@@ -167,13 +167,6 @@ void MoveQueue::traverse_isr_handler() {
     // Increment call counter
     g_isr_call_count++;
     
-    // Heartbeat LED (FAN1) - toggle every 2000 calls (0.1 sec @ 20kHz)
-    if ((g_isr_call_count % 2000) == 0) {
-        static bool heartbeat = false;
-        heartbeat = !heartbeat;
-        gpio_put(17, heartbeat);  // FAN1
-    }
-    
     // CRITICAL: Check safety flags FIRST
     if (feeding_paused) {
         g_feeding_paused_hits++;
@@ -201,9 +194,6 @@ void MoveQueue::traverse_isr_handler() {
         // Update counters
         g_chunks_loaded++;
         g_last_active_state = true;
-        
-        // Turn on FAN2 LED to show active
-        gpio_put(18, 1);
         
         return;  // Process on next ISR tick
     }
@@ -281,7 +271,6 @@ void MoveQueue::traverse_isr_handler() {
             if (active.count == 0) {
                 active_running = false;
                 g_last_active_state = false;
-                gpio_put(18, 0);  // Turn off FAN2 LED
                 return;
             }
 

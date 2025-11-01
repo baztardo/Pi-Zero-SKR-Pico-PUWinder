@@ -60,8 +60,9 @@ public:
     uint32_t get_predicted_next_pulse() const;
     int get_pulse_position() const;
 
-    // Motor Hall sensor RPM (separate from spindle monitor)
-    float get_motor_rpm() const;
+    // 🔄 MOTOR vs SPINDLE - Clear separation
+    float get_motor_rpm() const;      // BLDC motor speed (from Hall sensors)
+    float get_spindle_rpm() const;    // Spindle/workpiece speed (from GPIO29)
 
     // Predictive ramp down calculations
     float predict_ramp_down_start(float current_turns, float target_turns, float ramp_time_sec = 2.0f) const;

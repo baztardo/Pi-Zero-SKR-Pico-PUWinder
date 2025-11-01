@@ -43,21 +43,21 @@
 #define BLDC_STATUS_ERROR      3
 
 // BLDC PWM config - CORRECTED for ZS-X11H motor driver
-#define SPINDLE_PWM_PIN       24    // PWM speed control → PWM pin
-#define SPINDLE_BRAKE_PIN     25    // Brake → BRAKE pin (HIGH=brake ON, LOW=brake OFF)
-#define SPINDLE_DIR_PIN       20    // Direction → DIR pin - HIGH=CW, LOW=CCW
-#define SPINDLE_ENABLE_PIN    21    // Enable → Power 12/24v
-#define SPINDLE_HALL_A_PIN    22    // Speed feedback ← SC pin (just this one)
-#define SPINDLE_HALL_MONITOR_PIN 29 // For monitoring Hall sensor signal (digital GPIO)
+#define SPINDLE_PWM_PIN        3   // PWM speed control → PWM pin
+#define SPINDLE_BRAKE_PIN      7  // Brake → BRAKE pin (HIGH=brake ON, LOW=brake OFF)
+#define SPINDLE_DIR_PIN        2  // Direction → DIR pin - HIGH=CW, LOW=CCW
+//#define SPINDLE_ENABLE_PIN        // Enable → Power 12/24v
+#define SPINDLE_HALL_A_PIN     15   // Speed feedback ← SC pin (just this one)
+#define SPINDLE_HALL_MONITOR_PIN 28 // For monitoring Hall sensor signal (digital GPIO)
 
 #define PWM_DUTY_MIN         0.5f  // Minimum 20% to start motor
 #define PWM_DUTY_MAX         100.0f // Maximum 100%
 #define MAX_RPM              2000.0f // Clamped Maximum RPM
 
 // Traverse Stepper Motor
-#define TRAVERSE_STEP_PIN   6
-#define TRAVERSE_DIR_PIN    5
-#define TRAVERSE_ENA_PIN    7
+#define TRAVERSE_STEP_PIN   5
+#define TRAVERSE_DIR_PIN    4
+#define TRAVERSE_ENA_PIN    6
 #define TRAVERSE_HOME_PIN   16
 #define TRAVERSE_DIR_INVERT  0   // set 1 if traverse moves the wrong way
 #define TRAVERSE_CURRENT_MA 250     // Traverse motor RMS current (mA)
@@ -83,28 +83,27 @@
 #define TRAVERSE_RAPID_SPEED    1200    // steps/sec for rapid moves (ISR limit: ~1390 actual)
 #define TRAVERSE_RAPID_ACCEL    5000    // steps/sec² for rapid moves
 #define TRAVERSE_MIN_WINDING_SPEED 1000 // Minimum speed during winding (steps/sec)
-
-// Home switch (your one endstop)
-#define Y_HOME_SWITCH_PIN       16
+#define STEP_PULSE_US          2      // Step pulse width in microseconds
 
 // Soft limits enabled
 #define USE_SOFT_LIMITS         1
 
-#define EMERGENCY_STOP     25
-
+#define EMERGENCY_STOP     17
 
 // =============================================================================
 // TMC2209 UART (Shared bus)
 // =============================================================================
 
 // TMC2209 UART (Shared bus)
+#define TMC_UART_ID         uart1
 #define TMC_UART_TX_PIN     8
 #define TMC_UART_RX_PIN     9
 #define TMC_UART_BAUD       115200
 #define HOLD_CURRENT_PERCENT 30     // 30% of run current when holding
 #define POWER_DOWN_DELAY     20      // Delay before reducing to hold current (x 0.1s)
 
-
+// TMC2209 configuration
+#define R_SENSE                 0.11f   // Sense resistor value (ohms)
 
 // TMC2209 Microstepping values:
 // 0 = Full step (1x)
@@ -146,15 +145,9 @@
 // Move queue configuration
 #define MOVE_CHUNKS_CAPACITY    256     // Maximum chunks per axis
 
-// TMC2209 configuration
-#define R_SENSE                 0.11f   // Sense resistor value (ohms)
-
 // Scheduler configuration
 #define HEARTBEAT_US           100     // Scheduler heartbeat interval (microseconds)
-#define SCHED_HEARTBEAT_PIN    18     // Scheduler heartbeat LED pin - CHANGED from GPIO 25
-
-// Debug and step pulse configuration
-#define DEBUG_PIN              26     // Debug LED pin
-#define STEP_PULSE_US          2      // Step pulse width in microseconds
+#define SCHED_HEARTBEAT_PIN    27     // Scheduler heartbeat LED pin - CHANGED from GPIO 25
+#define ISR_HEARTBEAT_PIN      26     // ISR heartbeat LED pin - CHANGED from GPIO 17
 
 

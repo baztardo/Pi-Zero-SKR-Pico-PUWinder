@@ -162,9 +162,10 @@ void BLDC_MOTOR::handle_monitor_pulse() {
     uint32_t now = time_us_32();
     uint32_t dt_us = now - last_monitor_edge_time;
 
-    // Filter: Ignore pulses faster than 5000 μs (RPM > 12,000) to prevent noise
-    // At 2000 RPM, pulses come every 30,000 μs (30ms), so 5000μs is reasonable
-    if (dt_us < 5000) {
+    // Filter: Ignore pulses faster than 10000 μs (RPM > 6,000) to prevent noise
+    // At 1000 RPM, pulses come every 60,000 μs (60ms), so 10000μs is conservative
+    // This prevents noise from causing false pulses
+    if (dt_us < 10000) {
         return;
     }
 
@@ -291,17 +292,39 @@ MotorDirection BLDC_MOTOR::get_direction() const {
     return direction;
 }
 // =============================================================================
-// Get current RPM
+// Get current RPM (returns SPINDLE RPM for winding control)
 // =============================================================================
 float BLDC_MOTOR::get_rpm() const {
-    // ⭐ CRITICAL: Use monitor-based RPM if available (GPIO29 = 1 pulse/rev)
-    // This gives accurate RPM measurement independent of motor Hall sensor PPR
+    // ⭐ PRIMARY: Return spindle RPM (what winding control needs)
+    // This is an alias for get_spindle_rpm() for backward compatibility
+    return get_spindle_rpm();
+}
+
+// ⭐ NEW: Advanced RPM methods
+float BLDC_MOTOR::get_instantaneous_rpm() const {
+    return instantaneous_rpm;
+}
+
+// =============================================================================
+// 🔄 MOTOR RPM: BLDC motor speed (from Hall sensors only)
+// =============================================================================
+float BLDC_MOTOR::get_motor_rpm() const {
+    // Pure motor Hall sensor RPM - no conversions or GPIO29 data
+    return filtered_rpm;
+}
+
+// =============================================================================
+// 🌀 SPINDLE RPM: Workpiece speed (from GPIO29 monitor only)
+// =============================================================================
+float BLDC_MOTOR::get_spindle_rpm() const {
+    // ⭐ CRITICAL: Use monitor-based RPM ONLY (GPIO29 = 1 pulse/rev on spindle)
+    // This gives accurate SPINDLE RPM measurement independent of motor Hall sensor PPR
     if (monitor_edge_count >= 3) {
         // Primary method: Use the time since last monitor pulse for current RPM
         uint32_t time_since_last_monitor = time_us_32() - last_monitor_edge_time;
         if (time_since_last_monitor > 0 && time_since_last_monitor < 200000) {  // Within 200ms (reasonable for RPM measurement)
             float freq = 1000000.0f / time_since_last_monitor;
-            float rpm = freq * 60.0f;  // 1 pulse = 1 revolution
+            float rpm = freq * 60.0f;  // 1 pulse = 1 spindle revolution
             if (rpm >= 100 && rpm <= 3000) {  // Sanity check for reasonable RPM range
                 return rpm;
             }
@@ -324,28 +347,7 @@ float BLDC_MOTOR::get_rpm() const {
         }
     }
 
-    // Fallback: Use motor Hall sensor RPM scaled by gear ratio
-    // Motor RPM = spindle RPM × gear_ratio, so spindle RPM = motor RPM / gear_ratio
-    float motor_rpm = filtered_rpm;
-    if (motor_rpm >= 150 && motor_rpm <= 4500) {  // Motor RPM range check
-        return motor_rpm / 1.5f;  // Gear ratio 60:40 = 1.5:1
-    }
-
-    return 0.0f;  // No valid RPM measurement
-}
-
-// ⭐ NEW: Advanced RPM methods
-float BLDC_MOTOR::get_instantaneous_rpm() const {
-    return instantaneous_rpm;
-}
-
-// =============================================================================
-// Get motor RPM from Hall sensors (not spindle monitor)
-// =============================================================================
-float BLDC_MOTOR::get_motor_rpm() const {
-    // Return RPM calculated from motor Hall sensors (filtered_rpm)
-    // This is separate from get_rpm() which prioritizes GPIO29 spindle monitor
-    return filtered_rpm;
+    return 0.0f;  // No valid spindle RPM measurement
 }
 
 // =============================================================================
@@ -420,11 +422,12 @@ uint32_t BLDC_MOTOR::get_pulse_count() const {
 }
 
 // =============================================================================
-// Get revolutions (calculated from pulse count)
+// Get revolutions (SPINDLE revolutions from GPIO29 monitor pulses)
 // =============================================================================
 float BLDC_MOTOR::get_revolutions() const {
-    if (pulses_per_revolution == 0) return 0.0f;
-    return (float)edge_count / (float)pulses_per_revolution;
+    // Now returns spindle revolutions directly from monitor pulses
+    // This is used for diagnostics - turn counting uses monitor_pulse_count directly
+    return (float)monitor_pulse_count;
 }
 
 // =============================================================================
@@ -569,8 +572,8 @@ void BLDC_MOTOR::debug_status() const {
     printf("║ GPIO Pin:           %2u                ║\n", pulse_pin);
     printf("║ Total Pulses:       %lu                ║\n", (unsigned long)edge_count);
     printf("║ Monitor Pulses:     %llu               ║\n", monitor_pulse_count);
-    printf("║ Revolutions:        %.2f               ║\n", get_revolutions());
-    printf("║ Spindle RPM:        %.1f (GPIO29)      ║\n", get_rpm());
+    printf("║ Spindle Revs:       %.2f               ║\n", get_revolutions());
+    printf("║ Spindle RPM:        %.1f (GPIO29)      ║\n", get_spindle_rpm());
     printf("║ Motor RPM:          %.1f (Hall)        ║\n", get_motor_rpm());
     printf("║ Frequency:          %.1f Hz             ║\n", get_frequency());
     printf("║ Pulses/Rev:         %u                ║\n", pulses_per_revolution);

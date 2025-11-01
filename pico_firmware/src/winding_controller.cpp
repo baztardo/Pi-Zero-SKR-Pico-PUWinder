@@ -39,6 +39,7 @@ WindingController::WindingController(MoveQueue* mq, BLDC_MOTOR* spindle_motor)
     , ramp_start_time(0)
     , initial_sync_done(false)
     , initial_revolutions(0.0f)
+    , initial_monitor_pulses(0)
     , turn_accum(0.0)
     , encoder_sign(1)  // Assume forward initially
     , traverse_steps_emitted(0.0)
@@ -85,7 +86,9 @@ bool WindingController::start() {
     // ⭐ CRITICAL: Capture initial revolution count for accurate turn counting
     if (spindle_motor) {
         initial_revolutions = spindle_motor->get_revolutions();
-        printf("[WindingController] Captured initial revolutions: %.2f\n", initial_revolutions);
+        initial_monitor_pulses = spindle_motor->get_monitor_pulse_count();
+        printf("[WindingController] Captured initial revolutions: %.2f, monitor pulses: %llu\n",
+               initial_revolutions, initial_monitor_pulses);
     } else {
         initial_revolutions = 0.0f;
         printf("[WindingController] ⚠️ No spindle motor - initial revolutions set to 0\n");
@@ -195,6 +198,7 @@ void WindingController::reset() {
     ramp_start_time = 0;
     initial_sync_done = false;  // Reset sync state for new winding
     initial_revolutions = 0.0f;  // Will be set when winding starts
+    initial_monitor_pulses = 0;  // Will be set when winding starts
     turn_accum = 0.0f;
     encoder_sign = 1;
 
@@ -248,9 +252,10 @@ void WindingController::execute_winding() {
     
     // Update winding progress
     if (spindle_motor) {
-        float total_revolutions = spindle_motor->get_revolutions();
-        float winding_revolutions = total_revolutions - initial_revolutions;
-        uint32_t new_turns_completed = (uint32_t)winding_revolutions;
+        // Use GPIO29 monitor pulses directly for accurate turn counting (1 pulse = 1 spindle revolution)
+        uint64_t total_monitor_pulses = spindle_motor->get_monitor_pulse_count();
+        uint64_t winding_monitor_pulses = total_monitor_pulses - initial_monitor_pulses;
+        uint32_t new_turns_completed = (uint32_t)winding_monitor_pulses;
 
         if (new_turns_completed > turns_completed) {
             uint32_t delta = new_turns_completed - turns_completed;
@@ -550,9 +555,9 @@ void WindingController::sync_traverse_to_spindle() {
     // Calculate current traverse velocity based on current RPM
     // current_rpm already declared above
     
-    // Calculate required traverse velocity: TARGET RPM × wire_diameter
-    // ⭐ CRITICAL FIX: Use target RPM, not measured RPM for correct synchronization
-    float required_traverse_velocity_mm_per_min = params.spindle_rpm * params.wire_diameter_mm;
+    // Calculate required traverse velocity: SPINDLE RPM × wire_diameter
+    // ⭐ CRITICAL: Use spindle RPM (not motor RPM) for correct synchronization
+    float required_traverse_velocity_mm_per_min = current_rpm * params.wire_diameter_mm;
     float required_traverse_velocity_mm_per_sec = required_traverse_velocity_mm_per_min / 60.0f;
 
     // Convert to steps per second

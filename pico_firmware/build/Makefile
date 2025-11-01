@@ -152,7 +152,7 @@ bs2_default: cmake_check_build_system
 
 # fast build rule for target.
 bs2_default/fast:
-	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default.dir/build.make pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default.dir/build
+	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default.dir/build.make pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default.dir/build
 .PHONY : bs2_default/fast
 
 #=============================================================================
@@ -165,7 +165,7 @@ bs2_default_bin: cmake_check_build_system
 
 # fast build rule for target.
 bs2_default_bin/fast:
-	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default_bin.dir/build.make pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default_bin.dir/build
+	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_bin.dir/build.make pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_bin.dir/build
 .PHONY : bs2_default_bin/fast
 
 #=============================================================================
@@ -178,7 +178,7 @@ bs2_default_library: cmake_check_build_system
 
 # fast build rule for target.
 bs2_default_library/fast:
-	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default_library.dir/build.make pico-sdk/src/rp2040/boot_stage2/CMakeFiles/bs2_default_library.dir/build
+	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_library.dir/build.make pico-sdk/src/rp2350/boot_stage2/CMakeFiles/bs2_default_library.dir/build
 .PHONY : bs2_default_library/fast
 
 #=============================================================================
@@ -879,29 +879,29 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.c.s
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.o
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.i
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.i
 
 # target to preprocess a source file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.i
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.i
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.s
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.s
 
 # target to generate assembly for a file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.c.s
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.o
@@ -951,13 +951,29 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.c.s
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.S.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.o
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.i
+
+# target to preprocess a source file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.i
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.s
+
+# target to generate assembly for a file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.c.s
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.o
@@ -1439,45 +1455,53 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.cpp.s
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.S.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.o
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.o
-
-# target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.S.o
-
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.o
-
-# target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.o
-
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.i
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.i
 
 # target to preprocess a source file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.i
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.i
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.s
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.s
 
 # target to generate assembly for a file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.c.s
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.c.s
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.o
+
+# target to build an object file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.S.o
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.o
+
+# target to build an object file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.S.o
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.o
+
+# target to build an object file
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.o
@@ -1503,13 +1527,13 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.c.s
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.S.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.o
@@ -1559,37 +1583,21 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.c.s
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.S.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.S.o
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.o
-
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.i: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.i
-
-# target to preprocess a source file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.i
-
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.s: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.s
-
-# target to generate assembly for a file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.c.s
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.o
@@ -1615,21 +1623,13 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.c.s
 
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.o
 
 # target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.S.o
-
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.o
-
-# target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.S.o
+Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.S.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.o
@@ -1654,14 +1654,6 @@ Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.s: Users/ssnow
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.c.s
-
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.o
-
-# target to build an object file
-Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
-.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.S.o
 
 Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.o: Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.o
@@ -2362,9 +2354,9 @@ help:
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/common/pico_util/queue.s"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.i"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2040/pico_platform/platform.s"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.i"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2350/pico_platform/platform.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_boot_lock/boot_lock.s"
@@ -2372,6 +2364,8 @@ help:
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_clocks/clocks.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.i"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_divider/divider.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/hardware_flash/flash.s"
@@ -2432,34 +2426,31 @@ help:
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_cxx_options/new_delete.s"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_hardware.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_rp2040.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.i"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_init_rom_rp2040.s"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.i"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_divider/divider_compiler.s"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_aeabi_dcp.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_conv_m33.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_fma_dcp.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_math.s"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_v1_rom_shim_rp2040.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_double/double_sci_m33.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/rp2040_usb_device_enumeration.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_flash/flash.s"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_aeabi_rp2040.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.i"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_init_rom_rp2040.s"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_common_m33.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_conv32_vfp.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_math.s"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_v1_rom_shim_rp2040.o"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_int64_ops/pico_int64_ops_aeabi.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_float/float_sci_m33_vfp.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_malloc/malloc.s"
-	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_mem_ops/mem_ops_aeabi.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/src/rp2_common/pico_platform_common/common.s"

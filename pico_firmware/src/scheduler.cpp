@@ -46,10 +46,10 @@ bool Scheduler::start(uint32_t interval) {
     gpio_put(SCHED_HEARTBEAT_PIN, 0);
     
     // Initialize FAN1 LED for ISR heartbeat (toggled in traverse_isr_handler)
-    gpio_init(17);
-    gpio_set_dir(17, GPIO_OUT);
-    gpio_put(17, 0);
-    printf("[Scheduler] FAN1 LED initialized on pin 17\n");
+    gpio_init(ISR_HEARTBEAT_PIN);
+    gpio_set_dir(ISR_HEARTBEAT_PIN, GPIO_OUT);
+    gpio_put(ISR_HEARTBEAT_PIN, 0); 
+    printf("[Scheduler] FAN1 LED initialized on pin ISR_HEARTBEAT_PIN\n");
     
     interval_us = 50; // 20kHz = 50µs period
     
