@@ -133,12 +133,33 @@ bool CommunicationHandler::init() {
 }
 
 void CommunicationHandler::update() {
-    if (!initialized) return;
+    if (!uart_initialized && !usb_initialized) return;
 
-    // Process incoming UART data
-    while (uart_is_readable(PI_UART_ID)) {
-        char c = uart_getc(PI_UART_ID);
-        process_incoming_char(c);
+    // Process incoming UART data (Pi Zero legacy support)
+    if (uart_initialized) {
+        while (uart_is_readable(PI_UART_ID)) {
+            char c = uart_getc(PI_UART_ID);
+            process_incoming_char(c);
+        }
+    }
+
+    // Process USB tasks and data (Pi CM4 communication)
+    if (usb_initialized) {
+        tud_task(); // Keep TinyUSB alive
+
+        // Check connection status
+        bool was_connected = usb_connected;
+        usb_connected = tud_cdc_connected();
+
+        if (usb_connected != was_connected) {
+            printf("[CommunicationHandler] USB %s\n",
+                   usb_connected ? "connected" : "disconnected");
+        }
+
+        // Process incoming USB data
+        if (usb_connected) {
+            process_usb_data();
+        }
     }
 }
 
@@ -200,9 +221,9 @@ void CommunicationHandler::send_response(const char* response) {
 }
 
 void CommunicationHandler::send_error(const char* error) {
-    if (!initialized) return;
+    if (!uart_initialized) return;
 
-    printf("ERROR: %s\n", error);
+    printf("UART ERROR: %s\n", error);
 
     // Wait for UART to be ready (like FluidNC does)
     while (!uart_is_writable(PI_UART_ID)) {
@@ -215,4 +236,159 @@ void CommunicationHandler::send_error(const char* error) {
 
     // Wait for transmission to complete
     uart_tx_wait_blocking(PI_UART_ID);
+}
+
+// =============================================================================
+// USB COMMUNICATION METHODS
+// =============================================================================
+
+bool CommunicationHandler::send_usb_status(const status_t* status) {
+    if (!usb_connected || !usb_initialized) return false;
+
+    // Send message type + status data
+    uint8_t buffer[1 + sizeof(status_t)];
+    buffer[0] = MSG_TYPE_STATUS;
+    memcpy(buffer + 1, status, sizeof(status_t));
+
+    size_t sent = tud_cdc_write(buffer, sizeof(buffer));
+    tud_cdc_write_flush();
+
+    return sent == sizeof(buffer);
+}
+
+bool CommunicationHandler::send_usb_response(uint8_t command, uint8_t result) {
+    if (!usb_connected || !usb_initialized) return false;
+
+    response_t response = {command, result, 0};
+    uint8_t buffer[1 + sizeof(response_t)];
+    buffer[0] = MSG_TYPE_RESPONSE;
+    memcpy(buffer + 1, &response, sizeof(response_t));
+
+    size_t sent = tud_cdc_write(buffer, sizeof(buffer));
+    tud_cdc_write_flush();
+
+    return sent == sizeof(buffer);
+}
+
+bool CommunicationHandler::send_usb_error(const char* error_msg) {
+    if (!usb_connected || !usb_initialized) return false;
+
+    size_t msg_len = strlen(error_msg);
+    uint8_t buffer[1 + 1 + msg_len]; // type + length + message
+    buffer[0] = MSG_TYPE_ERROR;
+    buffer[1] = msg_len;
+    memcpy(buffer + 2, error_msg, msg_len);
+
+    size_t sent = tud_cdc_write(buffer, sizeof(buffer));
+    tud_cdc_write_flush();
+
+    return sent == sizeof(buffer);
+}
+
+void CommunicationHandler::process_motion_command(const motion_command_t* cmd) {
+    printf("[CommunicationHandler] Processing motion command: %u steps @ %u μs intervals\n",
+           cmd->stepper_steps, cmd->stepper_interval);
+
+    // TODO: Forward to move_queue for execution
+    // This will be implemented when we integrate with the motion system
+}
+
+void CommunicationHandler::process_usb_data() {
+    // Read available USB data
+    while (tud_cdc_available()) {
+        uint8_t byte;
+        uint32_t count = tud_cdc_read(&byte, 1);
+
+        if (count == 1) {
+            if (usb_rx_pos < sizeof(usb_rx_buffer)) {
+                usb_rx_buffer[usb_rx_pos++] = byte;
+
+                // Check for complete message (simple protocol: type + data)
+                if (usb_rx_pos >= 1) { // At least message type
+                    uint8_t msg_type = usb_rx_buffer[0];
+
+                    // For now, assume fixed-size messages based on type
+                    size_t expected_size = 1; // Message type
+
+                    switch (msg_type) {
+                        case MSG_TYPE_COMMAND:
+                            expected_size += 1; // Command byte
+                            break;
+                        case MSG_TYPE_MOTION_COMMAND:
+                            expected_size += sizeof(motion_command_t);
+                            break;
+                        default:
+                            // Unknown message type, reset buffer
+                            usb_rx_pos = 0;
+                            continue;
+                    }
+
+                    if (usb_rx_pos >= expected_size) {
+                        // Process complete message
+                        handle_usb_command(usb_rx_buffer, usb_rx_pos);
+                        usb_rx_pos = 0; // Reset for next message
+                    }
+                }
+            } else {
+                // Buffer overflow, reset
+                usb_rx_pos = 0;
+            }
+        }
+    }
+}
+
+void CommunicationHandler::handle_usb_command(const uint8_t* data, size_t length) {
+    if (length < 1) return;
+
+    uint8_t msg_type = data[0];
+
+    switch (msg_type) {
+        case MSG_TYPE_COMMAND: {
+            if (length >= 2) {
+                usb_command_t cmd = (usb_command_t)data[1];
+                printf("[CommunicationHandler] Received USB command: %d\n", cmd);
+
+                // Handle command
+                switch (cmd) {
+                    case CMD_PING:
+                        send_usb_response(CMD_PING, 0); // Success
+                        break;
+
+                    case CMD_GET_STATUS: {
+                        // TODO: Get actual status from system
+                        status_t status = {0, 1, 0, 0, 1, 0.0f, 0.0f, 0};
+                        send_usb_status(&status);
+                        break;
+                    }
+
+                    case CMD_EMERGENCY_STOP:
+                        printf("[CommunicationHandler] Emergency stop requested via USB\n");
+                        // TODO: Trigger emergency stop
+                        send_usb_response(CMD_EMERGENCY_STOP, 0);
+                        break;
+
+                    default:
+                        printf("[CommunicationHandler] Unknown USB command: %d\n", cmd);
+                        send_usb_response(cmd, 1); // Error
+                        break;
+                }
+            }
+            break;
+        }
+
+        case MSG_TYPE_MOTION_COMMAND: {
+            if (length >= 1 + sizeof(motion_command_t)) {
+                const motion_command_t* cmd = (const motion_command_t*)(data + 1);
+                process_motion_command(cmd);
+                // Send acknowledgment
+                send_usb_response(CMD_MOVE_TRAVERSE, 0);
+            }
+            break;
+        }
+
+        default:
+            printf("[CommunicationHandler] Unknown USB message type: %d\n", msg_type);
+            send_usb_error("Unknown message type");
+            break;
+    }
 }
