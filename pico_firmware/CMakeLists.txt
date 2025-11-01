@@ -48,6 +48,11 @@ add_executable(pico_spindle_controller
     src/pio_stepper.cpp
 )
 
+# Add USB support if enabled
+if(ENABLE_USB_COMM)
+    target_compile_definitions(pico_spindle_controller PRIVATE ENABLE_USB_COMM=1)
+endif()
+
 # Generate PIO header from .pio file
 pico_generate_pio_header(pico_spindle_controller ${CMAKE_CURRENT_LIST_DIR}/src/pio_stepper.pio)
 
@@ -61,9 +66,15 @@ target_link_libraries(pico_spindle_controller
     hardware_timer
     hardware_irq
     hardware_pio
-    tinyusb_device
-    tinyusb_board
 )
+
+# Add TinyUSB libraries if USB support is enabled
+if(ENABLE_USB_COMM)
+    target_link_libraries(pico_spindle_controller
+        tinyusb_device
+        tinyusb_board
+    )
+endif()
 
 pico_enable_stdio_usb(pico_spindle_controller 1)
 pico_enable_stdio_uart(pico_spindle_controller 0)

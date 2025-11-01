@@ -207,6 +207,30 @@ pico_status_led_ws2812_pio_h/fast:
 	$(MAKE) $(MAKESILENT) -f pico-sdk/src/rp2_common/pico_status_led/CMakeFiles/pico_status_led_ws2812_pio_h.dir/build.make pico-sdk/src/rp2_common/pico_status_led/CMakeFiles/pico_status_led_ws2812_pio_h.dir/build
 .PHONY : pico_status_led_ws2812_pio_h/fast
 
+Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.o
+
+# target to build an object file
+Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.o
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.o
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.i: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.i
+
+# target to preprocess a source file
+Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.i
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.i
+
+Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.s: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.s
+
+# target to generate assembly for a file
+Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pico_spindle_controller.dir/build.make CMakeFiles/pico_spindle_controller.dir/Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.s
+.PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.c.s
+
 Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.o: Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.c.o
 .PHONY : Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.o
 
@@ -2270,6 +2294,9 @@ help:
 	@echo "... bs2_default"
 	@echo "... bs2_default_library"
 	@echo "... pico_spindle_controller"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.o"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.i"
+	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/hw/bsp/rp2040/family.s"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.o"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.i"
 	@echo "... Users/ssnow/.pico-sdk/sdk/2.2.0/lib/tinyusb/src/class/audio/audio_device.s"

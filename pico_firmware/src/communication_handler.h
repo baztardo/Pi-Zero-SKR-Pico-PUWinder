@@ -1,6 +1,7 @@
 // =============================================================================
-// communication_handler.h - Communication Handler (UART + USB)
-// Purpose: Handle all communication with Pi CM4 (UART and USB)
+// communication_handler.h - UART/USB Communication Handler
+// Purpose: Handle UART communication with Pi Zero AND USB with Pi CM4
+// Based on Klipper's USB CDC ACM approach
 // =============================================================================
 
 #pragma once
@@ -9,100 +10,58 @@
 #include "config.h"
 #include "hardware/uart.h"
 
-// TinyUSB includes
+#ifdef ENABLE_USB_COMM
 #include "tusb.h"
 #include "class/cdc/cdc_device.h"
 
+// USB descriptors (Klipper-style) - all in one place
+#define USB_VID 0x1d50  // OpenMoko VID (like Klipper)
+#define USB_PID 0x614e  // Klipper-like PID
+
+// USB descriptor strings
+#define USB_MANUFACTURER "Pi-Zero-SKR-Pico-PUWinder"
+#define USB_PRODUCT "Coil Winder Controller"
+#define USB_SERIAL "0001"
+
+// USB endpoint sizes
+#define USB_CDC_EP_SIZE 64
+
+// USB descriptor externs
+extern const tusb_desc_device_t usb_desc_device;
+extern const uint8_t usb_desc_configuration[];
+extern const char* usb_string_desc_arr[];
+
+#endif
+
 class GCodeInterface; // Forward declaration
-
-// USB Protocol Definitions
-#define USB_COMM_VENDOR_ID       0xCAFE
-#define USB_COMM_PRODUCT_ID      0x4001
-#define USB_COMM_SERIAL_STR      "PU-Winder"
-
-// Message types
-typedef enum {
-    MSG_TYPE_COMMAND        = 0x01,
-    MSG_TYPE_MOTION_COMMAND = 0x02,
-    MSG_TYPE_STATUS         = 0x03,
-    MSG_TYPE_RESPONSE       = 0x04,
-    MSG_TYPE_ERROR          = 0x05,
-} usb_msg_type_t;
-
-// Command codes
-typedef enum {
-    CMD_PING                = 0x01,
-    CMD_GET_STATUS          = 0x02,
-    CMD_START_WINDING       = 0x03,
-    CMD_STOP_WINDING        = 0x04,
-    CMD_EMERGENCY_STOP      = 0x05,
-    CMD_RESET               = 0x06,
-    CMD_SET_SPINDLE_RPM     = 0x07,
-    CMD_MOVE_TRAVERSE       = 0x08,
-} usb_command_t;
-
-// Motion command structure
-typedef struct __attribute__((packed)) {
-    uint32_t sequence_id;
-    uint32_t stepper_steps;     // Steps to move
-    uint32_t stepper_interval;  // Interval between steps (μs)
-    uint8_t direction;          // 0=CCW, 1=CW
-    uint8_t end_of_move;        // 1 if this is the last segment
-} motion_command_t;
-
-// Status structure
-typedef struct __attribute__((packed)) {
-    uint32_t sequence_id;
-    uint8_t system_state;
-    uint8_t spindle_state;
-    uint8_t traverse_state;
-    uint8_t safety_state;
-    float spindle_rpm;
-    float traverse_pos_mm;
-    uint32_t turns_completed;
-} status_t;
-
-// Response structure
-typedef struct __attribute__((packed)) {
-    uint8_t command;
-    uint8_t result;
-    uint16_t data_length;
-} response_t;
 
 class CommunicationHandler {
 public:
     CommunicationHandler(GCodeInterface* gcode_interface);
     bool init();
     void update(); // Call this in main loop to process incoming data
-
-    // UART communication (legacy Pi Zero support)
     void send_response(const char* response);
     void send_error(const char* error);
 
-    // USB communication
-    bool send_usb_status(const status_t* status);
-    bool send_usb_response(uint8_t command, uint8_t result);
-    bool send_usb_error(const char* error_msg);
+    // USB functionality (Klipper-style) - public for extern "C" access
+    #ifdef ENABLE_USB_COMM
+    void init_usb();
+    void process_usb_data();
+    void send_usb_response(const char* response);
+    void send_usb_error(const char* error);
 
-    // Motion command interface
-    void process_motion_command(const motion_command_t* cmd);
+    // USB CDC callbacks (public for extern "C" access)
+    void usb_cdc_rx_callback(void);
+    void usb_cdc_tx_complete_callback(void);
+    void usb_cdc_line_state_callback(uint32_t itf, bool dtr, bool rts);
+    #endif
 
 private:
     GCodeInterface* gcode_interface;
     char command_buffer[256];
     int buffer_pos;
-    bool uart_initialized;
-    bool usb_initialized;
+    bool initialized;
+    bool usb_enabled;
 
-    // USB state
-    uint8_t usb_rx_buffer[512];
-    size_t usb_rx_pos;
-    bool usb_connected;
-
-    // UART processing
     void process_incoming_char(char c);
-
-    // USB processing
-    void process_usb_data();
-    void handle_usb_command(const uint8_t* data, size_t length);
 };
