@@ -38,7 +38,7 @@
 
 // BLDC Motor Status
 #define BLDC_STATUS_READY      0
-#define BLDC_STATUS_RUNNING    1
+#define BLDC_STATUS_RUNNING    1 
 #define BLDC_STATUS_STOPPED    2
 #define BLDC_STATUS_ERROR      3
 
@@ -48,7 +48,7 @@
 #define SPINDLE_DIR_PIN        2  // Direction → DIR pin - HIGH=CW, LOW=CCW
 //#define SPINDLE_ENABLE_PIN        // Enable → Power 12/24v
 #define SPINDLE_HALL_A_PIN     15   // Speed feedback ← SC pin (just this one)
-#define SPINDLE_HALL_MONITOR_PIN 28 // For monitoring Hall sensor signal (digital GPIO)
+#define SPINDLE_HALL_MONITOR_PIN 22 // For monitoring Hall sensor signal (digital GPIO)
 
 #define PWM_DUTY_MIN         0.5f  // Minimum 20% to start motor
 #define PWM_DUTY_MAX         100.0f // Maximum 100%

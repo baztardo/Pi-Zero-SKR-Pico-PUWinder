@@ -2,15 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug Pi Zero Python",
-      "type": "python",
+      "name": "Pico2 Debug",
+      "type": "cortex-debug",
       "request": "launch",
-      "program": "${workspaceFolder}/pi_zero/test_uart.py",
-      "console": "integratedTerminal",
-      "cwd": "${workspaceFolder}/pi_zero",
-      "env": {
-        "PYTHONPATH": "${workspaceFolder}/pi_zero"
-      }
+      "servertype": "openocd",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/pico_firmware/build/pico_spindle_controller.elf",
+      "configFiles": [
+        "interface/cmsis-dap.cfg",
+        "target/rp2350.cfg"
+      ],
+      "svdFile": "${env:PICO_SDK_PATH}/src/rp2350/hardware_regs/rp2350.svd",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "raw"
     },
     {
       "name": "Debug G-code Interface",
@@ -35,14 +39,6 @@
       "program": "${workspaceFolder}/pi_zero/test_klipper_architecture.py",
       "console": "integratedTerminal",
       "cwd": "${workspaceFolder}/pi_zero"
-    },
-    {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "lldb",
-      "request": "launch",
-      "args": [],
-      "cwd": "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/src",
-      "program": "/Users/ssnow/Documents/GitHub/Pi-Zero-SKR-Pico-PUWinder/pico_firmware/src/build/Debug/outDebug"
     }
   ]
 }

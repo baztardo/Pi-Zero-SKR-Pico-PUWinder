@@ -78,6 +78,27 @@
                 "focus": false,
                 "panel": "shared"
             }
+        },
+        {
+            "label": "Upload to Pico2 (OpenOCD)",
+            "type": "shell",
+            "command": "openocd",
+            "args": [
+                "-f",
+                "interface/cmsis-dap.cfg",
+                "-f",
+                "target/rp2350.cfg",
+                "-c",
+                "program ${workspaceFolder}/build/pico_spindle_controller.elf verify reset exit"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
         }
     ]
 }
