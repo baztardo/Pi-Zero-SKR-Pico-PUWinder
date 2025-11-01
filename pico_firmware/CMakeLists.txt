@@ -61,6 +61,8 @@ target_link_libraries(pico_spindle_controller
     hardware_timer
     hardware_irq
     hardware_pio
+    tinyusb_device
+    tinyusb_board
 )
 
 pico_enable_stdio_usb(pico_spindle_controller 1)
